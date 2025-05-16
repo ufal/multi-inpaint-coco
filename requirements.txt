@@ -1,0 +1,4 @@
+snakemake
+datasets
+Pillow
+googletrans
