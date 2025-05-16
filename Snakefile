@@ -37,7 +37,6 @@ rule google_translate:
 
 
 def images_as_base64(pil_image):
-    # First resize the image to 200x200
     pil_image = pil_image.resize((150, 150))
 
     buffered = BytesIO()
@@ -87,3 +86,13 @@ rule convert_to_docx:
         pandoc -s {input} -o {output}
         """
 
+
+rule convert_postedited_to_tsv:
+    input:
+        "postedited.{lang}.txt"
+    output:
+        "final.{lang}.tsv"
+    shell:
+        """
+        grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //'| sed 'N;s/\n/\t/' > {output}
+        """
