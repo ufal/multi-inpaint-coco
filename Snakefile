@@ -3,9 +3,20 @@ from io import BytesIO
 
 LANGUAGES = ["cs", "sk", "de", "ro", "it", "uk", "ru"]
 
+LANGUAGE_NAMES = {
+    "cs": "Czech",
+    "sk": "Slovak",
+    "de": "German",
+    "ro": "Romanian",
+    "it": "Italian",
+    "uk": "Ukrainian",
+    "ru": "Russian"
+}
+
 rule all:
     input:
-        expand("translated.{lang}.docx", lang=LANGUAGES)
+        expand("translated.google.{lang}.docx", lang=LANGUAGES),
+        expand("translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
 
 
 rule get_english:
@@ -29,11 +40,49 @@ rule google_translate:
     input:
         "texts.tsv"
     output:
-        "translated.{lang}.tsv"
+        "translated.google.{lang}.tsv"
     shell:
         """
         python3 translate.py {input} {wildcards.lang} > {output}
         """
+
+
+def gpt4_translate(client, lang, sentence):
+    response = client.chat.completions.create(
+        model="gpt-4",  # You can also use "gpt-4-turbo" for the latest version
+        messages=[
+            {"role": "system", "content": "You are the professional translator in the world that translate sentences very accurately and in a way that sounds natural in the target languages."},
+            {"role": "user", "content": f"Translate this into {LANGUAGE_NAMES[lang]}: {sentence}"},
+        ],
+        temperature=0.0,
+        max_tokens=100
+    )
+
+    return response.choices[0].message.content.strip()
+
+
+rule gpt4_translation:
+    input:
+        "texts.tsv"
+    output:
+        "translated.gpt4.{lang}.tsv"
+    run:
+        from openai import OpenAI
+
+        with open("oai_api_key.txt", "r") as file:
+            api_key = file.read().strip()
+
+        client = OpenAI(api_key=api_key)
+
+        with open(input[0], "r") as f_in, open(output[0], "w") as f_out:
+            for line in f_in:
+                coco_caption, inpaint_caption = line.strip().split("\t")
+                if not inpaint_caption:
+                    inpaint_caption = "?"
+                translated_coco = gpt4_translate(client, wildcards.lang, coco_caption)
+                translated_inpaint = gpt4_translate(client, wildcards.lang, inpaint_caption)
+                print(f"{translated_coco}\t{translated_inpaint}", file=f_out)
+
 
 
 def images_as_base64(pil_image):
@@ -60,6 +109,9 @@ rule generate_html:
         dataset = load_dataset("phiyodr/inpaintCOCO")
         with open(input[0], "r") as f:
             translation = [l.strip().split("\t") for l in f.readlines()]
+
+        assert len(translation) == len(dataset["test"])
+        assert all(len(t) == 2 for t in translation), "Translation file should have two columns: COCO and Inpaint captions."
 
         for i, (item, (tgt_coco, tgt_inpaint)) in enumerate(
                 zip(dataset["test"], translation)):
