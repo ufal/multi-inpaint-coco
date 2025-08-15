@@ -1714,12 +1714,12 @@ Inpaint en 214: A piece of chocolate cake sits on a plate with a spoon.
 Inpaint trans 214: O bucată de tort de ciocolată stă pe o farfurie cu o lingură.
   
 
-COCO en 215: A cow is leashed up to a yellow pole near the civilians.
-COCO trans 215: O vacă este legată de un stâlp galben în apropierea cetățenilor.
+COCO en 215: A cow is leashed up to a green pole near the civilians.
+COCO trans 215: O vacă este legată de un stâlp verde în apropierea cetățenilor.
   
 
-Inpaint en 215: A horse is leashed up to a yellow pole near the civilians.
-Inpaint trans 215: Un cal este legat de un stâlp galben în apropierea cetățenilor.
+Inpaint en 215: A horse is leashed up to a green pole near the civilians.
+Inpaint trans 215: Un cal este legat de un stâlp verde în apropierea cetățenilor.
   
 
 COCO en 216: A large cow with horns by some bushes.
@@ -2306,11 +2306,11 @@ Inpaint en 288: A fork resting in a bowl of vegetable soup.
 Inpaint trans 288: O furculiță stând într-un bol cu supă de legume.
   
 
-COCO en 289: A person sits across from a pizza already served.
+COCO en 289: A person sits across from a pizza ready to be served.
 COCO trans 289: O persoană stă în fața unei pizza deja servită.
   
 
-Inpaint en 289: A person sits across from a sandwich already served.
+Inpaint en 289: A person sits across from a sandwich ready to be served.
 Inpaint trans 289: O persoană stă în fața unui sandviș deja servit.
   
 
@@ -3102,9 +3102,10 @@ Inpaint en 387: A black cake sitting on top of a white paper and a large plate
 Inpaint trans 387: Un tort negru așezat pe o hârtie albă și pe o farfurie mare.
   
 
-COCO en 388: A man eating a sandwich off of a black plate.
-COCO trans 388: Un bărbat mănâncă un sandviș de pe o farfurie neagră.
-  
+COCO en 388: A man eating a sandwich off of a white plate.
+COCO trans 388: Un bărbat mănâncă un sandviș de pe o farfurie albă.
+#MARKED
+
 
 Inpaint en 388: A man eating a cake off of a black plate.
 Inpaint trans 388: Un bărbat mănâncă un tort de pe o farfurie neagră.
@@ -3401,7 +3402,8 @@ Inpaint trans 424: O masă înconjurată de plastic pentru pereți și tavan.
 
 COCO en 425: A goat standing up against the side of a house covered in grass.
 COCO trans 425: O capră stând în picioare sprijinită pe partea unei case acoperite cu iarbă.
-  
+#MARKED
+
 
 Inpaint en 425: A small white cow standing up against the side of a house covered in grass.
 Inpaint trans 425: O vacuță albă stând în picioare lângă peretele unei case acoperite cu iarbă.
@@ -3651,7 +3653,8 @@ Inpaint trans 455: Un bol imens de broccoli cu câteva felii de măr și o bucat
 
 COCO en 456: A big black dog standing behind a crowd of people.
 COCO trans 456: Un câine mare și negru stând în spatele unei mulțimi de oameni.
-  
+#MARKED
+
 
 Inpaint en 456: A big black dog standing behind a crowd of people.
 Inpaint trans 456: Un câine mare și negru stă în spatele unei mulțimi de oameni.
@@ -4234,7 +4237,8 @@ Inpaint trans 526: O cameră mare cu un pat și o fereastră care lasă lumina s
 
 COCO en 527: A glass vase with some flowers near a big window.
 COCO trans 527: Un vas de sticlă cu câteva flori lângă o fereastră mare.
-  
+#MARKED
+
 
 Inpaint en 527: A large glass vase with some flowers near a big window.
 Inpaint trans 527: Un vas mare de sticlă cu câteva flori lângă o fereastră mare.
@@ -4443,8 +4447,8 @@ Inpaint en 552: A small elephant walks up to the fence in a zoo.
 Inpaint trans 552: Un elefant mic se apropie de gard într-o grădină zoologică.
   
 
-COCO en 553: A dog standing on top of a skateboard.
-COCO trans 553: Un câine stând în picioare pe un skateboard.
+COCO en 553: A small dog standing on top of a skateboard.
+COCO trans 553: Un cățel stând în picioare pe un skateboard.
   
 
 Inpaint en 553: A tiny dog standing on top of a skateboard.
@@ -4540,7 +4544,7 @@ Inpaint en 564: A small white cow by some bushes.
 Inpaint trans 564: O vacuță albă lângă niște tufișuri.
   
 
-COCO en 565: A view with a large metal structure near the side of a building
+COCO en 565: A view A large metal structure near the side of a building
 COCO trans 565: O priveliște cu o structură mare de metal lângă latura unei clădiri.
   
 
@@ -4677,8 +4681,8 @@ Inpaint en 580: A woman sitting in front of a small pizza.
 Inpaint trans 580: O femeie stă în fața unei pizza mici.
   
 
-COCO en 581: A pizza sitting on a blue table.
-COCO trans 581: O pizza așezată pe o masă albastră.
+COCO en 581: A small pizza sitting on a blue table.
+COCO trans 581: O pizza mică așezată pe o masă albastră.
   
 
 Inpaint en 581: A large pizza sitting on a blue table.
@@ -5807,7 +5811,7 @@ Inpaint en 716: A tiny window with a sign that reads atm inside.
 Inpaint trans 716: O fereastră micuță cu un semn care indică ATM INSIDE.
   
 
-COCO en 717: The cow is grazing on the grass, he has big horns
+COCO en 717: the cog is grazing on the grass, he has big horns
 COCO trans 717: Vaca ce paște iarbă, are coarne mari.
   
 
@@ -5815,8 +5819,8 @@ Inpaint en 717: The cow is grazing on the grass, he has small horns
 Inpaint trans 717: Vaca ce paște iarbă, are coarne mici.
   
 
-COCO en 718: A man standing beside several small red suitcases.
-COCO trans 718: Un bărbat stând lângă mai multe valize mici de culoare roșie.
+COCO en 718: A man standing beside several small orange suitcases.
+COCO trans 718: Un bărbat stând lângă mai multe valize mici de culoare portocalie.
   
 
 Inpaint en 718: A man standing beside a big orange suitcase.
@@ -7063,12 +7067,12 @@ Inpaint en 868: young boy dressed in red holding a pizza in a box.
 Inpaint trans 868: Băiat tânăr îmbrăcat în roșu ținând o pizza într-o cutie.
   
 
-COCO en 869: A dessert and toppings are in a blue plastic bowl.
-COCO trans 869: Desertul și topping-uri se află într-un bol de plastic albastru.
+COCO en 869: Some dessert and toppings are in a blue plastic bowl.
+COCO trans 869: Un desert cu topping-uri se află într-un bol de plastic albastru.
   
 
 Inpaint en 869: A dessert and toppings are in a green plastic bowl.
-Inpaint trans 869: Desertul și toppingurile sunt într-un bol de plastic verde.
+Inpaint trans 869: Un desert cu toppingurile sunt într-un bol de plastic verde.
   
 
 COCO en 870: a green orange and silver train and some cars
@@ -7887,7 +7891,7 @@ Inpaint en 970: a woman in a blue jacket and a pizza
 Inpaint trans 970: O femeie într-o jachetă albastră și o pizza.
   
 
-COCO en 971: A white bed in a bedroom next to a table with a lamp.
+COCO en 971: A white bed in a bedroom next to a table on a lamp.
 COCO trans 971: Un pat alb într-o cameră de dormit lângă o masă cu o lampă.
   
 
@@ -7919,9 +7923,9 @@ Inpaint en 974: A group of people dressed in white preparing food.
 Inpaint trans 974: Un grup de persoane îmbrăcate în alb pregătesc mâncarea.
   
 
-COCO en 975: A black mouse with blue light-up parts is next to a white keyboard.
-COCO trans 975: Un mouse negru cu părți care luminează în albastru este lângă o tastatură albă.
-  
+COCO en 975: A black mouse with blue light-up parts is next to a gray keyboard.
+COCO trans 975: Un mouse negru cu părți care luminează în albastru este lângă o tastatură gri.
+
 
 Inpaint en 975: A black mouse with green light-up parts is next to a white keyboard.
 Inpaint trans 975: Un șoarece negru cu părți care se luminează în verde este lângă o tastatură albă.
@@ -8007,8 +8011,8 @@ Inpaint en 985: A black sink placed in the middle of a constructed kitchen.
 Inpaint trans 985: Un chiuvetă neagră plasată în mijlocul unei bucătării construite.
   
 
-COCO en 986: A black and white train hauling cargo along a track.
-COCO trans 986: Un tren alb-negru transportând marfă pe o cale ferată.
+COCO en 986: A white train hauling cargo along a track.
+COCO trans 986: Un tren alb transportând marfă pe o cale ferată.
   
 
 Inpaint en 986: A red train hauling cargo along a track.
@@ -8167,8 +8171,8 @@ Inpaint en 1005: there is on black bear in the wild
 Inpaint trans 1005: E un urs negru în sălbăticie.
   
 
-COCO en 1006: A red parking meter is on a sidewalk next to some green bushes.
-COCO trans 1006: Un aparat de parcare roșu se află pe trotuar lângă niște tufișuri verzi.
+COCO en 1006: A parking meter is on a sidewalk next to some green bushes.
+COCO trans 1006: Un aparat de parcare se află pe trotuar lângă niște tufișuri verzi.
   
 
 Inpaint en 1006: A blue parking meter is on a sidewalk next to some green bushes.
@@ -8368,8 +8372,8 @@ Inpaint en 1030: A blue bowl filled with lots of noodles and beef.
 Inpaint trans 1030: Un bol albastru plin cu mulți tăiței și carne de vită.
   
 
-COCO en 1031: a green and gray bus is on the street
-COCO trans 1031: Un autobuz verde și gri se află pe stradă.
+COCO en 1031: a green and white bus is on the street
+COCO trans 1031: Un autobuz verde și alb se află pe stradă.
   
 
 Inpaint en 1031: red and white bus is on the street
@@ -8449,8 +8453,8 @@ Inpaint en 1040: Someone in red is playing a golf game for the Wii.
 Inpaint trans 1040: Cineva în roșu joacă un joc de golf pe Wii.
   
 
-COCO en 1041: A girl in white dress leaning on a counter in a kitchen.
-COCO trans 1041: O fată în rochie albă se sprijină de tejghea într-o bucătărie.
+COCO en 1041: A woman in white dress leaning on a counter in a kitchen.
+COCO trans 1041: O femeie în rochie albă se sprijină de tejghea într-o bucătărie.
   
 
 Inpaint en 1041: A girl in green dress leaning on a counter in a kitchen.
@@ -8893,8 +8897,8 @@ Inpaint en 1095: Small girl in blue shirt holding a slice of pizza to her face.
 Inpaint trans 1095: Fetiță mică în tricou albastru ținând o felie de pizza lângă față.
   
 
-COCO en 1096: A man riding on the back of a beige horse.
-COCO trans 1096: Un bărbat călărind un cal bej.
+COCO en 1096: A man riding on the back of a brown horse.
+COCO trans 1096: Un bărbat călărind un cal maro.
   
 
 Inpaint en 1096: A man riding on the back of a black horse.
@@ -8982,8 +8986,8 @@ Inpaint en 1106: Person in green peacoat and hat riding a horse.
 Inpaint trans 1106: Persoană în palton verde și cu pălărie călărind un cal.
   
 
-COCO en 1107: a male in a black shirt is typing on a keyboard
-COCO trans 1107: Un bărbat într-un tricou negru tastează pe o tastatură.
+COCO en 1107: a male in a brown shirt is typing on a keyboard
+COCO trans 1107: Un bărbat într-un tricou maro tastează pe o tastatură.
   
 
 Inpaint en 1107: a male in a red shirt is typing on a keyboard
@@ -9202,7 +9206,8 @@ Inpaint trans 1133: O sufragerie cu pereți albi, ferestre dreptunghiulare și m
 
 COCO en 1134: Black and brown cat sitting in a small sink.
 COCO trans 1134: O pisică maro cu negru albă stând într-o chiuvetă mică.
-  
+#MARKED
+
 
 Inpaint en 1134: White cat sitting in a small sink.
 Inpaint trans 1134: Pisica albă stă într-o chiuvetă mică.
@@ -9233,7 +9238,7 @@ Inpaint en 1137: A man is dressed in yellow playing tennis.
 Inpaint trans 1137: Un bărbat îmbrăcat în galben joacă tenis.
   
 
-COCO en 1138: Two sparrows sit on a table with a red tablecloth at an outdoor cafe.
+COCO en 1138: Two sparrows sit n a table with a red tablecloth at an outdoor cafe.
 COCO trans 1138: Două vrăbii stau pe o masă cu o față de masă roșie la o cafenea în aer liber.
   
 
@@ -9241,7 +9246,7 @@ Inpaint en 1138: Two sparrows sit on a table with a blue tablecloth at an outdoo
 Inpaint trans 1138: Două vrăbii stau pe o masă cu o față de masă albastră la o cafenea în aer liber.
   
 
-COCO en 1139: A black dog laying on the floor sipping alcohol from a bottle.
+COCO en 1139: A black dog laying on the floor sitting alcohol from a bottle.
 COCO trans 1139: Un câine negru stând pe podea soarbe alcool dintr-o sticlă.
   
 
@@ -9419,11 +9424,11 @@ Inpaint en 1160: A black chicken standing on top of a lush green field.
 Inpaint trans 1160: Un pui negru stă pe un câmp verde luxuriant.
   
 
-COCO en 1161: A black cat sits on a red cloth that is over a television set.
-COCO trans 1161: O pisică neagră stă pe o pânză roșie care este peste un televizor.
+COCO en 1161: A black and white cat sits on a red cloth that is over a television set.
+COCO trans 1161: O pisică neagră cu alb stă pe o pânză roșie care este peste un televizor.
   
 
-Inpaint en 1161: A white cat sits on a red cloth that is over a television set.
+Inpaint en 1161: A white and white cat sits on a red cloth that is over a television set.
 Inpaint trans 1161: O pisică albă stă pe o pânză roșie care este peste un televizor.
   
 
@@ -9435,9 +9440,10 @@ Inpaint en 1162: A red shelf holds a silver vase.
 Inpaint trans 1162: Un raft roșu conține o vază de argint.
   
 
-COCO en 1163: A man in red jacket standing on a snowboard.
-COCO trans 1163: Un bărbat într-o jachetă roșie stând pe o placă de snowboard.
-  
+COCO en 1163: A woman in red jacket standing on a snowboard.
+COCO trans 1163: O femeie într-o jachetă roșie stând pe o placă de snowboard.
+#MARKED
+
 
 Inpaint en 1163: A man in a yellow jacket standing on a snowboard.
 Inpaint trans 1163: Un bărbat într-o geacă galbenă stând pe o placă de snowboard.
@@ -9459,8 +9465,8 @@ Inpaint en 1165: A man jumping up on a orange tennis court with a black tennis r
 Inpaint trans 1165: Un bărbat sărind pe un teren de tenis portocaliu cu o rachetă de tenis neagră în mâna lui.
   
 
-COCO en 1166: A cat sleeping on top of a black suitcase.
-COCO trans 1166: O pisică dormind pe un geamantan negru.
+COCO en 1166: A cat sleeping on top of a suitcase
+COCO trans 1166: O pisică dormind pe un geamantan
   
 
 Inpaint en 1166: a cat sleeping on top of a orange suitcase
@@ -9507,8 +9513,8 @@ Inpaint en 1171: A green and black bus on street next to trees.
 Inpaint trans 1171: Un autobuz verde și negru pe stradă lângă copaci.
   
 
-COCO en 1172: a cheese pizza on a gray tray and an red pizza cutter,
-COCO trans 1172: O pizza cu brânză pe o tavă gri și un tăietor de pizza roșu.
+COCO en 1172: a cheese pizza on a gray tray and an orange pizza cutter
+COCO trans 1172: O pizza cu brânză pe o tavă gri și un tăietor de pizza portocaliu.
   
 
 Inpaint en 1172: a cheese pizza on a white tray and an red pizza cutter.
@@ -9676,7 +9682,7 @@ Inpaint en 1192: A blue car parked on a street in the rain.
 Inpaint trans 1192: O mașină albastră parcată pe o stradă în ploaie.
   
 
-COCO en 1193: A desktop with a white mouse and a white keyboard.
+COCO en 1193: A desktop with a white mouse and keyboard.
 COCO trans 1193: Un birou cu un mouse alb și o tastatură albă.
   
 
@@ -9853,7 +9859,7 @@ Inpaint en 1214: a skateboarder in a black jacket is doing a trick
 Inpaint trans 1214: Un skateboarder într-o geacă neagră face un truc.
   
 
-COCO en 1215: a water skier in a red and white shirt and hat.
+COCO en 1215: a water skier in a red and white shirt and hat
 COCO trans 1215: Un schior acvatic într-un tricou roșu cu alb și o pălărie.
   
 
@@ -9861,8 +9867,8 @@ Inpaint en 1215: a water skier in a yellow shirt and hat.
 Inpaint trans 1215: Un schior acvatic într-un tricou galben și o pălărie.
   
 
-COCO en 1216: A blue and yellow fire hydrant posed on a street corner in a city.
-COCO trans 1216: Un hidrant albastru cu galben poziționat pe colțul unui stradă într-un oraș.
+COCO en 1216: A blue fire hydrant posed on a street corner in a city.
+COCO trans 1216: Un hidrant albastru poziționat pe colțul unui stradă într-un oraș.
   
 
 Inpaint en 1216: A red fire hydrant posed on a street corner in a city.

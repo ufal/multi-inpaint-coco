@@ -77,7 +77,7 @@ COCO en 1158: A red and gold painted fire hydrant on the street
 COCO en 1186: A blue clock sitting on the side of a road.
 
 
-# Only detected by Andrei (71):
+# Only detected by Andrei (77):
 COCO en 53: A sink that is in front of a mirror.
 COCO en 120: A very thick pizza is on a plate with one piece taken.
 COCO en 153: The sheep with most of it's wool shaved off stands near the herd.
@@ -86,9 +86,12 @@ COCO en 302: A cat standing on a bed and wearing a tie.
 COCO en 328: A plate with a peanut butter sandwich, ham, and tomatoes.
 COCO en 332: a large group of horse with men riding on a few of them
 COCO en 353: a black couch a green chair a red chair a mirror and a ceiling fan
+COCO en 388: A man eating a sandwich off of a white plate.
 COCO en 412: Pasta with sauce and broccoli on white plate.
+COCO en 425: A goat standing up against the side of a house covered in grass.
 COCO en 442: Two boys riding on a single bicycle on a city street
 COCO en 447: A man holding one frisbee and throwing another.
+COCO en 456: A big black dog standing behind a crowd of people.
 COCO en 460: a large tower that has a big clock at top
 COCO en 472: A small white boat sits on some calm water under a snow capped mountain.
 COCO en 480: there is a large bowl with vegetables and broccoli in it
@@ -104,6 +107,7 @@ COCO en 507: a little zebra biting its own tali
 COCO en 517: Clock post outside of a tall brick apartment building.
 COCO en 518: A large orbital vase sits next to a candle on a table.
 COCO en 520: an image of a man slicing a small pizza
+COCO en 527: A glass vase with some flowers near a big window.
 COCO en 541: A small passenger airplane sits in the grass at the airport.
 COCO en 566: A small black dog standing behind a crowd of people.
 COCO en 568: Three people are in a small boat in a lake and one woman holds a red and yellow umbrella.
@@ -142,8 +146,10 @@ COCO en 1058: Men in blue shirts push carts of luggage in an airport.
 COCO en 1063: A white dog sitting on a table next to a paper.
 COCO en 1074: Three people in black shirts playing with a white frisbee.
 COCO en 1128: a white clock is on top of a tower
+COCO en 1134: Black and brown cat sitting in a small sink.
 COCO en 1136: A green motorcycle parked on top of a green lawn.
 COCO en 1147: A wooden bed with white bedding and pillows
+COCO en 1163: A woman in red jacket standing on a snowboard.
 COCO en 1206: A large brown sectional sofa has people on it.
 COCO en 1227: A white dog is sitting on a wooden bench
 COCO en 1239: A child laying on a bed with a white pillow.
