@@ -157,8 +157,10 @@ COCO en 1244: A small white dog standing on a bench.
 COCO en 1246: A white and yellow train traveling down a road next to a red motorcycle.
 
 
-# Only detected by Jindrich (93):
+# Only detected by Jindrich (96):
+COCO en 451: The book is about fixing your bike.
 COCO en 473: A bunch of small red flowers in a barnacle encrusted clay vase
+COCO en 505: Three people in a boat with an umbrella in the rain
 COCO en 522: a tall church tower with a clock at the top
 COCO en 525: A small plate of food with broccoliw and nuts
 COCO en 528: A broccoli plant has very large leaves.
@@ -234,6 +236,7 @@ COCO en 915: Two large brown elephants walking in a grassy field.
 COCO en 943: A yellow fire hydrant with an angry face drawn on it.
 COCO en 945: A herd of zebra standing next to each other on a green grass covered field.
 COCO en 946: A herd of sheep grazing on a lush green field.
+COCO en 968: The man plays on the beach with his two dogs, one of which is a black standard poodle.
 COCO en 977: Add cooked vegetables to plain white rice for a healthy dinner.
 COCO en 982: A deep dish style pizza with a slice cut out of it next to a glass of white wine.
 COCO en 991: person in a grassy green field boardered by mountains

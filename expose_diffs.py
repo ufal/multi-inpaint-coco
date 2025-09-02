@@ -1,6 +1,3 @@
-
-# TODO: expose the changed english captions
-
 import re
 import ipdb
 
@@ -97,9 +94,13 @@ def main():
     export_diffs(ro_items, ro_marked_ids, cs_items, cs_marked_ids)
     export_en_captions_diffs(ro_items, ro_marked_ids, cs_items, cs_marked_ids)
 
-    # LATER: ignore the marked ones from both sets and include also images
+    with open("data/cs-ro.ignore.ids.txt", "w") as f:
+        ignoring_ids = list(set(ro_marked_ids) | set(cs_marked_ids))
+        ignoring_ids.sort()
+
+        f.write("\n".join(map(str, ignoring_ids)))
 
 if __name__ == "__main__":
     main()
 
-# RO #MARKED - DUPLICATE 
+# TODO: write a rule of merging in a tsv to pass to the next translation of languages

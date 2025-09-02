@@ -1114,7 +1114,7 @@ COCO en 140: Man swinging tennis racket while group of people watches
 COCO trans 140: Muž mává tenisovou raketou, zatímco skupina lidí sleduje.
   
 
-Inpaint en 140: Man swinging basketball bat while group of people watches
+Inpaint en 140: Man swinging baseball bat while group of people watches
 Inpaint trans 140: Muž mává baseballovou pálkou, zatímco skupina lidí se dívá.
   
 
@@ -1466,8 +1466,8 @@ COCO en 184: A woman checking her cell phone with a hello kitty case.
 COCO trans 184: Žena kontroluje svůj mobil s pouzdrem Hello Kitty.
   
 
-Inpaint en 184: A woman checking her remote controller with a hello kitty case.
-Inpaint trans 184: Žena kontroluje svůj dálkový ovladač s pouzdrem Hello Kitty.
+Inpaint en 184: A woman checking her remote controller.
+Inpaint trans 184: Žena kontroluje svůj dálkový ovladač.
   
 
 COCO en 185: A zebra standing on a dirty rocky field.
@@ -2210,8 +2210,8 @@ COCO en 277: A man balances his bicycle on one wheel
 COCO trans 277: Muž vyvažuje své kolo na jednom kole.
   
 
-Inpaint en 277: A man balances his motorcycle on one wheel.
-Inpaint trans 277: Muž vyvažuje svůj motocykl na jednom kole.
+Inpaint en 277: A man on his motorcycle.
+Inpaint trans 277: Muž na motocyklu.
   
 
 COCO en 278: A man and woman posing for a photo with pizza on the table they are sitting at.
@@ -2466,7 +2466,7 @@ COCO en 309: a very ugly cow with long horns staring
 COCO trans 309: Velmi ošklivá kráva s dlouhými rohy zírá.
   
 
-Inpaint en 309: a very ugly horse with long horns staring
+Inpaint en 309: a very ugly horse staring
 Inpaint trans 309: Velmi ošklivý kůň zírá.
   
 
@@ -2498,8 +2498,8 @@ COCO en 313: A raw piece of broccoli with something growing from it.
 COCO trans 313: Surový kus brokolice, ze kterého něco roste.
   
 
-Inpaint en 313: A raw piece of banana with something growing from it.
-Inpaint trans 313: Surový kus banánu s něčím, co z něj roste.
+Inpaint en 313: A raw piece of banana
+Inpaint trans 313: Syrový banán
   
 
 COCO en 314: Two sausage patties, carrots and potatoes on a plate with a fork.
@@ -2858,8 +2858,8 @@ COCO en 358: A mother giraffe is standing with a baby giraffe.
 COCO trans 358: Matka žirafa stojí s malou žirafou.
   
 
-Inpaint en 358: A mother elephant is standing with a baby elephant.
-Inpaint trans 358: Matka slona stojí s dítětem.
+Inpaint en 358: A mother elephant is standing with a baby boy.
+Inpaint trans 358: Slon stojí vedle dítěte.
   
 
 COCO en 359: A white toilet sitting next to a trash can in a restroom.
@@ -3042,8 +3042,8 @@ COCO en 381: A bird is perched on the back of a chair.
 COCO trans 381: Pták sedí na zadní straně židle.
   
 
-Inpaint en 381: A bird is perched on the back of a table.
-Inpaint trans 381: Pták sedí na zadní straně stolu.
+Inpaint en 381: A bird is perched on a table.
+Inpaint trans 381: Pták sedí na stole.
   
 
 COCO en 382: An elephant standing on top of a rocky hillside.
@@ -3599,8 +3599,8 @@ Inpaint trans 450: Muž drží tenisovou raketu.
   
 
 COCO en 451: The book is about fixing your bike.
-COCO trans 451: Kniha je o opravě vašeho kola.
-  
+COCO trans 451: Kniha je o opravě vašeho kola. DELETE
+
 
 Inpaint en 451: The clock is about fixing your bike.
 Inpaint trans 451: Hodiny jsou o opravě tvého kola.
@@ -3802,8 +3802,8 @@ COCO en 476: A man holding a large umbrella with some girls and a woman undernea
 COCO trans 476: Muž držící velký deštník, pod kterým jsou nějaké dívky a žena.
   
 
-Inpaint en 476: A man holding a small umbrella with some girls and a woman underneath.
-Inpaint trans 476: Muž držící malý deštník, pod kterým jsou nějaké dívky a žena.
+Inpaint en 476: A man holding a small umbrella with a woman underneath.
+Inpaint trans 476: Muž držící malý deštník, pod kterým je žena.
   
 
 COCO en 477: The people fly a kite by the tall stone building.
@@ -3898,8 +3898,8 @@ COCO en 488: The large green bus drives near two people on a motorcycle.
 COCO trans 488: Velký zelený autobus jede poblíž dvou lidí na motocyklu.
   
 
-Inpaint en 488: The giant green bus drives near two people on a motorcycle.
-Inpaint trans 488: Obrovský zelený autobus jede poblíž dvou lidí na motocyklu.
+Inpaint en 488: The tall green bus drives near two people on a motorcycle.
+Inpaint trans 488: Vysoký zelený autobus jede poblíž dvou lidí na motocyklu.
   
 
 COCO en 489: A girl is skate boarding on a short skateboard.
@@ -3922,8 +3922,8 @@ COCO en 491: A group of older people around a long restaurant table.
 COCO trans 491: Skupina starších lidí kolem dlouhého stolu v restauraci.
   
 
-Inpaint en 491: A group of older people around a short restaurant table.
-Inpaint trans 491: Skupina starších lidí kolem nízkého stolu v restauraci.
+Inpaint en 491: A group of older people around a small restaurant table.
+Inpaint trans 491: Skupina starších lidí kolem malého stolu v restauraci.
   
 
 COCO en 492: a small party of people eats some pizza on a table
@@ -4031,10 +4031,10 @@ Inpaint trans 504: Hubený pták stojí na skalnaté půdě.
   
 
 COCO en 505: Three people in a boat with an umbrella in the rain
-COCO trans 505: Tři lidé v člunu s deštníkem v dešti.
-  
+COCO trans 505: Tři lidé v člunu s deštníkem v dešti. DELETE
 
-Inpaint en 505: Three people in a big boat holding an umbrella
+
+Inpaint en 505: Three people in a boat holding an umbrella
 Inpaint trans 505: Tři lidé ve velké lodi drží deštník.
   
 
@@ -4066,15 +4066,15 @@ COCO en 509: Several suitcases on wheels leaning up against one long table with 
 COCO trans 509: Několik kufrů na kolečkách opřených o dlouhý stůl s židlemi.
   
 
-Inpaint en 509: Several suitcases on wheels leaning up against one short table with chairs.
-Inpaint trans 509: Několik kufrů na kolečkách opřených o nízký stůl se židlemi.
+Inpaint en 509: Several suitcases on wheels leaning up against one small table with chairs.
+Inpaint trans 509: Několik kufrů na kolečkách opřených o malý stůl se židlemi.
   
 
 COCO en 510: A man driving a small boat with a dog sitting on it's front end.
 COCO trans 510: Muž řídí malý člun s psem sedícím na jeho přední části.
   
 
-Inpaint en 510: s
+Inpaint en 510: A big boat.
 Inpaint trans 510: Velká loď
   
 
@@ -4234,8 +4234,8 @@ COCO en 530: A large red electrical passenger train riding down railroad tracks.
 COCO trans 530: Velký červený elektrický osobní vlak jede po kolejích.
   
 
-Inpaint en 530: A tiny red electrical passenger train riding down railroad tracks.
-Inpaint trans 530: Malý červený elektrický osobní vlak jede po kolejích.
+Inpaint en 530: A tiny yellow electrical passenger train riding down railroad tracks.
+Inpaint trans 530: Malý žlutý elektrický osobní vlak jede po kolejích.
   
 
 COCO en 531: Several people are standing outside a large boat.
@@ -4370,8 +4370,8 @@ COCO en 547: A large brown dog sitting on top of a couch.
 COCO trans 547: Velký hnědý pes sedí na vrchu pohovky.
   
 
-Inpaint en 547: A msall brown dog sitting on top of a couch.
-Inpaint trans 547: Malý hnědý pes sedí na vrchu pohovky.
+Inpaint en 547: A small white dog sitting on top of a couch.
+Inpaint trans 547: Malý bílý pes sedí na vrchu pohovky.
   
 
 COCO en 548: The large cat is resting comfortably behind the laptop screen.
@@ -4450,8 +4450,8 @@ COCO en 557: A large yellow dump truck sitting on green lawn.
 COCO trans 557: Velký žlutý sklápěč stojí na zeleném trávníku.
   
 
-Inpaint en 557: A tiny truck sitting on green lawn.
-Inpaint trans 557: Malý nákladní auto sedí na zeleném trávníku.
+Inpaint en 557: A white truck sitting on green lawn.
+Inpaint trans 557: Bílý náklaďák na zeleném trávníku.
   
 
 COCO en 558: A young boy playing in a living room with a large window.
@@ -4503,18 +4503,18 @@ Inpaint trans 563: Usmívající se muž držící velký talíř jídla
   
 
 COCO en 564: A large cow with horns by some bushes.
-COCO trans 564: Velká kráva s rohy u keřů.
+COCO trans 564: Velká rohatá kráva u keřů.
   
 
-Inpaint en 564: A small cow with horns by some bushes.
-Inpaint trans 564: Malá kráva u keřů.
+Inpaint en 564: A small white cow by some bushes.
+Inpaint trans 564: Malá bílá kráva u keřů.
   
 
 COCO en 565: A view A large metal structure near the side of a building
 COCO trans 565: Pohled na velkou kovovou konstrukci u boku budovy
   
 
-Inpaint en 565: A view A short metal structure near the side of a building
+Inpaint en 565: A view with a short metal structure near the side of a building
 Inpaint trans 565: Pohled na krátkou kovovou konstrukci u boku budovy.
   
 
@@ -4668,7 +4668,7 @@ COCO trans 584: Baseballová hra v velkém stadionu s míčem letícím směrem 
 
 Inpaint en 584: Baseball game in small stadium with ball flying toward batter
 Inpaint trans 584: Baseballová hra na malém stadionu s míčem letícím směrem k odpalovači.
-  
+
 
 COCO en 585: a large kite that is being flown in the sky
 COCO trans 585: velký drak, který létá na obloze
@@ -4698,8 +4698,8 @@ COCO en 588: A small green bus on a busy road.
 COCO trans 588: Malý zelený autobus na rušné silnici.
   
 
-Inpaint en 588: A large green bus on a busy road.
-Inpaint trans 588: Velký zelený autobus na rušné silnici.
+Inpaint en 588: A long green bus on a busy road.
+Inpaint trans 588: Dlouhý zelený autobus na rušné silnici.
   
 
 COCO en 589: a big airplane that is on a runway
@@ -4714,8 +4714,8 @@ COCO en 590: A large truck on a city street with two works sitting on top and on
 COCO trans 590: Velký nákladní vůz na městské ulici se dvěma dělníky sedícími nahoře a jedním dělníkem, který leze dovnitř dveřmi.
   
 
-Inpaint en 590: A small truck on a city street with two works sitting on top and one worker climbing in through door.
-Inpaint trans 590: Malý nákladní vůz na městské ulici se dvěma dělníky sedícími nahoře a jedním dělníkem, který vstupuje dveřmi.
+Inpaint en 590: A white truck on a city street with two works sitting on top and one worker climbing in through door.
+Inpaint trans 590: Bílý nákladní vůz na městské ulici se dvěma dělníky sedícími nahoře a jedním dělníkem, který vstupuje dveřmi.
   
 
 COCO en 591: Empty parked train painted with large, colorful graffiti.
@@ -4786,8 +4786,8 @@ COCO en 599: A large clock is on the wall where the paint is peeling.
 COCO trans 599: Velké hodiny jsou na zdi, kde se odlupuje barva.
   
 
-Inpaint en 599: tinylarge clock is on the wall where the paint is peeling.
-Inpaint trans 599: Malévelké hodiny jsou na zdi, kde se odlupuje barva.
+Inpaint en 599: tiny clock is on the wall where the paint is peeling.
+Inpaint trans 599: Malé hodiny jsou na zdi, kde se odlupuje barva.
   
 
 COCO en 600: A large piece of blueberry cake on a plate.
@@ -4850,7 +4850,7 @@ COCO en 607: Two large identical teddy bears are piled against the wall.
 COCO trans 607: Dva velcí stejní plyšoví medvědi u zdi.
   
 
-Inpaint en 607: Two small identical teddy bears are piled against the wall.
+Inpaint en 607: Two small identical teddy bears are against the wall.
 Inpaint trans 607: Dva malí stejní plyšoví medvědi u zdi.
   
 
@@ -5095,11 +5095,11 @@ Inpaint trans 637: Žena v tmavě barevných šatech stojí u obrubníku poblí�
   
 
 COCO en 638: A large calico cat sitting on a wooden table next to a remote control.
-COCO trans 638: Velká trojbarevná kočka sedí na dřevěném stole vedle dálkového ovladače.
+COCO trans 638: Velká kočka sedí na dřevěném stole vedle dálkového ovladače.
   
 
-Inpaint en 638: A small calico cat sitting on a wooden table next to a remote control.
-Inpaint trans 638: Malá trojbarevná kočka sedí na dřevěném stole vedle dálkového ovladače.
+Inpaint en 638: A small cat sitting on a wooden table next to a remote control.
+Inpaint trans 638: Malá kočka sedí na dřevěném stole vedle dálkového ovladače.
   
 
 COCO en 639: Man standing beneath large sail on beach with man controlling from distance.
@@ -5274,8 +5274,8 @@ COCO en 660: A living room with white furniture and a small wooden table.
 COCO trans 660: Obývací pokoj s bílým nábytkem a malým dřevěným stolkem.
   
 
-Inpaint en 660: A living room with white furniture and a huge wooden table.
-Inpaint trans 660: Obývací pokoj s bílým nábytkem a obrovským dřevěným stolem.
+Inpaint en 660: A living room with white furniture and a large wooden table.
+Inpaint trans 660: Obývací pokoj s bílým nábytkem a velkým dřevěným stolem.
   
 
 COCO en 661: A little boy smiling for a picture as he eats.
@@ -5386,8 +5386,8 @@ COCO en 674: A family sitting at a large table in a restaurant.
 COCO trans 674: Rodina sedí u velkého stolu v restauraci.
   
 
-Inpaint en 674: A family sitting at a short table in a restaurant.
-Inpaint trans 674: Rodina sedí u nízkého stolu v restauraci.
+Inpaint en 674: A family sitting at many small tables in a restaurant.
+Inpaint trans 674: Rodina sedí u několika malých stolů v restauraci.
   
 
 COCO en 675: A large white sheep next to a small black one
@@ -5402,8 +5402,8 @@ COCO en 676: The strawberries was sitting beside the tall glass of milkshake
 COCO trans 676: Jahody ležely vedle vysokého sklenice s milkshakem.
   
 
-Inpaint en 676: The strawberries was sitting beside the short glass of milkshake
-Inpaint trans 676: Jahody ležely vedle nízkého skleničky s milkshakem.
+Inpaint en 676: The strawberries was sitting beside the small glass of milkshake
+Inpaint trans 676: Jahody ležely vedle malé skleničky s milkshakem.
   
 
 COCO en 677: A large white sheep standing next to other sheep.
@@ -5602,7 +5602,7 @@ COCO en 701: A dried black flower in a long, tall black & white vase.
 COCO trans 701: Sušený černý květ v dlouhé, vysoké černobílé váze.
   
 
-Inpaint en 701: dried black flower in a small,short black & white vase.
+Inpaint en 701: dried black flower in a small, short black & white vase.
 Inpaint trans 701: Sušený černý květ v malé, nízké černo-bílé váze.
   
 
@@ -5618,8 +5618,8 @@ COCO en 703: The tall, skinny birds are standing in the grass.
 COCO trans 703: Vysocí štíhlí ptáci stojí v trávě.
   
 
-Inpaint en 703: The small, skinny birds are standing in the grass.
-Inpaint trans 703: Malí hubení ptáci stojí v trávě.
+Inpaint en 703: A small, skinny bird is standing in the grass.
+Inpaint trans 703: Malý hubený pták stojí v trávě.
   
 
 COCO en 704: A large white bowl sits on a slide out shelf under a microwave.
@@ -5727,11 +5727,11 @@ Inpaint trans 716: Malé okénko se značkou, na které je napsáno atm uvnitř.
   
 
 COCO en 717: the cog is grazing on the grass, he has big horns
-COCO trans 717: Cvak se pase na trávě, má velké rohy.
+COCO trans 717: Kráva se pase na trávě, má velké rohy.
   
 
-Inpaint en 717: the cog is grazing on the grass, he has small horns
-Inpaint trans 717: Cvak se pase na trávě, má malé rohy.
+Inpaint en 717: The cow is grazing on the grass, he has small horns
+Inpaint trans 717: Kráva se pase na trávě, má malé rohy.
   
 
 COCO en 718: A man standing beside several small orange suitcases.
@@ -5800,7 +5800,7 @@ Inpaint trans 725: Malý pokoj má dřevěný stůl se židlemi a pohovkou.
 
 COCO en 726: a couple of elephants out in a large field 
 COCO trans 726: Pár slonů venku na velkém poli DELETE
-  
+
 
 Inpaint en 726: a couple of elephants out in a small field
 Inpaint trans 726: Pár slonů venku na malém poli
@@ -5834,8 +5834,8 @@ COCO en 730: A small airplane sitting next to an airport runway.
 COCO trans 730: Malé letadlo stojící vedle letištní dráhy.
   
 
-Inpaint en 730: A large airplane sitting next to an airport runway.
-Inpaint trans 730: Velké letadlo stojící vedle letištní dráhy.
+Inpaint en 730: A long airplane sitting next to an airport runway.
+Inpaint trans 730: Dlouhé letadlo stojící vedle letištní dráhy.
   
 
 COCO en 731: a small bowl of fruit on a table
@@ -6047,11 +6047,11 @@ Inpaint trans 756: Přímo venku z nízké budovy je hodiny.
   
 
 COCO en 757: a small dog wearing a shirt and sniffing something on the ground
-COCO trans 757: Malý pes v tričku, který něco na zemi čichá.
+COCO trans 757: Malý pes v tričku, který něco čichá na zemi.
   
 
-Inpaint en 757: a huge dog wearing a shirt and sniffing something on the ground
-Inpaint trans 757: Velký pes v tričku, který něco na zemi čichá.
+Inpaint en 757: a big dog wearing a shirt and sniffing something on the ground
+Inpaint trans 757: Velký pes v tričku, který něco čichá na zemi.
   
 
 COCO en 758: A small kitchen has various appliances and a table.
@@ -6282,7 +6282,7 @@ COCO en 786: A small desk with lamp, phone, and laptop on it.
 COCO trans 786: Malý stůl s lampou, telefonem a notebookem na něm.
   
 
-Inpaint en 786: A massive desk with lamp, phone, and laptop on it.
+Inpaint en 786: A big desk with lamp, phone, and laptop on it.
 Inpaint trans 786: Velký stůl s lampou, telefonem a notebookem na něm.
   
 
@@ -6394,24 +6394,24 @@ COCO en 800: Traffic lights over a street with blue sky in background.
 COCO trans 800: Semafor nad ulicí s modrým nebem na pozadí.
   
 
-Inpaint en 800: Traffic lights over a street with orange sky in background.
-Inpaint trans 800: Semafor nad ulicí s oranžovým nebem na pozadí.
+Inpaint en 800: Panel over a street with orange sky in background.
+Inpaint trans 800: Panel nad ulicí s oranžovým nebem na pozadí.
   
 
 COCO en 801: A double decker bus sitting on a green field.
 COCO trans 801: Dvoupatrový autobus stojí na zeleném poli. DELETE
   
 
-Inpaint en 801: A double decker bus sitting on a yellow field.
-Inpaint trans 801: Dvoupatrový autobus stojí na žlutém poli.
+Inpaint en 801: A double decker bus sitting on a yellow field. 
+Inpaint trans 801: Dvoupatrový autobus stojí na žlutém poli. 
   
 
 COCO en 802: Soup with meat, pasta and greens in a white bowl.
 COCO trans 802: Polévka s masem, těstovinami a zeleninou v bílé misce.
   
 
-Inpaint en 802: Soup with meat, pasta and greens in a blue bowl.
-Inpaint trans 802: Polévka s masem, těstovinami a zeleninou v modré misce.
+Inpaint en 802: Soup with meat and greens in a blue bowl.
+Inpaint trans 802: Polévka s masem a zeleninou v modré misce.
   
 
 COCO en 803: A room that has a small television next to a red chair.
@@ -6530,8 +6530,8 @@ COCO en 817: A brown curly haired dog chasing after a red frisbee
 COCO trans 817: Hnědý pes s kudrnatou srstí, který honí červený frisbee.
   
 
-Inpaint en 817: A black curly haired dog chasing after a red frisbee
-Inpaint trans 817: Černý pes s kudrnatou srstí, který honí červený frisbee.
+Inpaint en 817: A black haired dog chasing after a red frisbee
+Inpaint trans 817: Černý pes, který honí červený frisbee.
   
 
 COCO en 818: Large black dog sitting in front of a big mirror.
@@ -6770,8 +6770,8 @@ COCO en 847: A red pick up truck with a plow blade drives down a snowy suburban 
 COCO trans 847: Červený pick up s radlicí jede po zasněžené předměstské silnici.
   
 
-Inpaint en 847: A yellow pick up truck with a plow blade drives down a snowy suburban road.
-Inpaint trans 847: Žlutý pick up s radlicí jede po zasněžené předměstské silnici.
+Inpaint en 847: A yellow pick up truck drives down a snowy suburban road.
+Inpaint trans 847: Žlutý pick up jede po zasněžené předměstské silnici.
   
 
 COCO en 848: A salad is in a red container and has lettuce, tomatoes and bits of carrots in it.
@@ -6898,7 +6898,7 @@ COCO en 863: Skier with a red jacket on going down the side of a mountain.
 COCO trans 863: Lyžař v červené bundě sjíždí horu.
   
 
-Inpaint en 863: Skier with a red jacket on going up the side of a mountain
+Inpaint en 863: Skier with a green jacket on going up the side of a mountain
 Inpaint trans 863: Lyžař v červené bundě sjiždí horu.
   
 
@@ -6946,7 +6946,7 @@ COCO en 869: Some dessert and toppings are in a blue plastic bowl.
 COCO trans 869: Nějaký dezert a posypky jsou v modré plastové misce.
   
 
-Inpaint en 869: ome dessert and toppings are in a green plastic bowl.
+Inpaint en 869: A dessert and toppings are in a green plastic bowl.
 Inpaint trans 869: Nějaký dezert a posypky jsou v zelené plastové misce.
   
 
@@ -6994,8 +6994,8 @@ COCO en 875: A black and brown dog wearing a chain around it's neck.
 COCO trans 875: Černohnědý pes s řetězem kolem krku.
   
 
-Inpaint en 875: A white dog wearing a chain around it's neck.
-Inpaint trans 875: Bílý pes s řetězem kolem krku.
+Inpaint en 875: A white dog.
+Inpaint trans 875: Bílý pes.
   
 
 COCO en 876: A baby giraffe and a baby zebra stand near a green hut.
@@ -7138,7 +7138,7 @@ COCO en 893: A black and white cat lays on the hood of a car.
 COCO trans 893: Černobílá kočka leží na kapotě auta.
   
 
-Inpaint en 893: A brown and black cat lays on the hood of a car.
+Inpaint en 893: A brown and white cat lays on the hood of a car.
 Inpaint trans 893: Hnědá a černá kočka leží na kapotě auta.
   
 
@@ -7154,16 +7154,16 @@ COCO en 895: A man holding a black and white umbrella.
 COCO trans 895: Muž držící černobílý deštník.
   
 
-Inpaint en 895: A man holding a black and blue umbrella.
-Inpaint trans 895: Muž držící černý a modrý deštník.
+Inpaint en 895: A man holding a blue umbrella.
+Inpaint trans 895: Muž držící modrý deštník.
   
 
 COCO en 896: A large living room area features a white couch and a glass table.
 COCO trans 896: Velká obývací místnost s bílou pohovkou a skleněným stolem.
   
 
-Inpaint en 896: A large living room area features a brown couch and a glass table.
-Inpaint trans 896: Velká obývací místnost s hnědou pohovkou a skleněným stolem.
+Inpaint en 896: A large living room area features a gray couch and a glass table.
+Inpaint trans 896: Velká obývací místnost s šedou pohovkou a skleněným stolem.
   
 
 COCO en 897: A green street sign next to a dirt field by a playground.
@@ -7335,11 +7335,11 @@ Inpaint trans 917: Červený požární hydrant před cihlovou budovou.
   
 
 COCO en 918: A black and white cow on side of street next to people.
-COCO trans 918: Černobílá kráva na straně ulice vedle lidí.
+COCO trans 918: Černobílá kráva na ulici vedle lidí.
   
 
-Inpaint en 918: A white cow on side of street next to people.
-Inpaint trans 918: Bílá kráva na straně ulice vedle lidí.
+Inpaint en 918: A white cow on the street next to people.
+Inpaint trans 918: Bílá kráva na ulici vedle lidí.
   
 
 COCO en 919: A brown horse stands over a light colored dog.
@@ -7442,8 +7442,8 @@ COCO en 931: a black and white cat wearing a little purple hat
 COCO trans 931: Černobílá kočka má malou fialovou čepici.
   
 
-Inpaint en 931: a black and white cat wearing a little purple hat
-Inpaint trans 931: Šedá kočka nosící má fialovou čepici.
+Inpaint en 931: a gray cat wearing a little purple hat
+Inpaint trans 931: Šedá kočka má malou fialovou čepici.
   
 
 COCO en 932: A man in black shirt standing in field with baseball mitt.
@@ -7487,11 +7487,11 @@ Inpaint trans 936: Pár bílých koní kráčí ulicí vedle budov.
   
 
 COCO en 937: An orange train engine moves down the track with one train car behind it.
-COCO trans 937: Oranžov lokomotiva se pohybuje po kolejích s jedním vagónem za sebou.
+COCO trans 937: Oranžová lokomotiva  s jedním vagónem za sebou se pohybuje po kolejích.
   
 
-Inpaint en 937: A blue train engine moves down the track with one train car behind it.
-Inpaint trans 937: Modr lokomotiva se pohybuje po kolejích s jedním vagónem za sebou.
+Inpaint en 937: A blue train engine moves down the track.
+Inpaint trans 937: Modrá lokomotiva se pohybuje po kolejích.
   
 
 COCO en 938: A woman in green sweater eating a hotdog by campfire.
@@ -7735,11 +7735,11 @@ Inpaint trans 967: Chlapeček je na modré podložce a hraje videohru.
   
 
 COCO en 968: The man plays on the beach with his two dogs, one of which is a black standard poodle.
-COCO trans 968: Muž si hraje na pláži se svými dvěma psy, z nichž jeden je černý pudl.
+COCO trans 968: Muž si hraje na pláži se svými dvěma psy, z nichž jeden je černý pudl. DELETE
   
 
-Inpaint en 968: The man plays on the beach with his two dogs, one of which is a white standard poodle.
-Inpaint trans 968: Muž si hraje na pláži se svými dvěma psy, z nichž jeden je bílý..
+Inpaint en 968: The man plays on the beach with his dog.
+Inpaint trans 968: Muž si hraje na pláži se svým psem.
   
 
 COCO en 969: A white toilet sitting inside of a bathroom next to a sink.
@@ -7762,7 +7762,7 @@ COCO en 971: A white bed in a bedroom next to a table on a lamp.
 COCO trans 971: Bílá postel v ložnici vedle stolu s lampou.
   
 
-Inpaint en 971: A yellow bed in a bedroom next to a table on a lamp.
+Inpaint en 971: A yellow bed in a bedroom next to a table with a lamp.
 Inpaint trans 971: Žlutá postel v ložnici vedle stolu s lampou.
   
 
@@ -7794,8 +7794,8 @@ COCO en 975: A black mouse with blue light-up parts is next to a gray keyboard.
 COCO trans 975: Černá myš s modrými svítícími částmi je vedle šedé klávesnice.
   
 
-Inpaint en 975: A black mouse with green light-up parts is next to a gray keyboard.
-Inpaint trans 975: Černá myš s zelenými svítícími částmi je vedle šedé klávesnice.
+Inpaint en 975: A black mouse with green light-up parts is next to a white keyboard.
+Inpaint trans 975: Černá myš s zelenými svítícími částmi je vedle bílé klávesnice.
   
 
 COCO en 976: A small, white toilet with a toilet paper dispenser on the wall.
@@ -7906,8 +7906,8 @@ COCO en 989: A red fire hydrant with a face drawn on it's side.
 COCO trans 989: Červený požární hydrant s obličejem nakresleným na boku.
   
 
-Inpaint en 989: A yellow fire hydrant with a face drawn on it's side.
-Inpaint trans 989: Žlutý požární hydrant s obličejem nakresleným na boku.
+Inpaint en 989: A yellow fire hydrant.
+Inpaint trans 989: Žlutý požární hydrant.
   
 
 COCO en 990: Gray and white cat sitting next to open laptop.
@@ -7970,8 +7970,8 @@ COCO en 997: A white plate on a table topped with a sandwich.
 COCO trans 997: Bílý talíř na stole s sendvičem.
   
 
-Inpaint en 997: A blue plate on a table topped with a sandwich.
-Inpaint trans 997: Modrý talíř na stole se sendvičem.
+Inpaint en 997: A black plate on a table topped with a sandwich.
+Inpaint trans 997: Černý talíř na stole se sendvičem.
   
 
 COCO en 998: A yellow dump truck driving past a forest.
@@ -8218,8 +8218,8 @@ COCO en 1028: A green bus with a smaller bus sitting on top of it.
 COCO trans 1028: Zelený autobus s menším autobusem na sobě.
   
 
-Inpaint en 1028: A red bus with a smaller bus sitting on top of it.
-Inpaint trans 1028: Červený autobus s menším autobusem na sobě.
+Inpaint en 1028: A red bus is parked on the grass.
+Inpaint trans 1028: Červený autobus parkuje na trávě.
   
 
 COCO en 1029: A slice of pizza sitting on top of a white plate.
@@ -8322,8 +8322,8 @@ COCO en 1041: A woman in white dress leaning on a counter in a kitchen.
 COCO trans 1041: Žena v bílých šatech se opírá o pult v kuchyni.
   
 
-Inpaint en 1041: A woman in green dress leaning on a counter in a kitchen.
-Inpaint trans 1041: Žena v zelených šatech se opírá o pult v kuchyni.
+Inpaint en 1041: A girl in green dress leaning on a counter in a kitchen.
+Inpaint trans 1041: Dívka v zelených šatech se opírá o pult v kuchyni.
   
 
 COCO en 1042: Man in yellow and black body suit on skateboard.
@@ -8370,8 +8370,8 @@ COCO en 1047: A red stop sign with two green street signs on top of it.
 COCO trans 1047: Červená stop značka se dvěma zelenými dopravními značkami nad ní.
   
 
-Inpaint en 1047: A red stop sign with two blue street signs on top of it.
-Inpaint trans 1047: Červená stop značka s dvěma modrými uličními značkami nad ní.
+Inpaint en 1047: A red stop sign with a blue street sign on top of it.
+Inpaint trans 1047: Červená stop značka s modrou cedulí označující ulici.
   
 
 COCO en 1048: a brown horse in the field gazing around
@@ -8482,8 +8482,8 @@ COCO en 1061: Two brown bears growling at each other while laying on a log.
 COCO trans 1061: Dva hnědí medvědi na sebe vrčí a leží na kládě.
   
 
-Inpaint en 1061: Two white bears growling at each other while laying on a log.
-Inpaint trans 1061: Dva bílí medvědi na sebe vrčí a leží na kládě.
+Inpaint en 1061: Two white bears laying on a log.
+Inpaint trans 1061: Dva bílí medvědi na sebe leží na kládě.
   
 
 COCO en 1062: a white boat some green hills and water
@@ -8762,7 +8762,7 @@ COCO en 1096: A man riding on the back of a brown horse.
 COCO trans 1096: Muž jedoucí na hřbetě hnědého koně.
   
 
-Inpaint en 1096: A man riding on he back of a black horse.
+Inpaint en 1096: A man riding on the back of a black horse.
 Inpaint trans 1096: Muž jedoucí na hřbetě černého koně.
   
 
@@ -9098,7 +9098,7 @@ COCO en 1138: Two sparrows sit n a table with a red tablecloth at an outdoor caf
 COCO trans 1138: Dva vrabci sedí na stole s červeným ubrusem v kavárně pod širým nebem.
   
 
-Inpaint en 1138: Two sparrows sit n a table with a blue tablecloth at an outdoor cafe.
+Inpaint en 1138: Two sparrows sit on a table with a blue tablecloth at an outdoor cafe.
 Inpaint trans 1138: Dva vrabci sedí na stole s modrým ubrusem v kavárně pod širým nebem.
   
 
@@ -9106,7 +9106,7 @@ COCO en 1139: A black dog laying on the floor sitting alcohol from a bottle.
 COCO trans 1139: Černý pes leží na podlaze a čichá si k alkoholu z lahve.
   
 
-Inpaint en 1139: A white dog laying on the floor sitting alcohol from a bottle.
+Inpaint en 1139: A white dog laying on the floor sipping alcohol from a bottle.
 Inpaint trans 1139: Bílý pes leží na podlaze a čichá si k alkoholu z lahve.
   
 
@@ -9154,8 +9154,8 @@ COCO en 1145: Man in green sweatshirt about to catch a frisbee.
 COCO trans 1145: Muž v zelené mikině se chystá chytit frisbee.
   
 
-Inpaint en 1145: Man in black sweatshirt about to catch a frisbee.
-Inpaint trans 1145: Muž v černé mikině se chystá chytit frisbee.
+Inpaint en 1145: Woman in black sweatshirt about to catch a frisbee.
+Inpaint trans 1145: Žena v černé mikině se chystá chytit frisbee.
   
 
 COCO en 1146: An Asian child brushes their teeth with a blue toothbrush.
@@ -9282,16 +9282,16 @@ COCO en 1161: A black and white cat sits on a red cloth that is over a televisio
 COCO trans 1161: Černobílá kočka sedí na červeném plátně, které je přes televizor.
   
 
-Inpaint en 1161: A white cat sits upon a television set.
-Inpaint trans 1161: Bílá kočka sedí na televizi.
+Inpaint en 1161: A white cat sits on a red cloth that is over a television set.
+Inpaint trans 1161: Černobílá kočka sedí na červeném plátně, které je přes televizor.
   
 
 COCO en 1162: A blue shelf holds different sized silver vases.
-COCO trans 1162: Modrá police drží stříbrné vázy různých velikostí.
+COCO trans 1162: Modrá police má na sobě stříbrné vázy různých velikostí.
   
 
-Inpaint en 1162: A red shelf holds different sized silver vases.
-Inpaint trans 1162: Červená police drží stříbrné vázy různých velikostí.
+Inpaint en 1162: A red shelf holds a silver vase.
+Inpaint trans 1162: Červená police má na sobě stříbrnou vázu.
   
 
 COCO en 1163: A woman in blue jacket standing on a snowboard.
@@ -9346,8 +9346,8 @@ COCO en 1169: A red icing doughnut with sprinkles on top.
 COCO trans 1169: Kobliha s červenou polevou a posypem.
   
 
-Inpaint en 1169: A brown icing doughnut with sprinkles on top.
-Inpaint trans 1169: Kobliha s hnědou polevou a posypem.
+Inpaint en 1169: A brown icing doughnut.
+Inpaint trans 1169: Kobliha s hnědou polevou.
   
 
 COCO en 1170: A red and yellow fire hydrant sitting on the side of a road.
@@ -9442,8 +9442,8 @@ COCO en 1181: A black metal bench with a had hanging on the back of it.
 COCO trans 1181: Černá kovová lavička s kloboukem zavěšeným na její zadní straně.
   
 
-Inpaint en 1181: A brown metal bench with a had hanging on the back of it.
-Inpaint trans 1181: Hnědá kovová lavička s kloboukem zavěšeným na její zadní straně.
+Inpaint en 1181: A brown metal bench.
+Inpaint trans 1181: Hnědá kovová lavička.
   
 
 COCO en 1182: A red truck parked in grass next to other trucks.
@@ -9538,8 +9538,8 @@ COCO en 1193: A desktop with a white mouse and keyboard.
 COCO trans 1193: Stolní počítač s bílou myší a klávesnicí.
   
 
-Inpaint en 1193: A desktop with a green mouse and keyboard
-Inpaint trans 1193: Stolní počítač se zelenou myší a klávesnicí
+Inpaint en 1193: A desktop with a green mouse and a white keyboard
+Inpaint trans 1193: Stolní počítač se zelenou myší a bílou klávesnicí
   
 
 COCO en 1194: A man in a black jacket holding a zebra print umbrella.
@@ -9682,7 +9682,7 @@ COCO en 1211: A young man in a red jacket jumping for a Frizbee in a field.
 COCO trans 1211: Mladý muž v červené bundě skáče pro frisbee na poli.
   
 
-Inpaint en 1211: A young man in a red blue jumping for a Frizbee in a field.
+Inpaint en 1211: A young man in a blue jacket jumping for a Frizbee in a field.
 Inpaint trans 1211: Mladý muž v modré bundě skáče pro frisbee na poli.
   
 
@@ -9714,8 +9714,8 @@ COCO en 1215: a water skier in a red and white shirt and hat
 COCO trans 1215: Vodní lyžař v červenobílém tričku a čepici
   
 
-Inpaint en 1215: a water skier in a yellow shirt
-Inpaint trans 1215: vodní lyžař v žlutém tričku
+Inpaint en 1215: a water skier in a yellow shirt and hat
+Inpaint trans 1215: vodní lyžař v žlutém tričku a čepici
   
 
 COCO en 1216: A blue fire hydrant posed on a street corner in a city.
@@ -9746,7 +9746,7 @@ COCO en 1219: A smiling man in a green suit and a hat.
 COCO trans 1219: Usmívající se muž v zeleném obleku a klobouku.
   
 
-Inpaint en 1219: A smiling man in a green suit and a hat.
+Inpaint en 1219: A smiling man in a gray suit and a hat.
 Inpaint trans 1219: Usmívající se muž v zeleném obleku a klobouku.
   
 
@@ -9770,8 +9770,8 @@ COCO en 1222: People stand near the curb behind a lime green double-decked bus.
 COCO trans 1222: Lidé stojí u obrubníku za světle zeleným dvoupatrovým autobusem.
   
 
-Inpaint en 1222: People stand near the curb behind a red double-decked bus.
-Inpaint trans 1222: Lidé stojí u obrubníku za červeným dvoupatrovým autobusem.
+Inpaint en 1222: People stand near the curb behind a red bus.
+Inpaint trans 1222: Lidé stojí u obrubníku za červeným autobusem.
   
 
 COCO en 1223: A blue office chair sitting next to a wooden desk.
@@ -9895,10 +9895,10 @@ Inpaint trans 1237: Žena v bílých šatech krájí dort nožem.
   
 
 COCO en 1238: A blue piece of luggage sitting on the side of a road.
-COCO trans 1238: Modrý taška leží na kraji silnice.
+COCO trans 1238: Modrá taška leží na kraji silnice.
   
 
-Inpaint en 1238: A blue piece of luggage sitting on the side of a road.
+Inpaint en 1238: An orange piece of luggage sitting on the side of a road.
 Inpaint trans 1238: Oranžový kufr leží na kraji silnice.
   
 
@@ -10002,8 +10002,8 @@ COCO en 1251: A man in black shirt doing a trick on a skateboard.
 COCO trans 1251: Muž v černé košili dělá trik na skateboardu.
   
 
-Inpaint en 1251: A man in black shirt doing a trick on a skateboard.
-Inpaint trans 1251: Muž v černé košili dělá trik na skateboardu.
+Inpaint en 1251: A man in red shirt doing a trick on a skateboard.
+Inpaint trans 1251: Muž v červené košili dělá trik na skateboardu.
   
 
 COCO en 1252: Women and children are gathered around a blue cake.

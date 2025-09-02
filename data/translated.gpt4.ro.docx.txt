@@ -2503,8 +2503,8 @@ COCO en 313: A raw piece of broccoli with something growing from it.
 COCO trans 313: O bucată crudă de broccoli cu ceva care crește din ea.
   
 
-Inpaint en 313: A raw piece of banana.
-Inpaint trans 313: O bucată crudă de banană.
+Inpaint en 313: A raw piece of banana
+Inpaint trans 313: O bucată crudă de banană
   
 
 COCO en 314: Two sausage patties, carrots and potatoes on a plate with a fork.
@@ -2866,7 +2866,7 @@ COCO en 358: A mother giraffe is standing with a baby giraffe.
 COCO trans 358: O girafă mamă stă împreună cu un pui de girafă.
   
 
-Inpaint en 358: A mother elephant is standing with a little  boy.
+Inpaint en 358: A mother elephant is standing with a baby boy.
 Inpaint trans 358: O mamă elefant stă împreună cu un băiețel.
   
 
@@ -3050,7 +3050,7 @@ COCO en 381: A bird is perched on the back of a chair.
 COCO trans 381: O pasăre este așezată pe spatele unui scaun.
   
 
-Inpaint en 381: A bird is perched on the table.
+Inpaint en 381: A bird is perched on a table.
 Inpaint trans 381: O pasăre este așezată pe o masă.
   
 
@@ -4734,8 +4734,8 @@ COCO en 587: Two girls under a large umbrella in the rain
 COCO trans 587: Două fete sub o umbrelă mare în ploaie.
   
 
-Inpaint en 587: Two girls under a umbrella in the rain
-Inpaint trans 587: Două fete sub o umbrelă în ploaie.
+Inpaint en 587: Two girls under a small umbrella in the rain
+Inpaint trans 587: Două fete sub o umbrelă mică în ploaie.
   
 
 COCO en 588: A small green bus on a busy road.
@@ -7895,7 +7895,7 @@ COCO en 971: A white bed in a bedroom next to a table on a lamp.
 COCO trans 971: Un pat alb într-o cameră de dormit lângă o masă cu o lampă.
   
 
-Inpaint en 971: A yellow bed in a bedroom next to a table with lamp.
+Inpaint en 971: A yellow bed in a bedroom next to a table with a lamp.
 Inpaint trans 971: Un pat galben într-o cameră, alături de o masă cu o lampă.
   
 
@@ -8505,7 +8505,7 @@ COCO en 1047: A red stop sign with two green street signs on top of it.
 COCO trans 1047: Un semn de stop roșu cu două semne stradale verzi deasupra lui.
   
 
-Inpaint en 1047: A red stop sign with one blue street sign on top of it.
+Inpaint en 1047: A red stop sign with a blue street sign on top of it.
 Inpaint trans 1047: Un semn de stop roșu cu un semn stradal albastru deasupra lui.
   
 
@@ -8618,8 +8618,8 @@ COCO en 1061: Two brown bears growling at each other while laying on a log.
 COCO trans 1061: Doi ursi maro se mârâie unul pe celălalt în timp ce stau întinși pe un trunchi de copac.
   
 
-Inpaint en 1061: Two white bears growling while laying on a log.
-Inpaint trans 1061: Doi urși albi mormăind în timp ce stau întinși pe un trunchi de copac.
+Inpaint en 1061: Two white bears laying on a log.
+Inpaint trans 1061: Doi urși albi stau întinși pe un trunchi de copac.
   
 
 COCO en 1062: a white boat some green hills and water
@@ -9428,7 +9428,7 @@ COCO en 1161: A black and white cat sits on a red cloth that is over a televisio
 COCO trans 1161: O pisică neagră cu alb stă pe o pânză roșie care este peste un televizor.
   
 
-Inpaint en 1161: A white and white cat sits on a red cloth that is over a television set.
+Inpaint en 1161: A white cat sits on a red cloth that is over a television set.
 Inpaint trans 1161: O pisică albă stă pe o pânză roșie care este peste un televizor.
   
 
@@ -9514,11 +9514,11 @@ Inpaint trans 1171: Un autobuz verde și negru pe stradă lângă copaci.
   
 
 COCO en 1172: a cheese pizza on a gray tray and an orange pizza cutter
-COCO trans 1172: O pizza cu brânză pe o tavă gri și un tăietor de pizza portocaliu.
+COCO trans 1172: O pizza cu brânză pe o tavă gri și un tăietor de pizza portocaliu
   
 
-Inpaint en 1172: a cheese pizza on a white tray and an red pizza cutter.
-Inpaint trans 1172: O pizza cu brânză pe o tavă albă și un tăietor de pizza roșu.
+Inpaint en 1172: a cheese pizza on a white tray and an orange pizza cutter
+Inpaint trans 1172: O pizza cu brânză pe o tavă albă și un tăietor de pizza portocaliu
   
 
 COCO en 1173: A herd of cattle grazing on a lush green field.
@@ -9831,7 +9831,7 @@ COCO en 1211: A young man in a red jacket jumping for a Frizbee in a field.
 COCO trans 1211: Un tânăr într-o geacă roșie sare după un Frisbee pe un câmp.
   
 
-Inpaint en 1211: A young man in a blue jumping for a Frizbee in a field.
+Inpaint en 1211: A young man in a blue jacket jumping for a Frizbee in a field.
 Inpaint trans 1211: Un tânăr într-un costum albastru sare pentru a prinde un frisbee într-un câmp.
   
 
@@ -9863,8 +9863,8 @@ COCO en 1215: a water skier in a red and white shirt and hat
 COCO trans 1215: Un schior acvatic într-un tricou roșu cu alb și o pălărie.
   
 
-Inpaint en 1215: a water skier in a yellow shirt and hat.
-Inpaint trans 1215: Un schior acvatic într-un tricou galben și o pălărie.
+Inpaint en 1215: a water skier in a yellow shirt and hat
+Inpaint trans 1215: Un schior acvatic într-un tricou galben și o pălărie
   
 
 COCO en 1216: A blue fire hydrant posed on a street corner in a city.
