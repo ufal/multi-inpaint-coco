@@ -81,12 +81,12 @@ def export_en_captions_diffs(ro_items, ro_marked_ids, cs_items, cs_marked_ids):
 
 
 def main():
-    with open("data/translated.gpt4.ro.docx.txt", "r", encoding="utf-8") as f:
+    with open("data/translated.final.ro.docx.txt", "r", encoding="utf-8") as f:
         ro_content = f.read()
     ro_items = extract_items_from_content(ro_content)
     ro_marked_ids = extract_ro_marked_ids(ro_content)
 
-    with open("data/translated.gpt4.cs.docx.txt", "r", encoding="utf-8") as f:
+    with open("data/translated.final.cs.docx.txt", "r", encoding="utf-8") as f:
         cs_content = f.read()
     cs_items = extract_items_from_content(cs_content)
     cs_marked_ids = extract_cs_marked_ids(cs_content)
@@ -94,7 +94,7 @@ def main():
     export_diffs(ro_items, ro_marked_ids, cs_items, cs_marked_ids)
     export_en_captions_diffs(ro_items, ro_marked_ids, cs_items, cs_marked_ids)
 
-    with open("data/cs-ro.ignore.ids.txt", "w") as f:
+    with open("data/ignore.ids.txt", "w") as f:
         ignoring_ids = list(set(ro_marked_ids) | set(cs_marked_ids))
         ignoring_ids.sort()
 

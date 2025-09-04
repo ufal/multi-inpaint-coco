@@ -12,6 +12,7 @@ LANGUAGE_NAMES = {
     "uk": "Ukrainian",
     "ru": "Russian"
 }
+LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 
 rule all:
     input:
@@ -19,20 +20,48 @@ rule all:
         expand("translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
 
 
-rule get_english:
+rule fix_original_dataset_and_export:
+    input:
+        "data/translated.final.cs.docx.txt",
+        "data/ignore.ids.txt"
     output:
         "texts.tsv"
+    resources:
+        mem="48G",
+        cpus_per_task=8,
+        tasks=1,
     run:
-        from datasets import load_dataset
+        import re
+        import pandas as pd
+
+        from datasets import load_dataset, Dataset
         dataset = load_dataset("phiyodr/inpaintCOCO")
 
+        with open(input[0], "r") as f:
+            new_content = f.read()
+            inpaint_biling_sents = re.findall(r"Inpaint \w+ \d+:(.+)\n", new_content)
+            inpaint_en_sents = inpaint_biling_sents[0::2]
+
+        with open(input[1], "r") as f:
+            ignoring_ids = list(map(int, f.read().split("\n")))
+
+        # Updating the new inpaint english values
+        fixed_ds = dataset["test"]
+        fixed_ds = fixed_ds.map(lambda example, idx: {**example, "inpaint_caption": inpaint_en_sents[idx]}, 
+                                with_indices=True, batch_size=16, writer_batch_size=16)
+
+        # Ignoring the bad samples
+        valid_indices = [i for i in range(len(fixed_ds)) if i not in ignoring_ids]
+        fixed_ds = fixed_ds.select(valid_indices)
+
+        fixed_ds.save_to_disk(LOCAL_DS_PATH)
+
+        # exporting the right texts.txt
         with open(output[0], "w") as f:
             f.write("coco_caption\tinpaint_caption\n")
-            for item in dataset["test"]:
+            for item in fixed_ds:
                 coco_caption = item["coco_caption"].strip()
                 inpaint_caption = item["inpaint_caption"].strip()
-                if not inpaint_caption:
-                    inpaint_caption = "?"
                 f.write(f"{coco_caption}\t{inpaint_caption}\n")
 
 
@@ -97,7 +126,8 @@ def images_as_base64(pil_image):
 
 rule generate_html:
     input:
-        "translated.{lang}.tsv"
+        "translated.{lang}.tsv",
+        "data/ignore.ids.txt"
     output:
         "translated.{lang}.html"
     run:
@@ -106,7 +136,7 @@ rule generate_html:
         f_out = open(output[0], "w")
         print("<html><body>", file=f_out)
 
-        dataset = load_dataset("phiyodr/inpaintCOCO")
+        dataset = load_dataset(LOCAL_DS_PATH)
         with open(input[0], "r") as f:
             translation = [l.strip().split("\t") for l in f.readlines()]
 
@@ -148,3 +178,12 @@ rule convert_postedited_to_tsv:
         """
         grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //'| sed 'N;s/\n/\t/' > {output}
         """
+
+rule expose_cs_ro_diffs:
+    input:
+        "data/translated.final.cs.docx.txt",
+        "data/translated.final.ro.docx.txt"
+    output:
+        "data/ignore.ids.txt"
+    script:
+        "expose_diffs.py"
