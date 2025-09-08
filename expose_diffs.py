@@ -102,5 +102,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# TODO: write a rule of merging in a tsv to pass to the next translation of languages

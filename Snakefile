@@ -16,8 +16,8 @@ LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 
 rule all:
     input:
-        expand("translated.google.{lang}.docx", lang=LANGUAGES),
-        expand("translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
+        expand("data/translated.google.{lang}.docx", lang=LANGUAGES),
+        expand("data/translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
 
 
 rule fix_original_dataset_and_export:
@@ -25,7 +25,7 @@ rule fix_original_dataset_and_export:
         "data/translated.final.cs.docx.txt",
         "data/ignore.ids.txt"
     output:
-        "texts.tsv"
+        "data/texts.tsv"
     resources:
         mem="48G",
         cpus_per_task=8,
@@ -67,9 +67,9 @@ rule fix_original_dataset_and_export:
 
 rule google_translate:
     input:
-        "texts.tsv"
+        "data/texts.tsv"
     output:
-        "translated.google.{lang}.tsv"
+        "data/translated.google.{lang}.tsv"
     shell:
         """
         python3 translate.py {input} {wildcards.lang} > {output}
@@ -92,9 +92,9 @@ def gpt4_translate(client, lang, sentence):
 
 rule gpt4_translation:
     input:
-        "texts.tsv"
+        "data/texts.tsv"
     output:
-        "translated.gpt4.{lang}.tsv"
+        "data/translated.gpt4.{lang}.tsv"
     run:
         from openai import OpenAI
 
@@ -126,10 +126,10 @@ def images_as_base64(pil_image):
 
 rule generate_html:
     input:
-        "translated.{lang}.tsv",
+        "data/translated.{lang}.tsv",
         "data/ignore.ids.txt"
     output:
-        "translated.{lang}.html"
+        "data/translated.{lang}.html"
     run:
         from datasets import load_dataset
 
@@ -160,9 +160,9 @@ rule generate_html:
 
 rule convert_to_docx:
     input:
-        "translated.{lang}.html"
+        "data/translated.{lang}.html"
     output:
-        "translated.{lang}.docx"
+        "data/translated.{lang}.docx"
     shell:
         """
         pandoc -s {input} -o {output}

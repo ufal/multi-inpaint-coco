@@ -4,7 +4,7 @@ from googletrans import Translator
 
 async def main(lang: str):
     async with Translator() as translator:
-        with open('texts.tsv', 'r', encoding='utf-8') as file:
+        with open('data/texts.tsv', 'r', encoding='utf-8') as file:
             for line in file:
                 senteneces = line.strip().split('\t')
                 results = await translator.translate(senteneces, dest=lang)
