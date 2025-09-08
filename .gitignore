@@ -1,5 +1,8 @@
 oai_api_key.txt
+texts.tsv
+translated.*.tsv
 .snakemake
+data/inpaintCOCO_v2
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

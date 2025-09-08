@@ -20,9 +20,12 @@ rule all:
         expand("data/translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
 
 
+# This rule loads the original InpaintCOCO dataset and applies the edits that
+# were done during processing Czech and Romanian (some images deleted, some
+# captions edited).
 rule fix_original_dataset_and_export:
     input:
-        "data/translated.final.cs.docx.txt",
+        "data/translated.final.cs.docx.txt", # Source of edited English Inpaint sentences
         "data/ignore.ids.txt"
     output:
         "data/texts.tsv"
@@ -72,7 +75,7 @@ rule google_translate:
         "data/translated.google.{lang}.tsv"
     shell:
         """
-        python3 translate.py {input} {wildcards.lang} > {output}
+        python3 translate_google.py {input} {wildcards.lang} > {output}
         """
 
 
@@ -124,6 +127,9 @@ def images_as_base64(pil_image):
     return html
 
 
+# This rule generates an HTML file that contains the entire dataset (including
+# images in 150x150px base64-encoded format) and its machine translation.
+# It is then used to generate editable docx.
 rule generate_html:
     input:
         "data/translated.{lang}.tsv",
@@ -158,6 +164,8 @@ rule generate_html:
         print("</body></html>", file=f_out)
 
 
+# This generates editable docx with machine translation of the dataset that is
+# later used for manual post-editing in Google doc.
 rule convert_to_docx:
     input:
         "data/translated.{lang}.html"
@@ -179,11 +187,13 @@ rule convert_postedited_to_tsv:
         grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //'| sed 'N;s/\n/\t/' > {output}
         """
 
-rule expose_cs_ro_diffs:
+# Get the list of deleted items from the original dataset and check if it was
+# the same in Czech and Romanian.
+rule check_dataset_edits:
     input:
         "data/translated.final.cs.docx.txt",
         "data/translated.final.ro.docx.txt"
     output:
         "data/ignore.ids.txt"
     script:
-        "expose_diffs.py"
+        "check_dataset_edits.py"
