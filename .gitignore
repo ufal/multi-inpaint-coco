@@ -1,6 +1,8 @@
 oai_api_key.txt
-texts.tsv
-translated.*.tsv
+data/texts.tsv
+data/translated.*.tsv
+data/translated.*.docx
+data/translated.*.html
 .snakemake
 data/inpaintCOCO_v2
 
