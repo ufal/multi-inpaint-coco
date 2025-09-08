@@ -75,7 +75,7 @@ rule google_translate:
         "data/translated.google.{lang}.tsv"
     shell:
         """
-        python3 translate_google.py {input} {wildcards.lang} > {output}
+        python3 translate_google.py {wildcards.lang} > {output}
         """
 
 
@@ -132,25 +132,26 @@ def images_as_base64(pil_image):
 # It is then used to generate editable docx.
 rule generate_html:
     input:
-        "data/translated.{lang}.tsv",
-        "data/ignore.ids.txt"
+        translated="data/translated.{system}.{lang}.tsv",
+        dataset=LOCAL_DS_PATH,
     output:
-        "data/translated.{lang}.html"
+        "data/translated.{system}.{lang}.html"
     run:
-        from datasets import load_dataset
+        from datasets import load_from_disk
 
         f_out = open(output[0], "w")
         print("<html><body>", file=f_out)
 
-        dataset = load_dataset(LOCAL_DS_PATH)
-        with open(input[0], "r") as f:
-            translation = [l.strip().split("\t") for l in f.readlines()]
+        dataset = load_from_disk(input.dataset)
+        with open(input.translated, "r") as f:
+            # The [1:] is there because the translation file has a header line
+            translation = [l.strip().split("\t") for l in f.readlines()][1:]
 
-        assert len(translation) == len(dataset["test"])
+        assert len(translation) == len(dataset)
         assert all(len(t) == 2 for t in translation), "Translation file should have two columns: COCO and Inpaint captions."
 
         for i, (item, (tgt_coco, tgt_inpaint)) in enumerate(
-                zip(dataset["test"], translation)):
+                zip(dataset, translation)):
             orig_img_html = images_as_base64(item["coco_image"])
             print(f"<p>{orig_img_html}</p>", file=f_out)
             print(f"<p><b>COCO en {i + 1}:</b> {item['coco_caption']}</p>", file=f_out)
@@ -194,6 +195,7 @@ rule check_dataset_edits:
         "data/translated.final.cs.docx.txt",
         "data/translated.final.ro.docx.txt"
     output:
-        "data/ignore.ids.txt"
+        "data/ignore.ids.txt",
+        directory(LOCAL_DS_PATH)
     script:
         "check_dataset_edits.py"
