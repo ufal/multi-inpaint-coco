@@ -2,3 +2,6 @@ snakemake
 datasets
 Pillow
 googletrans
+transformers
+torch
+accelerate

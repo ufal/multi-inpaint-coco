@@ -12,6 +12,7 @@ LANGUAGE_NAMES = {
     "uk": "Ukrainian",
     "ru": "Russian"
 }
+
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 
 rule all:
@@ -68,6 +69,8 @@ rule fix_original_dataset_and_export:
                 f.write(f"{coco_caption}\t{inpaint_caption}\n")
 
 
+# Google translate is in a separate file because we use async calls that are
+# tricky from withing Snakemake
 rule google_translate:
     input:
         "data/texts.tsv"
@@ -115,6 +118,53 @@ rule gpt4_translation:
                 translated_inpaint = gpt4_translate(client, wildcards.lang, inpaint_caption)
                 print(f"{translated_coco}\t{translated_inpaint}", file=f_out)
 
+
+def run_hunyuan_translate(tokenizer, model, language, sentence):
+    messages = [
+        {"role": "user",
+        "content": f"Translate the following segment into {LANGUAGE_NAMES[language]}, without additional explanation.\n\n{sentence}"},
+    ]
+    tokenized_chat = tokenizer.apply_chat_template(
+        messages,
+        tokenize=True,
+        add_generation_prompt=False,
+        return_tensors="pt"
+    )
+
+    outputs = model.generate(tokenized_chat.to(model.device), max_new_tokens=500)
+    output_text = tokenizer.decode(outputs[0][tokenized_chat.shape[1]:], skip_special_tokens=True)
+    # Replace all newlines with spaces
+    output_text = output_text.replace("\n", " ").strip()
+    return output_text
+
+
+rule hunyuan_translation:
+    input:
+        "data/texts.tsv"
+    output:
+        "data/translated.hunyuan.{lang}.tsv"
+    resources:
+        mem="48G",
+        cpus_per_task=4,
+        slurm_partition="gpu-troja,gpu-ms",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram48G|gpuram64G|gpuram95G'"
+    run:
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from tqdm import tqdm
+
+        model_name_or_path = "tencent/Hunyuan-MT-7B"
+        tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+        model = AutoModelForCausalLM.from_pretrained(model_name_or_path, device_map="auto")
+
+        with open(input[0], "r") as f_in, open(output[0], "w") as f_out:
+            lines = f_in.readlines()
+            for line in tqdm(lines, desc="Translating with Hunyuan"):
+                coco_caption, inpaint_caption = line.strip().split("\t")
+                if not inpaint_caption:
+                    inpaint_caption = "?"
+                translated_coco = run_hunyuan_translate(tokenizer, model, wildcards.lang, coco_caption)
+                translated_inpaint = run_hunyuan_translate(tokenizer, model, wildcards.lang, inpaint_caption)
+                print(f"{translated_coco}\t{translated_inpaint}", file=f_out)
 
 
 def images_as_base64(pil_image):
