@@ -74,6 +74,13 @@ def check_deletion_diff(ro_items, ro_marked_ids, cs_items, cs_marked_ids):
         
         print(error_msg, file=sys.stderr)
 
+def write_final_items(items, marked_ids, fout):
+    final_items = [item for idx, item in enumerate(items) if (idx + 1) not in marked_ids]
+    for idx, item in enumerate(final_items):
+        fout.write(f"COCO en {idx+1}: {item['coco_en']}\n" + \
+                   f"COCO translated {idx+1}: {item['coco_fe']}\n\n\n" + \
+                   f"Inpaint en {idx+1}: {item['inpaint_en']}\n" + \
+                   f"Inpaint translated {idx+1}: {item['inpaint_fe']}\n\n\n")
 
 def main():
     with open("data/translated.final.ro.docx.txt", "r", encoding="utf-8") as f:
@@ -94,7 +101,11 @@ def main():
 
         f.write("\n".join(map(str, ignoring_ids)))
 
+    with open("data/translated.final.clean.ro.txt", "w", encoding="utf-8") as f:
+        write_final_items(ro_items, ignoring_ids, f)
+
+    with open("data/translated.final.clean.cs.txt", "w", encoding="utf-8") as f:
+        write_final_items(cs_items, ignoring_ids, f)
+
 if __name__ == "__main__":
     main()
-
-# TODO: write a rule of merging in a tsv to pass to the next translation of languages
