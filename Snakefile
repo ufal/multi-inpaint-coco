@@ -26,10 +26,11 @@ rule all:
 # captions edited).
 rule fix_original_dataset_and_export:
     input:
-        "data/translated.final.cs.docx.txt", # Source of edited English Inpaint sentences
+        "data/translated.edited.cs.docx.txt", # Source of edited English Inpaint sentences
         "data/ignore.ids.txt"
     output:
-        "data/texts.tsv"
+        "data/texts.tsv",
+        directory(LOCAL_DS_PATH),
     resources:
         mem="48G",
         cpus_per_task=8,
@@ -228,24 +229,27 @@ rule convert_to_docx:
         """
 
 
+# Get the list of deleted items from the original dataset and check if it was
+# the same in Czech and Romanian.
+rule check_dataset_edits:
+    input:
+        "data/translated.edited.cs.docx.txt",
+        "data/translated.edited.ro.docx.txt",
+    output:
+        "data/ignore.ids.txt",
+        "data/translated.final.cs.txt",
+        "data/translated.final.ro.txt",
+    script:
+        "check_dataset_edits.py"
+
+
 rule convert_postedited_to_tsv:
     input:
-        "postedited.{lang}.txt"
+        "data/postedited.{lang}.txt"
     output:
-        "final.{lang}.tsv"
+        "data/final.{lang}.tsv"
     shell:
         """
         grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //'| sed 'N;s/\n/\t/' > {output}
         """
 
-# Get the list of deleted items from the original dataset and check if it was
-# the same in Czech and Romanian.
-rule check_dataset_edits:
-    input:
-        "data/translated.final.cs.docx.txt",
-        "data/translated.final.ro.docx.txt"
-    output:
-        "data/ignore.ids.txt",
-        directory(LOCAL_DS_PATH)
-    script:
-        "check_dataset_edits.py"

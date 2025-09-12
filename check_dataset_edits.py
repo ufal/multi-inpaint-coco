@@ -83,12 +83,12 @@ def write_final_items(items, marked_ids, fout):
                    f"Inpaint translated {idx+1}: {item['inpaint_fe']}\n\n\n")
 
 def main():
-    with open("data/translated.final.ro.docx.txt", "r", encoding="utf-8") as f:
+    with open("data/translated.edited.ro.docx.txt", "r", encoding="utf-8") as f:
         ro_content = f.read()
     ro_items = parse_doc_content(ro_content)
     ro_marked_ids = extract_ro_marked_ids(ro_content)
 
-    with open("data/translated.final.cs.docx.txt", "r", encoding="utf-8") as f:
+    with open("data/translated.edited.cs.docx.txt", "r", encoding="utf-8") as f:
         cs_content = f.read()
     cs_items = parse_doc_content(cs_content)
     cs_marked_ids = extract_cs_marked_ids(cs_content)
@@ -101,10 +101,10 @@ def main():
 
         f.write("\n".join(map(str, ignoring_ids)))
 
-    with open("data/translated.final.clean.ro.txt", "w", encoding="utf-8") as f:
+    with open("data/translated.final.ro.txt", "w", encoding="utf-8") as f:
         write_final_items(ro_items, ignoring_ids, f)
 
-    with open("data/translated.final.clean.cs.txt", "w", encoding="utf-8") as f:
+    with open("data/translated.final.cs.txt", "w", encoding="utf-8") as f:
         write_final_items(cs_items, ignoring_ids, f)
 
 if __name__ == "__main__":

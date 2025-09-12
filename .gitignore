@@ -6,6 +6,8 @@ data/translated.*.docx
 data/translated.*.html
 .snakemake
 data/inpaintCOCO_v2
+data/translated.final.cs.txt
+data/translated.final.ro.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
