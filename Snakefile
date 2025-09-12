@@ -14,6 +14,8 @@ LANGUAGE_NAMES = {
 }
 
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
+LOCAL_TRANSLATED_DS_PATH = "data/inpaintCOCO_multilingual"
+FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
@@ -245,11 +247,37 @@ rule check_dataset_edits:
 
 rule convert_postedited_to_tsv:
     input:
-        "data/postedited.{lang}.txt"
+        "data/translated.final.{lang}.txt"
     output:
-        "data/final.{lang}.tsv"
+        "data/translated.final.{lang}.tsv"
     shell:
         """
-        grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //'| sed 'N;s/\n/\t/' > {output}
+        grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //' | sed 'N;s/\\n/\\t/' > {output}
         """
 
+rule finalize_dataset:
+    input:
+        dataset=LOCAL_DS_PATH,
+        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES)
+    output:
+        directory(LOCAL_TRANSLATED_DS_PATH)
+    run:
+        from datasets import load_from_disk
+        dataset = load_from_disk(input.dataset)
+
+        translations = []
+        for trans_file in input.translations:
+            with open(trans_file) as f:
+                translations.append([line.strip().split("\t") for line in f])
+
+        def update_item(item, idx):
+            new_item = dict(item)
+            new_item["coco_caption_en"] = new_item.pop("coco_caption")
+            new_item["inpaint_caption_en"] = new_item.pop("inpaint_caption")
+            for lang, trans in zip(FINAL_LANGUAGES, translations):
+                new_item[f"coco_caption_{lang}"] = trans[idx][0]
+                new_item[f"inpaint_caption_{lang}"] = trans[idx][1]
+            return new_item
+        
+        dataset = dataset.map(update_item, with_indices=True)
+        dataset.save_to_disk(LOCAL_TRANSLATED_DS_PATH)
