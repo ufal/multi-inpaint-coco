@@ -7,8 +7,8 @@ data/translated.*.html
 .snakemake
 data/inpaintCOCO_v2
 data/inpaintCOCO_multilingual
-data/translated.final.cs.txt
-data/translated.final.ro.txt
+data/translated.final.*.txt
+data/eval.*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
