@@ -19,8 +19,7 @@ FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        expand("data/translated.google.{lang}.docx", lang=LANGUAGES),
-        expand("data/translated.gpt4.{lang}.docx", lang=["ro", "cs"]),
+        expand("data/eval.results.{model_name}.{lang}.csv", model_name=["google_gemma-3n-e4b-it"], lang=["en", "cs", "ro"])
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -279,5 +278,21 @@ rule finalize_dataset:
                 new_item[f"inpaint_caption_{lang}"] = trans[idx][1]
             return new_item
         
-        dataset = dataset.map(update_item, with_indices=True)
+        dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16)
         dataset.save_to_disk(LOCAL_TRANSLATED_DS_PATH)
+
+rule evaluate_dataset:
+    input:
+        directory(LOCAL_TRANSLATED_DS_PATH)
+    output:
+        "data/eval.results.{model_name}.{lang}.csv"
+    params:
+        model_name=lambda wildcards: wildcards.model_name.replace("_", "/"),
+        lang=lambda wildcards: wildcards.lang,
+    resources:
+        mem="48G",
+        cpus_per_task=4,
+        slurm_partition="gpu-troja,gpu-ms",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram48G|gpuram64G|gpuram95G'"
+    script:
+        "evaluate.py"

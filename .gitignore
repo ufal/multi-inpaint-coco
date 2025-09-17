@@ -6,6 +6,7 @@ data/translated.*.docx
 data/translated.*.html
 .snakemake
 data/inpaintCOCO_v2
+data/inpaintCOCO_multilingual
 data/translated.final.cs.txt
 data/translated.final.ro.txt
 
