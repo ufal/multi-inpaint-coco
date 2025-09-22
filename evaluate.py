@@ -7,7 +7,16 @@ from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 
 
-def run_sample(model, tokenizer, item, lang):
+def get_prompt_fn_by_id(prompt_id):
+    if prompt_id == "prompt_0":
+        prompt_fn = lambda image_token, caption: f"Based on the two images {image_token}{image_token}, ordered from left to right, which follows the following caption, in the best way \"{caption}\"? Answer left or right."
+
+    elif prompt_id == "prompt_1":
+        prompt_fn = lambda image_token, caption: f"Given the two images {image_token}{image_token}, ordered from left to right, and the caption \"{caption}\", does the caption describe better the image in the left than the one in the right? Answer yes or no."
+        
+    return prompt_fn
+
+def run_sample(model, tokenizer, item, lang, prompt_fn):
     coco_caption = item[f"coco_caption_{lang}"]
     inpaint_caption = item[f"inpaint_caption_{lang}"]
 
@@ -27,46 +36,54 @@ def run_sample(model, tokenizer, item, lang):
             "content": [
                 {"type": "image", "url": item["coco_image"]},
                 {"type": "image", "url": item["inpaint_image"]},
-                # {"type": "text", "text": f"Given the two images {image_token}{image_token}, which one follows the following caption, in the best way \"{caption}\"? Answer left or right."}
-                {"type": "text", "text": f"Based on the two images {image_token}{image_token}, ordered from left to right, which follows the following caption, in the best way \"{caption}\"? Answer left or right."}
+                {"type": "text", "text": prompt_fn(image_token, caption)}
             ]
         }
     ]
     tokenized_chat = tokenizer.apply_chat_template(
         messages,
         tokenize=True,
-        add_generation_prompt=False,
+        add_generation_prompt=True,
         return_tensors="pt"
     )
 
-    outputs = model.generate(tokenized_chat.to(model.device), max_new_tokens=10)
+    outputs = model.generate(tokenized_chat.to(model.device), max_new_tokens=20)
     output_text = tokenizer.decode(outputs[0][tokenized_chat.shape[1]:], skip_special_tokens=True)
     
     # Replace all newlines with spaces
     output_text = output_text.replace("\n", " ").strip()
     return label, output_text
 
-def get_gemma3n_answer(output_text):
+def get_gemma3n_answer_prompt_0(output_text):
     output_text = output_text.lower()
     if "left" in output_text:
         return 0
     elif "right" in output_text:
         return 1
     else:
-        return -1
+        return 0
+    
+def get_gemma3n_answer_prompt_1(output_text):
+    output_text = output_text.lower()
+    if "yes" in output_text:
+        return 0
+    else:
+        return 1
 
-def main(multiling_ds_path, model_name, lang):
+def main(multiling_ds_path, model_name, lang, prompt_id):
     dataset = load_from_disk(multiling_ds_path)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+    prompt_fn = get_prompt_fn_by_id(prompt_id)
+    answer_extractor_fn = get_gemma3n_answer_prompt_0 if prompt_id == 0 else get_gemma3n_answer_prompt_1
 
     results = []
     labels = []
     preds = []
 
     for item in tqdm(dataset):
-        label, output_text = run_sample(model, tokenizer, item, lang)
-        extracted_answer = get_gemma3n_answer(output_text)
+        label, output_text = run_sample(model, tokenizer, item, lang, prompt_fn)
+        extracted_answer = answer_extractor_fn(output_text)
 
         labels.append(label)
         preds.append(extracted_answer)
@@ -80,10 +97,10 @@ def main(multiling_ds_path, model_name, lang):
         })
 
     model_name_path = model_name.replace("/", "_")
-    pd.DataFrame(results).to_csv(f"data/eval.results.{model_name_path}.{lang}.csv", index=False)
+    pd.DataFrame(results).to_csv(f"data/eval.results.{model_name_path}.{lang}.{prompt_id}.csv", index=False)
 
     acc = accuracy_score(labels, preds)
-    with open(f"data/eval.acc.{model_name_path}.{lang}.csv", "w") as fout:
+    with open(f"data/eval.acc.{model_name_path}.{lang}.{prompt_id}.csv", "w") as fout:
         fout.write(f"Accuracy: {acc}\n")
 
 
@@ -96,5 +113,6 @@ if __name__ == "__main__":
         multiling_ds_path = snakemake.input[0]
         model_name = snakemake.params.model_name
         lang = snakemake.params.lang
+        prompt_id = snakemake.params.prompt_id
 
-    main(multiling_ds_path, model_name, lang)
+    main(multiling_ds_path, model_name, lang, prompt_id)

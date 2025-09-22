@@ -20,7 +20,12 @@ FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        expand("data/eval.results.{model_name}.{lang}.csv", model_name=["google_gemma-3n-e4b-it"], lang=["en", "cs", "ro"])
+        expand(
+            "data/eval.results.{model_name}.{lang}.{prompt_id}.csv", 
+            model_name=["google_gemma-3n-e4b-it"], 
+            lang=["en", "cs", "ro"], 
+            prompt_id=["prompt_0", "prompt_1"]
+        )
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -286,10 +291,11 @@ rule evaluate_dataset:
     input:
         LOCAL_TRANSLATED_DS_PATH
     output:
-        "data/eval.results.{model_name}.{lang}.csv"
+        "data/eval.results.{model_name}.{lang}.{prompt_id}.csv"
     params:
         model_name=lambda wildcards: wildcards.model_name.replace("_", "/"),
         lang=lambda wildcards: wildcards.lang,
+        prompt_id=lambda wildcards: wildcards.prompt_id
     resources:
         mem="48G",
         cpus_per_task=4,
