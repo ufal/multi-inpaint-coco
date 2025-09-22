@@ -124,7 +124,7 @@ rule gpt4_translation:
 def run_hunyuan_translate(tokenizer, model, language, sentence):
     messages = [
         {"role": "user",
-        "content": f"Translate the following segment into {LANGUAGE_NAMES[language]}, without additional explanation.\n\n{sentence}"},
+        "content": f"Translate the following segment into {LANGUAGE_NAMES[language]}, without additional explanation. Keep the original sentence length and structure and be as concise as possible.\n\n{sentence}"},
     ]
     tokenized_chat = tokenizer.apply_chat_template(
         messages,
