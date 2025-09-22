@@ -10,7 +10,8 @@ LANGUAGE_NAMES = {
     "ro": "Romanian",
     "it": "Italian",
     "uk": "Ukrainian",
-    "ru": "Russian"
+    "ru": "Russian",
+    "am": "Amharic",
 }
 
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
@@ -283,7 +284,7 @@ rule finalize_dataset:
 
 rule evaluate_dataset:
     input:
-        directory(LOCAL_TRANSLATED_DS_PATH)
+        LOCAL_TRANSLATED_DS_PATH
     output:
         "data/eval.results.{model_name}.{lang}.csv"
     params:
