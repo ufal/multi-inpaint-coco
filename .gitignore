@@ -9,6 +9,8 @@ data/inpaintCOCO_v2
 data/inpaintCOCO_multilingual
 data/translated.final.*.txt
 data/eval.*.csv
+data/samples/
+.bkp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

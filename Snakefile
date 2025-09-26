@@ -21,10 +21,11 @@ FINAL_LANGUAGES = ["cs", "ro"]
 rule all:
     input:
         expand(
-            "data/eval.results.{model_name}.{lang}.{prompt_id}.csv", 
-            model_name=["google_gemma-3n-e4b-it"], 
-            lang=["en", "cs", "ro"], 
-            prompt_id=["prompt_0", "prompt_1"]
+            "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=["google_gemma-3-12b-it"],
+            lang=["en", "cs", "ro"],
+            task=["2img", "2txt"],
+            prompt_id=["prompt_0"]
         )
 
 
@@ -280,8 +281,11 @@ rule finalize_dataset:
             new_item["coco_caption_en"] = new_item.pop("coco_caption")
             new_item["inpaint_caption_en"] = new_item.pop("inpaint_caption")
             for lang, trans in zip(FINAL_LANGUAGES, translations):
-                new_item[f"coco_caption_{lang}"] = trans[idx][0]
-                new_item[f"inpaint_caption_{lang}"] = trans[idx][1]
+                match = re.search(r"COCO \w+ \d+:(.+)$", trans[idx][0])
+                new_item[f"coco_caption_{lang}"] = match.group(1).strip()
+
+                match = re.search(r"Inpaint \w+ \d+:(.+)$", trans[idx][1])
+                new_item[f"inpaint_caption_{lang}"] = match.group(1).strip()
             return new_item
         
         dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16)
@@ -291,10 +295,11 @@ rule evaluate_dataset:
     input:
         LOCAL_TRANSLATED_DS_PATH
     output:
-        "data/eval.results.{model_name}.{lang}.{prompt_id}.csv"
+        "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv"
     params:
         model_name=lambda wildcards: wildcards.model_name.replace("_", "/"),
         lang=lambda wildcards: wildcards.lang,
+        task=lambda wildcards: wildcards.task,
         prompt_id=lambda wildcards: wildcards.prompt_id
     resources:
         mem="48G",
