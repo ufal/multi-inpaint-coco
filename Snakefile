@@ -20,13 +20,7 @@ FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        expand(
-            "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["google_gemma-3-12b-it"],
-            lang=["en", "cs", "ro"],
-            task=["2img", "2txt"],
-            prompt_id=["prompt_0"]
-        )
+        "data/eval.all.csv"
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -297,14 +291,29 @@ rule evaluate_dataset:
     output:
         "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv"
     params:
-        model_name=lambda wildcards: wildcards.model_name.replace("_", "/"),
+        model_name=lambda wildcards: wildcards.model_name,
         lang=lambda wildcards: wildcards.lang,
         task=lambda wildcards: wildcards.task,
         prompt_id=lambda wildcards: wildcards.prompt_id
     resources:
-        mem="48G",
+        mem="64G",
         cpus_per_task=4,
-        slurm_partition="gpu-troja,gpu-ms",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram48G|gpuram64G|gpuram95G'"
+        slurm_partition="gpu-amd",
+        slurm_extra="--gres=gpu:4 --constraint='gpuram64G'"
     script:
         "evaluate.py"
+
+
+rule gather_evals:
+    input:
+        expand(
+            "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=["google_gemma-3-12b-it", "llama4_scout"],
+            lang=["en", "cs", "ro"],
+            task=["2img", "2txt"],
+            prompt_id=["prompt_0"]
+        )
+    output:
+        "data/eval.all.csv"
+    script:
+        "gather.py"

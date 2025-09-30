@@ -6,7 +6,12 @@ import torch
 from datasets import load_from_disk
 from transformers import pipeline
 from tqdm import tqdm
-from sklearn.metrics import accuracy_score
+
+snapshot_map = {
+    "google_gemma-3-12b-it": "google/gemma-3-12b-it",
+    # "llama4_scout": "meta-llama_Llama-4-Scout-17B-16E-Instruct",
+    "llama4_scout": "/home/manea/personal_work_troja/.cache/huggingface/hub/models--meta-llama--Llama-4-Scout-17B-16E-Instruct/snapshots/7dab2f5f854fe665b6b2f1eccbd3c48e5f627ad8"
+}
 
 
 def get_prompt_fn_by_id(task, prompt_id):
@@ -94,7 +99,8 @@ prompt_fn_map = {
 
 def main(multiling_ds_path, model_name, lang, task, prompt_id):
     dataset = load_from_disk(multiling_ds_path)
-    model_pipe = pipeline("image-text-to-text", model=model_name, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto")
+    model_snapshot = snapshot_map.get(model_name)
+    model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto")
 
     prompt_fn = get_prompt_fn_by_id(task, prompt_id)
     answer_extractor_fn = prompt_fn_map.get(prompt_id)
@@ -111,6 +117,7 @@ def main(multiling_ds_path, model_name, lang, task, prompt_id):
         preds.append(extracted_answer)
 
         results.append({
+            "concept": item["concept"],
             "coco_caption": item["coco_caption"],
             "inpaint_caption": item["inpaint_caption"],
             "label": label,
@@ -118,12 +125,7 @@ def main(multiling_ds_path, model_name, lang, task, prompt_id):
             "output_text": output_text
         })
 
-    model_name_path = model_name.replace("/", "_")
-    pd.DataFrame(results).to_csv(f"data/eval.results.{model_name_path}.{lang}.{task}.{prompt_id}.csv", index=False)
-
-    acc = accuracy_score(labels, preds)
-    with open(f"data/eval.acc.{model_name_path}.{lang}.{task}.{prompt_id}.csv", "w") as fout:
-        fout.write(f"Accuracy: {acc}\n")
+    pd.DataFrame(results).to_csv(f"data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv", index=False)
 
 
 if __name__ == "__main__":
