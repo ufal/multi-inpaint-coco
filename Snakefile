@@ -198,7 +198,7 @@ rule generate_html:
         dataset = load_from_disk(input.dataset)
         with open(input.translated, "r") as f:
             # The [1:] is there because the translation file has a header line
-            translation = [l.strip().split("\t") for l in f.readlines()][1:]
+            translation = [l.strip("\n").split("\t") for l in f.readlines()][1:]
 
         assert len(translation) == len(dataset)
         assert all(len(t) == 2 for t in translation), "Translation file should have two columns: COCO and Inpaint captions."
@@ -281,7 +281,7 @@ rule finalize_dataset:
                 match = re.search(r"Inpaint \w+ \d+:(.+)$", trans[idx][1])
                 new_item[f"inpaint_caption_{lang}"] = match.group(1).strip()
             return new_item
-        
+
         dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16)
         dataset.save_to_disk(LOCAL_TRANSLATED_DS_PATH)
 
