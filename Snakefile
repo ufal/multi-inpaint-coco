@@ -311,26 +311,26 @@ rule evaluate_dataset:
         task=lambda wildcards: wildcards.task,
         prompt_id=lambda wildcards: wildcards.prompt_id
     resources:
-        mem="64G",
+        mem="48G",
         cpus_per_task=4,
-        slurm_partition="gpu-amd",
-        slurm_extra="--gres=gpu:3 --constraint='gpuram64G'"
+        slurm_partition="gpu-ms,gpu-troja",
+        slurm_extra="--gres=gpu:3 --constraint='gpuram40G|gpuram48G'"
     script:
         "evaluate.py"
 
 
 rule gather_evals:
     input:
+        # expand(
+        #     "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+        #     model_name=["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b"], 
+        #     lang=HUNYAN_LANGS+FINAL_LANGUAGES,
+        #     task=["2img", "2txt"],
+        #     prompt_id=["prompt_2"]
+        # ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b", "llama4_scout"], 
-            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
-            task=["2img", "2txt"],
-            prompt_id=["prompt_2"]
-        ),
-        expand(
-            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["siglip2-base"], 
+            model_name=["siglip2-base", "siglip2-large", "siglip2-so400m", "siglip2-giant"], 
             lang=HUNYAN_LANGS+FINAL_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["similarity"]

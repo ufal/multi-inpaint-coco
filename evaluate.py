@@ -3,6 +3,7 @@ from unicodedata import normalize
 import pandas as pd
 import ipdb
 import torch
+import torch.nn.functional as F
 
 from datasets import load_from_disk
 from transformers import pipeline, AutoModel, AutoProcessor
@@ -18,10 +19,11 @@ snapshot_map_generation = {
 }
 
 snapshot_map_similarity = {
-    # "nllb-clip-base": "visheratin/nllb-clip-base",
-    "siglip2-base": "google/siglip2-base-patch16-224"
+    "siglip2-base": "google/siglip2-base-patch16-224",
+    "siglip2-large": "google/siglip2-large-patch16-256",
+    "siglip2-so400m": "google/siglip2-so400m-patch16-256",
+    "siglip2-giant": "google/siglip2-giant-opt-patch16-256"
 }
-
 
 def get_prompt_fn_by_id(task, prompt_id):
 
@@ -134,6 +136,126 @@ def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
         })
     return results
 
+def resize_positional_embeddings_2d(pos_embed, target_length):
+    """
+    Bilinearly resize positional embeddings following SiGLIP paper approach.
+    
+    Args:
+        pos_embed: [seq_len, hidden_size] positional embeddings
+        target_length: target sequence length
+    
+    Returns:
+        resized_pos_embed: [target_length, hidden_size] resized positional embeddings
+    """
+    
+    # Convert 1D sequence to 2D grid for bilinear interpolation
+    seq_len, hidden_size = pos_embed.shape
+    
+    # Assume square grid for original embeddings (common in SiGLIP)
+    orig_size = int(seq_len ** 0.5)
+    if orig_size * orig_size != seq_len:
+        # If not perfect square, find closest factorization
+        # This handles cases where seq_len might not be exactly square
+        orig_h = int(seq_len ** 0.5)
+        orig_w = seq_len // orig_h
+        if orig_h * orig_w != seq_len:
+            orig_h = orig_w = int(seq_len ** 0.5)
+    else:
+        orig_h = orig_w = orig_size
+    
+    # Target grid dimensions
+    target_size = int(target_length ** 0.5)
+    if target_size * target_size != target_length:
+        target_h = int(target_length ** 0.5)
+        target_w = target_length // target_h
+        if target_h * target_w != target_length:
+            target_h = target_w = int(target_length ** 0.5)
+    else:
+        target_h = target_w = target_size
+    
+    # Reshape to 2D grid: [hidden_size, orig_h, orig_w]
+    pos_embed_2d = pos_embed.T.view(hidden_size, orig_h, orig_w).unsqueeze(0)
+    
+    # Bilinear interpolation with anti-aliasing (recompute_scale_factor=False for stability)
+    resized_pos_embed_2d = F.interpolate(
+        pos_embed_2d,
+        size=(target_h, target_w),
+        mode='bilinear',
+        align_corners=False,
+        antialias=True  # Anti-aliasing as mentioned in the paper
+    )
+    
+    # Reshape back to 1D: [target_length, hidden_size]
+    resized_pos_embed = resized_pos_embed_2d.squeeze(0).view(hidden_size, -1).T
+    
+    # Ensure we have exactly target_length embeddings
+    if resized_pos_embed.size(0) != target_length:
+        # Fallback: simple linear interpolation if 2D approach doesn't work perfectly
+        pos_embed_1d = pos_embed.T.unsqueeze(0).unsqueeze(0)  # [1, hidden_size, seq_len, 1]
+        resized_pos_embed_1d = F.interpolate(
+            pos_embed_1d,
+            size=(target_length, 1),
+            mode='bilinear',
+            align_corners=False,
+            antialias=True
+        )
+        resized_pos_embed = resized_pos_embed_1d.squeeze(0).squeeze(-1).T  # [target_length, hidden_size]
+    
+    return resized_pos_embed
+
+def get_text_features_with_resized_pos_embeddings(model, input_ids, attention_mask):
+    """
+    Get text features with bilinearly resized positional embeddings following SiGLIP paper.
+    """
+    seq_length = input_ids.size(1)
+    text_model = model.text_model
+    embeddings_layer = text_model.embeddings
+    
+    # Get token embeddings
+    inputs_embeds = embeddings_layer.token_embedding(input_ids)
+    
+    # Get original positional embeddings
+    original_pos_embed = embeddings_layer.position_embedding.weight  # [orig_max_length, hidden_size]
+    
+    # Resize positional embeddings to match sequence length
+    if seq_length > original_pos_embed.size(0):
+        resized_pos_embed = resize_positional_embeddings_2d(original_pos_embed, seq_length)
+        
+        # Create position ids for the full sequence
+        position_ids = torch.arange(seq_length, dtype=torch.long, device=input_ids.device)
+        position_ids = position_ids.unsqueeze(0).expand(input_ids.size(0), -1)
+        
+        # Apply resized positional embeddings
+        position_embeddings = resized_pos_embed[position_ids]
+    else:
+        # Use standard positional embeddings for shorter sequences
+        position_ids = torch.arange(seq_length, dtype=torch.long, device=input_ids.device)
+        position_ids = position_ids.unsqueeze(0).expand(input_ids.size(0), -1)
+        position_embeddings = embeddings_layer.position_embedding(position_ids)
+    
+    # Combine token and position embeddings
+    embeddings = inputs_embeds + position_embeddings
+    
+    encoder_outputs = text_model.encoder(
+        inputs_embeds=embeddings,
+        attention_mask=attention_mask.to(dtype=torch.bool),
+        output_attentions=False,
+        output_hidden_states=False,
+        return_dict=True,
+    )
+    
+    # Pool the output (first token for SiGLIP)
+    last_hidden_state = encoder_outputs.last_hidden_state
+    pooled_output = last_hidden_state[:, 0, :]
+    
+    # Apply text projection
+    if hasattr(model, 'text_projection') and model.text_projection is not None:
+        text_features = model.text_projection(pooled_output)
+    else:
+        text_features = pooled_output
+    
+    return text_features
+
 # imported from hard-negative-mining github
 def run_similarity_sample(item, model, processor, lang, task, to_normalize=True):
     coco_caption = item[f"coco_caption_{lang}"]
@@ -152,8 +274,14 @@ def run_similarity_sample(item, model, processor, lang, task, to_normalize=True)
 
     inputs = processor(text=captions, images=images, return_tensors="pt", padding=True, return_attention_mask=True).to(model.device)
     with torch.no_grad():
-        # Txt encoder incl. projections
-        texts_feats = model.get_text_features(input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"])
+        seq_length = inputs["input_ids"].size(1)
+        if model.config.model_type == "siglip" and seq_length > 64:
+            # Use bilinearly resized positional embeddings following SiGLIP paper
+            texts_feats = get_text_features_with_resized_pos_embeddings(
+                model, inputs["input_ids"], inputs["attention_mask"]
+            )
+        else:
+            texts_feats = model.get_text_features(input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"])
 
         # Img encoder incl. projections
         image_feats = model.get_image_features(pixel_values=inputs["pixel_values"])
@@ -166,7 +294,7 @@ def run_similarity_sample(item, model, processor, lang, task, to_normalize=True)
     return label, similarity
 
 def evaluate_by_similarity(dataset, model_name, lang, task):
-    model = AutoModel.from_pretrained(snapshot_map_similarity[model_name], device_map="cuda")
+    model = AutoModel.from_pretrained(snapshot_map_similarity[model_name], device_map="cuda").eval()
     processor = AutoProcessor.from_pretrained(snapshot_map_similarity[model_name])
 
     results = []
