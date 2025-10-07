@@ -8,7 +8,7 @@ data/translated.*.html
 data/inpaintCOCO_v2
 data/inpaintCOCO_multilingual
 data/translated.final.*.txt
-data/eval.*.csv
+data/evaluation/
 data/samples/
 .bkp
 

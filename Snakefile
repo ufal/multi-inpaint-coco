@@ -2,6 +2,7 @@ import base64
 from io import BytesIO
 
 LANGUAGES = ["cs", "sk", "de", "ro", "it", "uk", "ru"]
+HUNYAN_LANGS = ["vi", "ta", "bn", "gu", "my"]
 
 LANGUAGE_NAMES = {
     "cs": "Czech",
@@ -12,15 +13,21 @@ LANGUAGE_NAMES = {
     "uk": "Ukrainian",
     "ru": "Russian",
     "am": "Amharic",
+
+    "vi": "Vietnamese",
+    "ta": "Tamil",
+    "bn": "Bengali",
+    "gu": "Gujarati",
+    "my": "Burmese",
 }
 
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
-LOCAL_TRANSLATED_DS_PATH = "data/inpaintCOCO_multilingual"
+LOCAL_TRANSLATED_PATH = "data/inpaintCOCO_multilingual"
 FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        "data/eval.all.csv"
+        "data/evaluation/eval.all.csv"
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -150,7 +157,7 @@ rule hunyuan_translation:
         mem="48G",
         cpus_per_task=4,
         slurm_partition="gpu-troja,gpu-ms",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram48G|gpuram64G|gpuram95G'"
+        slurm_extra="--gres=gpu:3 --constraint='gpuram40G|gpuram48G|gpuram64G|gpuram95G'"
     run:
         from transformers import AutoModelForCausalLM, AutoTokenizer
         from tqdm import tqdm
@@ -255,12 +262,30 @@ rule convert_postedited_to_tsv:
         grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //' | sed 'N;s/\\n/\\t/' > {output}
         """
 
+def update_item(item, idx, languages, translations):
+        new_item = dict(item)
+        new_item["coco_caption_en"] = new_item.pop("coco_caption")
+        new_item["inpaint_caption_en"] = new_item.pop("inpaint_caption")
+        for lang, trans in zip(languages, translations):
+            match = re.search(r"COCO \w+ \d+:(.+)$", trans[idx][0])
+            if match is not None:
+                new_item[f"coco_caption_{lang}"] = match.group(1).strip()
+            else:
+                new_item[f"coco_caption_{lang}"] = trans[idx][0]
+
+            match = re.search(r"Inpaint \w+ \d+:(.+)$", trans[idx][1])
+            if match is not None:
+                new_item[f"inpaint_caption_{lang}"] = match.group(1).strip()
+            else:
+                new_item[f"inpaint_caption_{lang}"] = trans[idx][1]
+        return new_item
+
 rule finalize_dataset:
     input:
         dataset=LOCAL_DS_PATH,
-        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES)
+        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES + HUNYAN_LANGS)
     output:
-        directory(LOCAL_TRANSLATED_DS_PATH)
+        directory(LOCAL_TRANSLATED_PATH)
     run:
         from datasets import load_from_disk
         dataset = load_from_disk(input.dataset)
@@ -270,26 +295,16 @@ rule finalize_dataset:
             with open(trans_file) as f:
                 translations.append([line.strip().split("\t") for line in f])
 
-        def update_item(item, idx):
-            new_item = dict(item)
-            new_item["coco_caption_en"] = new_item.pop("coco_caption")
-            new_item["inpaint_caption_en"] = new_item.pop("inpaint_caption")
-            for lang, trans in zip(FINAL_LANGUAGES, translations):
-                match = re.search(r"COCO \w+ \d+:(.+)$", trans[idx][0])
-                new_item[f"coco_caption_{lang}"] = match.group(1).strip()
-
-                match = re.search(r"Inpaint \w+ \d+:(.+)$", trans[idx][1])
-                new_item[f"inpaint_caption_{lang}"] = match.group(1).strip()
-            return new_item
-
-        dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16)
-        dataset.save_to_disk(LOCAL_TRANSLATED_DS_PATH)
+        languages = FINAL_LANGUAGES + HUNYAN_LANGS
+        dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16,
+                              fn_kwargs={"languages": languages, "translations": translations})
+        dataset.save_to_disk(LOCAL_TRANSLATED_PATH)
 
 rule evaluate_dataset:
     input:
-        LOCAL_TRANSLATED_DS_PATH
+        LOCAL_TRANSLATED_PATH
     output:
-        "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv"
+        "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv"
     params:
         model_name=lambda wildcards: wildcards.model_name,
         lang=lambda wildcards: wildcards.lang,
@@ -299,7 +314,7 @@ rule evaluate_dataset:
         mem="64G",
         cpus_per_task=4,
         slurm_partition="gpu-amd",
-        slurm_extra="--gres=gpu:4 --constraint='gpuram64G'"
+        slurm_extra="--gres=gpu:3 --constraint='gpuram64G'"
     script:
         "evaluate.py"
 
@@ -307,13 +322,20 @@ rule evaluate_dataset:
 rule gather_evals:
     input:
         expand(
-            "data/eval.results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["google_gemma-3-12b-it", "llama4_scout"],
-            lang=["en", "cs", "ro"],
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b", "llama4_scout"], 
+            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_0"]
+            prompt_id=["prompt_2"]
+        ),
+        expand(
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=["siglip2-base"], 
+            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
+            task=["2img", "2txt"],
+            prompt_id=["similarity"]
         )
     output:
-        "data/eval.all.csv"
+        "data/evaluation/eval.all.csv"
     script:
         "gather.py"
