@@ -14,7 +14,7 @@ snapshot_map_generation = {
     "qwen3g-8b": "Qwen/Qwen3Guard-Gen-8B",
     "qwen_omni-7b": "Qwen/Qwen2.5-Omni-7B",
     "eurovllm-9b": "utter-project/EuroVLM-9B-Preview",
-    "llama4_scout": "meta-llama_Llama-4-Scout-17B-16E-Instruct",
+    "llama4_scout": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
 }
 
 snapshot_map_similarity = {
