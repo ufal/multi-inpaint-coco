@@ -13,7 +13,12 @@ LANGUAGE_NAMES = {
     "uk": "Ukrainian",
     "ru": "Russian",
     "am": "Amharic",
-
+    "ar": "Arabic",
+    "az": "Azerbaijani",
+    "be": "Belarusian",
+    "bg": "Bulgarian",
+    "ja": "Japanese",
+    "tr": "Turkish",
     "vi": "Vietnamese",
     "ta": "Tamil",
     "bn": "Bengali",
