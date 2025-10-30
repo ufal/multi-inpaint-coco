@@ -1,29 +1,54 @@
 import base64
 from io import BytesIO
 
-LANGUAGES = ["cs", "sk", "de", "ro", "it", "uk", "ru"]
-HUNYAN_LANGS = ["vi", "ta", "bn", "gu", "my"]
+LANGUAGES = ["cs", "sk", "de", "ro", "it", "uk", "ru", "vi", "am", "ja", "ar"]
+HUNYAN_ONLY_LANGS = ["zh", "fr", "pt", "es", "tr", "ko", "th", "ms", "id", "tl",
+    "hi", "pl", "nl", "km", "my", "fa", "gu", "ur", "te", "mr", "he", "bn", "ta",
+    "bo", "kk", "mn", "ug", "yue"]
 
 LANGUAGE_NAMES = {
-    "cs": "Czech",
-    "sk": "Slovak",
-    "de": "German",
-    "ro": "Romanian",
-    "it": "Italian",
-    "uk": "Ukrainian",
-    "ru": "Russian",
     "am": "Amharic",
     "ar": "Arabic",
     "az": "Azerbaijani",
     "be": "Belarusian",
     "bg": "Bulgarian",
-    "ja": "Japanese",
-    "tr": "Turkish",
-    "vi": "Vietnamese",
-    "ta": "Tamil",
     "bn": "Bengali",
+    "bo": "Tibetan",
+    "cs": "Czech",
+    "de": "German",
+    "es": "Spanish",
+    "fa": "Persian",
+    "fr": "French",
     "gu": "Gujarati",
+    "he": "Hebrew",
+    "hi": "Hindi",
+    "id": "Indonesian",
+    "it": "Italian",
+    "ja": "Japanese",
+    "kk": "Kazakh",
+    "km": "Khmer",
+    "ko": "Korean",
+    "mn": "Mongolian",
+    "mr": "Marathi",
+    "ms": "Malay",
     "my": "Burmese",
+    "nl": "Dutch",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "sk": "Slovak",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "th": "Thai",
+    "tl": "Filipino",
+    "tr": "Turkish",
+    "ug": "Uyghur",
+    "uk": "Ukrainian",
+    "ur": "Urdu",
+    "vi": "Vietnamese",
+    "yue": "Cantonese",
+    "zh": "Chinese",
 }
 
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
@@ -32,7 +57,8 @@ FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        "data/evaluation/eval.all.csv"
+        #"data/evaluation/eval.all.csv"
+        expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -294,7 +320,7 @@ def update_item(item, idx, languages, translations):
 rule finalize_dataset:
     input:
         dataset=LOCAL_DS_PATH,
-        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES + HUNYAN_LANGS)
+        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES + HUNYAN_ONLY_LANGS)
     output:
         directory(LOCAL_TRANSLATED_PATH)
     run:
@@ -306,7 +332,7 @@ rule finalize_dataset:
             with open(trans_file) as f:
                 translations.append([line.strip().split("\t") for line in f])
 
-        languages = FINAL_LANGUAGES + HUNYAN_LANGS
+        languages = FINAL_LANGUAGES + HUNYAN_ONLY_LANGS
         dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16,
                               fn_kwargs={"languages": languages, "translations": translations})
         dataset.save_to_disk(LOCAL_TRANSLATED_PATH)
@@ -335,14 +361,14 @@ rule gather_evals:
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
             model_name=["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b", "llama4_scout"], 
-            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
+            lang=HUNYAN_ONLY_LANGS+FINAL_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["prompt_2"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
             model_name=["siglip2-base"], 
-            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
+            lang=HUNYAN_ONLY_LANGS+FINAL_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["similarity"]
         )
