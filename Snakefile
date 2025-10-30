@@ -201,6 +201,9 @@ rule generate_html:
         dataset=LOCAL_DS_PATH,
     output:
         "data/translated.{system}.{lang}.html"
+    resources:
+        mem="4G",
+        cpus_per_task=1,
     run:
         from datasets import load_from_disk
 
@@ -237,6 +240,9 @@ rule convert_to_docx:
         "data/translated.{lang}.html"
     output:
         "data/translated.{lang}.docx"
+    resources:
+        mem="8G",
+        cpus_per_task=4,
     shell:
         """
         pandoc -s {input} -o {output}
