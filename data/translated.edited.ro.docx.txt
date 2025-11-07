@@ -628,7 +628,7 @@ COCO trans 79: O felie mare de pizza pe o farfurie lângă un pahar cu băutură
   
 
 Inpaint en 79: A big donut on a plate next to a glass of beverage
-Inpaint trans 79: Un gogoasă mare pe o farfurie lângă un pahar cu băutură.
+Inpaint trans 79: O gogoașă mare pe o farfurie lângă un pahar cu băutură.
   
 
 COCO en 80: A tall giraffe standing in a lush green field.
