@@ -57,8 +57,8 @@ FINAL_LANGUAGES = ["cs", "ro"]
 
 rule all:
     input:
-        #"data/evaluation/eval.all.csv"
-        expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
+        "data/evaluation/eval.all.csv"
+        # expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -368,7 +368,7 @@ rule gather_evals:
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
             model_name=["nllb-siglip-base", "nllb-siglip-large", "mexma-siglip2", "siglip2-base", "siglip2-large", "siglip2-so400m", "siglip2-giant"], 
-            lang=HUNYAN_LANGS+FINAL_LANGUAGES,
+            lang=HUNYAN_ONLY_LANGS+FINAL_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["similarity"]
         )

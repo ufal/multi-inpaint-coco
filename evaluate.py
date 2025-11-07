@@ -76,7 +76,7 @@ prompt_fn_map = {
     "prompt_2": get_gemma3n_answer_prompt_0
 }
 
-def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
+def compute_task_specific_input(item, lang, task):
     coco_caption = item[f"coco_caption_{lang}"]
     inpaint_caption = item[f"inpaint_caption_{lang}"]
 
@@ -85,24 +85,36 @@ def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
     image = item["coco_image"] if label == 0 else item["inpaint_image"]
     
     if task == "2img":
-        prompt_text = prompt_fn(caption)
+        images = [item["coco_image"], item["inpaint_image"]]
+        captions = [caption]
+    else:
+        images = [image]
+        captions = [coco_caption, inpaint_caption]
+
+    return label, captions, images
+
+def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
+    label, captions, images = compute_task_specific_input(item, lang, task)
+    
+    if task == "2img":
+        prompt_text = prompt_fn(captions[0])
         messages = [
             {
                 "role": "user",
                 "content": [
-                    {"type": "image", "image": item["coco_image"]},
-                    {"type": "image", "image": item["inpaint_image"]},
+                    {"type": "image", "image": images[0]},
+                    {"type": "image", "image": images[1]},
                     {"type": "text", "text": prompt_text}
                 ]
             }
         ]
     else:
-        prompt_text = prompt_fn(coco_caption, inpaint_caption)
+        prompt_text = prompt_fn(captions[0], captions[1])
         messages = [
             {
                 "role": "user",
                 "content": [
-                    {"type": "image", "image": image},
+                    {"type": "image", "image": images[0]},
                     {"type": "text", "text": prompt_text}
                 ]
             }
@@ -167,7 +179,7 @@ def get_clip_similarity(model, inputs, to_normalize=True):
     return similarity
 
 def get_siglip_similarity(model, inputs):
-    outputs = model(inputs["input_ids"][:, :64], inputs["pixel_values"])
+    outputs = model(**inputs)
     similarity = outputs.logits_per_image.flatten()
     return similarity
 
@@ -181,34 +193,25 @@ def get_nllb_siglip_similarity(model, inputs):
     similarity = logit_scale_exp * image_features @ text_features.T + logit_bias
     return similarity.flatten()
 
-# imported from hard-negative-mining github
-def run_similarity_sample(item, model, model_name, processor, lang, task):
-    coco_caption = item[f"coco_caption_{lang}"]
-    inpaint_caption = item[f"inpaint_caption_{lang}"]
 
-    label = random.sample([0, 1], 1)[0]
-    caption = coco_caption if label == 0 else inpaint_caption
-    image = item["coco_image"] if label == 0 else item["inpaint_image"]
-    
-    if task == "2img":
-        images = [item["coco_image"], item["inpaint_image"]]
-        captions = [caption]
-    else:
-        images = [image]
-        captions = [coco_caption, inpaint_caption]
+def run_similarity_sample(item, model, model_name, processor, lang, task):
+    label, captions, images = compute_task_specific_input(item, lang, task)
 
     if model_name.startswith("nllb-siglip"):
         inputs = process_nllb_siglip(processor, captions, images)
+    elif model_name.startswith("siglip2"):
+        inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
     else:
         inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
 
+    # imported from hard-negative-mining github
     with torch.inference_mode():
         if model_name.startswith("mexma"):
             similarity = get_mexma_similarity(model, inputs)
         elif model_name.startswith("nllb-siglip"):
             similarity = get_nllb_siglip_similarity(model, inputs)
         elif model_name.startswith("siglip2"):
-          similarity = get_siglip_similarity(model, inputs)
+            similarity = get_siglip_similarity(model, inputs)
         elif model_name.startswith("clip"):
             similarity = get_clip_similarity(model, inputs)
 
