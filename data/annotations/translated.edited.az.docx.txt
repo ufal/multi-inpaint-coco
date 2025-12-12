@@ -4445,11 +4445,11 @@ Inpaint trans 409: Tərəvəz və pendirli sendviç taxtanın üstündə dayanı
   
 
 COCO en 410: Van drives by a bus sitting at the curb
-COCO trans 410: Kənarda dayanan avtobusun yanından keçən mikroavtobus (van).
+COCO trans 410: Kənarda dayanan avtobusun yanından keçən mikroavtobus.
   
 
 Inpaint en 410: Van drives by a car sitting at the curb
-Inpaint trans 410: Kənarda dayanan avtomobilin yanından keçən mikroavtobus (van).
+Inpaint trans 410: Kənarda dayanan avtomobilin yanından keçən mikroavtobus.
   
 
 COCO en 411: A desk that has a laptop computer on it.
@@ -5057,7 +5057,7 @@ COCO trans 483: Böyük soyuducu və digər avadanlıqları olan mətbəx.
   
 
 Inpaint en 483: A kitchen that has a short fridge and other appliances.
-Inpaint trans 483: Aşağı (qısa) soyuducu və digər avadanlıqları olan mətbəx.
+Inpaint trans 483: Aşağı soyuducu və digər avadanlıqları olan mətbəx.
   
 
 COCO en 484: Group of zebras walking through tall grass together.
@@ -5273,7 +5273,7 @@ Inpaint trans 508: Böyük bir körpə tutan kişi.
   
 
 COCO en 509: A large yellow dump truck sitting on green lawn.
-COCO trans 509: Yaşıl çəmənlikdə dayanmış böyük sarı yük maşını (dump-truck).
+COCO trans 509: Yaşıl çəmənlikdə dayanmış böyük sarı yük maşını.
   
 
 Inpaint en 509: A white truck sitting on green lawn.
@@ -5339,11 +5339,11 @@ Inpaint trans 516: Mavi masanın üstündə duran böyük pizza.
   
 
 COCO en 517: A large tusked elephant walking in a wooded area.
-COCO trans 517: Böyük şahlı (dişli) bir fil meşəlik ərazidə gəzir.
+COCO trans 517: Böyük şahlı bir fil meşəlik ərazidə gəzir.
   
 
 Inpaint en 517: A tiny tusked elephant walking in a wooded area.
-Inpaint trans 517: Kiçik şahlı (dişli) bir fil meşəlik ərazidə gəzir.
+Inpaint trans 517: Kiçik şahlı bir fil meşəlik ərazidə gəzir.
   
 
 COCO en 518: a large kite that is being flown in the sky

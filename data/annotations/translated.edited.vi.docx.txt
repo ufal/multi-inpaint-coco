@@ -89,7 +89,6 @@ Inpaint trans 11: Một cậu bé đang lấy quả chuối ra khỏi hộp táo
 COCO en 12: A cat that is laying down on a chair.
 COCO trans 12: Một con mèo đang nằm trên một chiếc ghế.
   
-(very bad)[a]
 Inpaint en 12: A dog that is laying on a chair
 Inpaint trans 12: Một con chó đang nằm trên một chiếc ghế.
   
@@ -945,7 +944,6 @@ Inpaint trans 118: Một người đang đứng trên tấm ván trượt tuyế
 COCO en 119: A very thick pizza is on a plate with one piece taken.
 COCO trans 119: Một chiếc pizza rất dày được đặt trên đĩa; trong đó một miếng đã được cắt ra.
   
- (not aligned with caption, i.e. still the whole cake)[b]
 Inpaint en 119: A very thick cake is on a plate with one piece taken.
 Inpaint trans 119: Một chiếc bánh rất dày được đặt trên đĩa; một miếng đã được cắt ra.
   
@@ -977,7 +975,7 @@ Inpaint trans 122: Một bàn máy tính, bao gồm một chiếc laptop, các m
 COCO en 123: A woman standing behind a very small banana tree with green bananas on it.
 COCO trans 123: Một người phụ nữ đang đứng sau một cây chuối rất nhỏ, trên cây có những quả chuối màu xanh lá.
   
-(no way this is an apple tree :))[c]
+
 Inpaint en 123: A woman standing behind a very small apple tree with green apples on it.
 Inpaint trans 123: Một người phụ nữ đứng sau một cây táo rất nhỏ, trên cây có những quả táo màu xanh lá.
   
@@ -1177,7 +1175,7 @@ Inpaint trans 147: Một con cừu đang đi dọc theo con đường.
 COCO en 148: A child standing completely upright in front of a refrigerator.
 COCO trans 148: Một đứa trẻ đứng thẳng đứng ngay trước tủ lạnh.
   
-(this is a horror scene :))[d]
+
 Inpaint en 148: A child standing completely upright in front of a microwave.
 Inpaint trans 148: Một đứa trẻ đứng thẳng đứng ngay trước lò vi sóng.
   
@@ -1393,7 +1391,8 @@ Inpaint trans 174: Bàn ăn được bày trí gọn gàng nằm ngay bên cạn
 COCO en 175: A man standing by an oven with the door open.
 COCO trans 175: Một người đàn ông đang đứng bên cạnh chiếc lò nướng, cửa lò được mở ra.
   
-(a bit unrealistic toilet)[e]
+
+
 Inpaint en 175: A man standing by a toilet with the door open.
 Inpaint trans 175: Một người đàn ông đang đứng bên cạnh bồn cầu; nắp bồn cầu được mở ra.
   
@@ -1489,7 +1488,8 @@ Inpaint trans 186: Một con chó nhìn chằm chằm qua khe hở giữa hai c�
 COCO en 187: A toilet in a bathroom next to a sink.
 COCO trans 187: Một chiếc bồn cầu trong phòng tắm, nằm ngay cạnh vòi nước.
   
-(no sink)[f]
+
+
 Inpaint en 187: A chair in a bathroom next to a sink.
 Inpaint trans 187: Một chiếc ghế trong phòng tắm, đặt bên cạnh bồn rửa mặt.
   
@@ -1641,7 +1641,8 @@ Inpaint trans 205: Một chiếc máy bay màu trắng và đỏ; một con chim
 COCO en 206: a brown teddy bear lying on sand with a hat
 COCO trans 206: Một chú gấu bông màu nâu nằm trên cát, đội một chiếc mũ.
   
-(no hat)[g]
+
+
 Inpaint en 206: a black dog lying on sand with a hat
 Inpaint trans 206: Một con chó đen nằm trên cát, đội một chiếc mũ.
   
@@ -1721,7 +1722,8 @@ Inpaint trans 215: Một chiếc ghế đặt phía sau chiếc bàn, trước m
 COCO en 216: A man riding a skateboard down a street in front of a red car.
 COCO trans 216: Một người đàn ông đang trượt patin dọc theo con phố, ngay trước một chiếc xe màu đỏ.
   
-(no truck)[h]
+
+
 Inpaint en 216: A man riding a skateboard down a street in front of a blue truck.
 Inpaint trans 216: Một người đàn ông đang trượt patin dọc theo con phố, ngay trước một chiếc xe tải màu xanh dương.
   
@@ -1753,7 +1755,8 @@ Inpaint trans 219: Có một chiếc bánh sandwich nhỏ đặt trên đĩa tr�
 COCO en 220: A cat looking directly into a magnifying glass on a table.
 COCO trans 220: Một con mèo đang nhìn thẳng vào chiếc kính phóng đại đặt trên bàn.
   
-(too cartoonish + the bird not looking directly into :))[i]
+
+
 Inpaint en 220: A bird looking directly into a magnifying glass on a table.
 Inpaint trans 220: Một con chim đang nhìn thẳng vào chiếc kính phóng đại đặt trên bàn.
   
@@ -1841,7 +1844,8 @@ Inpaint trans 230: Một chiếc xe ngựa do con bò kéo, đang di chuyển tr
 COCO en 231: A bear that is running on some dirt.
 COCO trans 231: Một con gấu đang chạy trên đường đất.
   
-(the giraffe’s neck is short and twisted :))[j]
+
+
 Inpaint en 231: A giraffe is standing on some dirt
 Inpaint trans 231: Một con hươu cao cổ đang đứng trên đường đất.
   
@@ -2009,7 +2013,8 @@ Inpaint trans 251: Một người phụ nữ mặc áo màu đỏ, với vài c�
 COCO en 252: A fire hydrant with graffiti that makes it appear to be smiling mischievously.
 COCO trans 252: Một vòi cứu hỏa được trang trí bằng những bức tranh graffiti khiến nó trông như đang mỉm cười một cách nghịch ngợm.
   
-(not seeing the smile though, so I think it’s bad :))[k]
+
+
 Inpaint en 252: A bottle with graffiti that makes it appear to be smiling mischievously.
 Inpaint trans 252: Một chai được trang trí bằng những hình vẽ graffiti khiến nó trông như đang mỉm cười một cách nghịch ngợm.
   
@@ -2033,7 +2038,7 @@ Inpaint trans 254: Vài chiếc bánh mì kẹp và một ly đồ uống.
 COCO en 255: One elephant standing away from the rest of the herd, drinking water.
 COCO trans 255: Một con voi đứng riêng biệt khỏi đàn đang uống nước.
   
-(again, giraffe’s neck is short, not sure if actually a giraffe :))[l]
+
 Inpaint en 255: One giraffe standing away from the rest of the herd, drinking water.
 Inpaint trans 255: Một con hươu cao cổ đứng riêng biệt khỏi đàn đang uống nước.
   
@@ -2577,7 +2582,7 @@ Inpaint trans 322: Một chiếc xe hơi đang di chuyển trong khu vực đô 
 COCO en 323: A plate with a peanut butter sandwich, ham, and tomatoes.
 COCO trans 323: Một đĩa gồm bánh mì kẹp bơ đậu phộng, thịt xông khói và cà chua.
   
-(I dont see no cakes though)[m]
+
 Inpaint en 323: A plate with a cake, ham, and tomatoes.
 Inpaint trans 323: Một đĩa gồm bánh kem, thịt xông khói và cà chua.
   
@@ -2601,7 +2606,7 @@ Inpaint trans 325: Một hiệp sĩ cưỡi voi di chuyển qua khu đất, tron
 COCO en 326: a large group of horse with men riding on a few of them
 COCO trans 326: Một nhóm nhiều những con ngựa, trong đó một số con được người cưỡi.
   
-(there’s only one elephant though)[n]
+
 Inpaint en 326: a large group of elephants with men riding on a few of them
 Inpaint trans 326: Một nhóm lớn những con voi, trong đó có vài con được con người cưỡi trên lưng.
   
@@ -2825,7 +2830,7 @@ Inpaint trans 353: Một con mèo nằm trên ghế sofa, được phủ kín b�
 COCO en 354: a yellow and black fire hydrant on the sidewalk
 COCO trans 354: Một vòi cứu hỏa màu vàng và đen được đặt trên vỉa hè.
   
-(the stop sign is kinda unrealistic)[o]
+
 Inpaint en 354: a stop sign on the sidewalk
 Inpaint trans 354: Một biển báo dừng trên vỉa hè
   
@@ -3001,7 +3006,6 @@ Inpaint trans 375: Một chiếc ghế màu trắng đặt bên cạnh cuộn gi
 COCO en 376: A horse looking over a fence on a snowy day
 COCO trans 376: Một con ngựa đang nhìn qua hàng rào vào một ngày tuyết rơi.
   
-(not really “looking over”, and also unrealistic bear)[p]
 Inpaint en 376: A bear looking over a fence on a snowy day
 Inpaint trans 376: Một con gấu đang nhìn qua hàng rào vào một ngày tuyết rơi.
   
@@ -3217,7 +3221,7 @@ Inpaint trans 402: Một bàn gồm hai khay đen chứa thức ăn; trong đó 
 COCO en 403: Pasta with sauce and broccoli on white plate.
 COCO trans 403: Mì ống kèm nước sốt và bông cải xanh, được đặt trên đĩa trắng.
   
-(not sure I see any carrots)[q]
+
 Inpaint en 403: Pasta with sauce and carrot on white plate.
 Inpaint trans 403: Mì ống ăn kèm nước sốt và cà rốt, trên đĩa trắng.
   
@@ -3281,7 +3285,7 @@ Inpaint trans 410: Xe thùng đi ngang qua một chiếc xe hơi đang đậu b�
 COCO en 411: A desk that has a laptop computer on it.
 COCO trans 411: Một chiếc bàn trên đó có một chiếc máy tính xách tay.
   
-(not sure if there is a suitcase)[r]
+
 Inpaint en 411: A desk that has a suitcase on it.
 Inpaint trans 411: Một chiếc bàn trên đó có một chiếc vali.
   
@@ -3497,7 +3501,7 @@ Inpaint trans 437: Một người đàn ông đang cầm một vợt tennis.
 COCO en 438: The book is about fixing your bike.
 COCO trans 438: Cuốn sách này nói về cách sửa chữa chiếc xe đạp của bạn.
   
-(there’s only a clock, no bike)[s]
+
 Inpaint en 438: The clock is about fixing your bike.
 Inpaint trans 438: Cái đồng hồ này là về việc sửa chiếc xe đạp của bạn.
   
@@ -4585,7 +4589,7 @@ Inpaint trans 573: Người đàn ông và người phụ nữ đang giơ con da
 COCO en 574: Two large identical teddy bears are piled against the wall.
 COCO trans 574: Hai chú gấu bông lớn, giống hệt nhau, được xếp chồng lên nhau và đặt sát tường.
   
-(not exactly “piled”)[t]
+
 Inpaint en 574: Two small identical teddy bears are piled against the wall.
 Inpaint trans 574: Hai chú gấu bông nhỏ, giống hệt nhau, được xếp chồng lên nhau và đặt sát tường.
   
@@ -5105,7 +5109,7 @@ Inpaint trans 638: Một người đàn ông đứng phía sau chiếc xe tải 
 COCO en 639: A pair of beds in a hotel with green sheets and one head board.
 COCO trans 639: Một căn phòng khách sạn có hai chiếc giường với ga trải giường màu xanh lá và có chung một đầu giường.
   
-(it’s just one bed though)[u]
+
 Inpaint en 639: A pair of beds in a hotel with red sheets and one head board.
 Inpaint trans 639: Một căn phòng khách sạn với hai chiếc giường được trang bị ga trải giường màu đỏ và có chung một đầu giường.
   
@@ -7081,7 +7085,7 @@ Inpaint trans 885: Người đàn ông đội chiếc mũ xanh lá cây đang ng
 COCO en 886: The tiny white bathroom has a toilet and pedestal sink.
 COCO trans 886: Phòng tắm nhỏ màu trắng này chỉ có một chiếc bồn cầu và một bồn rửa đặt trên chân đứng.
   
-(there’s no sink)[v]
+
 Inpaint en 886: The tiny yellow bathroom has a toilet and pedestal sink.
 Inpaint trans 886: Phòng tắm nhỏ màu vàng chỉ có một chiếc bồn cầu và một bồn rửa đặt trên chân đứng.
   
@@ -7369,7 +7373,7 @@ Inpaint trans 921: Một chiếc máy bay màu đỏ đang di chuyển dọc the
 COCO en 922: A red and gold painted fire hydrant on the street
 COCO trans 922: Một cái vòi cứu hỏa được sơn màu đỏ và vàng, đặt trên con phố.
   
-(no fire hydrant)[w]
+
 Inpaint en 922: An orange painted fire hydrant on the street
 Inpaint trans 922: Một chiếc vòi cứu hỏa được sơn màu cam, đứng trên con phố
   
@@ -7953,7 +7957,7 @@ Inpaint trans 994: Một đứa trẻ nằm trên giường, sử dụng chiếc
 COCO en 995: a brown teddy bear lying on sand with a hat
 COCO trans 995: Một chú gấu bông màu nâu nằm trên cát, đội một chiếc mũ.
   
-(no hat though)[x]
+
 Inpaint en 995: a black teddy bear lying on sand with a hat
 Inpaint trans 995: Một chú gấu bông màu đen nằm trên cát, đội một chiếc mũ.
   
