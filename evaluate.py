@@ -76,7 +76,7 @@ prompt_fn_map = {
     "prompt_2": get_gemma3n_answer_prompt_0
 }
 
-def compute_task_specific_input(item, lang, task):
+def compute_task_specific_random_input(item, lang, task):
     coco_caption = item[f"coco_caption_{lang}"]
     inpaint_caption = item[f"inpaint_caption_{lang}"]
 
@@ -93,41 +93,86 @@ def compute_task_specific_input(item, lang, task):
 
     return label, captions, images
 
-def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
-    label, captions, images = compute_task_specific_input(item, lang, task)
-    
-    if task == "2img":
-        prompt_text = prompt_fn(captions[0])
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "image", "image": images[0]},
-                    {"type": "image", "image": images[1]},
-                    {"type": "text", "text": prompt_text}
-                ]
-            }
-        ]
-    else:
-        prompt_text = prompt_fn(captions[0], captions[1])
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "image", "image": images[0]},
-                    {"type": "text", "text": prompt_text}
-                ]
-            }
-        ]
+def compute_task_specific_full_input(item, lang, task):
+    coco_caption = item[f"coco_caption_{lang}"]
+    inpaint_caption = item[f"inpaint_caption_{lang}"]
 
-    outputs = model_pipe(
-            text=messages,
-            max_new_tokens=20,
-            return_full_text=False
-        )
-    decoded_str = outputs[0]["generated_text"]
-    decoded_str = decoded_str.replace("\n", " ").strip()
-    return label, decoded_str
+    coco_image = item["coco_image"]
+    inpaint_image = item["inpaint_image"]
+
+    labels = []
+    captions_list = []
+    images_list = []
+
+    if task == "2img":
+        for label_id, caption in enumerate([coco_caption, inpaint_caption]):
+            
+            # natural order
+            images_list.append([coco_image, inpaint_image])
+            captions_list.append([caption])
+            labels.append(label_id)
+            
+            # swapped order
+            images_list.append([inpaint_image, coco_image])
+            captions_list.append([caption])
+            labels.append(1 - label_id)
+            
+    else:
+        for label_id, image in enumerate([coco_image, inpaint_image]):
+            
+            # natural order
+            captions_list.append([coco_caption, inpaint_caption])
+            images_list.append([image])
+            labels.append(label_id)
+            
+            # swapped order
+            captions_list.append([inpaint_caption, coco_caption])
+            images_list.append([image])
+            labels.append(1 - label_id)
+
+    return labels, captions_list, images_list
+
+
+def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
+    # label, captions, images = compute_task_specific_random_input(item, lang, task)
+    labels, captions_list, images_list = compute_task_specific_full_input(item, lang, task)
+
+    decoded_list = []
+    for captions, images in zip(captions_list, images_list):
+        if task == "2img":
+            prompt_text = prompt_fn(captions[0])
+            messages = [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "image": images[0]},
+                        {"type": "image", "image": images[1]},
+                        {"type": "text", "text": prompt_text}
+                    ]
+                }
+            ]
+        else:
+            prompt_text = prompt_fn(captions[0], captions[1])
+            messages = [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "image": images[0]},
+                        {"type": "text", "text": prompt_text}
+                    ]
+                }
+            ]
+
+        outputs = model_pipe(
+                text=messages,
+                max_new_tokens=20,
+                return_full_text=False
+            )
+        decoded_str = outputs[0]["generated_text"]
+        decoded_str = decoded_str.replace("\n", " ").strip()
+        decoded_list.append(decoded_str)
+    
+    return labels, decoded_list
 
 def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
     model_snapshot = snapshot_map_generation.get(model_name)
@@ -138,17 +183,18 @@ def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
 
     results = []
     for item in tqdm(dataset):
-        label, output_text = run_generation_sample(model_pipe, item, lang, task, prompt_fn)
-        extracted_answer = answer_extractor_fn(output_text)
+        labels, output_texts = run_generation_sample(model_pipe, item, lang, task, prompt_fn)
+        extracted_answers = [answer_extractor_fn(output_text) for output_text in output_texts]
 
-        results.append({
-            "concept": item["concept"],
-            "coco_caption": item["coco_caption"],
-            "inpaint_caption": item["inpaint_caption"],
-            "label": label,
-            "extracted_answer": extracted_answer,
-            "output_text": output_text
-        })
+        for label, extracted_answer, output_text in zip(labels, extracted_answers, output_texts):
+            results.append({
+                "concept": item["concept"],
+                "coco_caption": item["coco_caption"],
+                "inpaint_caption": item["inpaint_caption"],
+                "label": label,
+                "extracted_answer": extracted_answer,
+                "output_text": output_text
+            })
     return results
 
 def import_nllb_siglip(model_name):
@@ -195,27 +241,31 @@ def get_nllb_siglip_similarity(model, inputs):
 
 
 def run_similarity_sample(item, model, model_name, processor, lang, task):
-    label, captions, images = compute_task_specific_input(item, lang, task)
+    # label, captions, images = compute_task_specific_random_input(item, lang, task)
+    labels, captions_list, images_list = compute_task_specific_full_input(item, lang, task)
 
-    if model_name.startswith("nllb-siglip"):
-        inputs = process_nllb_siglip(processor, captions, images)
-    elif model_name.startswith("siglip2"):
-        inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
-    else:
-        inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
-
-    # imported from hard-negative-mining github
-    with torch.inference_mode():
-        if model_name.startswith("mexma"):
-            similarity = get_mexma_similarity(model, inputs)
-        elif model_name.startswith("nllb-siglip"):
-            similarity = get_nllb_siglip_similarity(model, inputs)
+    similarities = []
+    for captions, images in zip(captions_list, images_list):
+        if model_name.startswith("nllb-siglip"):
+            inputs = process_nllb_siglip(processor, captions, images)
         elif model_name.startswith("siglip2"):
-            similarity = get_siglip_similarity(model, inputs)
-        elif model_name.startswith("clip"):
-            similarity = get_clip_similarity(model, inputs)
+            inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
+        else:
+            inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
 
-    return label, similarity
+        # imported from hard-negative-mining github
+        with torch.inference_mode():
+            if model_name.startswith("mexma"):
+                similarity = get_mexma_similarity(model, inputs)
+            elif model_name.startswith("nllb-siglip"):
+                similarity = get_nllb_siglip_similarity(model, inputs)
+            elif model_name.startswith("siglip2"):
+                similarity = get_siglip_similarity(model, inputs)
+            elif model_name.startswith("clip"):
+                similarity = get_clip_similarity(model, inputs)
+        
+        similarities.append(similarity)
+    return labels, similarities
 
 def evaluate_by_similarity(dataset, model_name, lang, task):
 
@@ -228,17 +278,18 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
 
     results = []
     for item in tqdm(dataset):
-        label, similarity = run_similarity_sample(item, model, model_name, processor, lang, task)
-        extracted_answer = torch.argmax(similarity).item()
+        labels, similarities = run_similarity_sample(item, model, model_name, processor, lang, task)
+        extracted_answers = [torch.argmax(similarity).item() for similarity in similarities]
 
-        results.append({
-            "concept": item["concept"],
-            "coco_caption": item["coco_caption"],
-            "inpaint_caption": item["inpaint_caption"],
-            "label": label,
-            "extracted_answer": extracted_answer,
-            "similarity": similarity.cpu().tolist()
-        })
+        for label, extracted_answer, similarity in zip(labels, extracted_answers, similarities):
+            results.append({
+                "concept": item["concept"],
+                "coco_caption": item["coco_caption"],
+                "inpaint_caption": item["inpaint_caption"],
+                "label": label,
+                "extracted_answer": extracted_answer,
+                "similarity": similarity.cpu().tolist()
+            })
     
     return results
 

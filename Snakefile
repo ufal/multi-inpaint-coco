@@ -1,7 +1,7 @@
 import base64
 from io import BytesIO
 
-LANGUAGES = ["cs", "sk", "de", "ro", "it", "uk", "ru", "vi", "am", "ja", "ar"]
+LANGUAGES_FOR_ANNOTS = ["cs", "sk", "de", "ro", "it", "uk", "ru", "vi", "am", "ja", "ar"]
 HUNYAN_ONLY_LANGS = ["zh", "fr", "pt", "es", "tr", "ko", "th", "ms", "id", "tl",
     "hi", "pl", "nl", "km", "my", "fa", "gu", "ur", "te", "mr", "he", "bn", "ta",
     "bo", "kk", "mn", "ug", "yue"]
@@ -55,9 +55,29 @@ LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 LOCAL_TRANSLATED_PATH = "data/inpaintCOCO_multilingual"
 FINAL_LANGUAGES = ["cs", "ro"]
 
+TARGET_LANGUAGES = FINAL_LANGUAGES + ["en"]
+
+GENERATIVE_MODEL_NAMES = [
+    "google_gemma-3-12b-it",
+    "qwen-7b",
+    "eurovllm-9b"
+]
+
+ENCODER_MODEL_NAMES = [
+    "nllb-siglip-base",
+    "nllb-siglip-large",
+    "mexma-siglip2",
+    "siglip2-base",
+    "siglip2-large",
+    "siglip2-so400m",
+    "siglip2-giant"
+]
+
 rule all:
     input:
-        "data/evaluation/eval.all.csv"
+        "data/evaluation/eval.all.csv",
+        "data/evaluation/corelate.all.csv",
+        "data/evaluation/languages_agreement.all.csv"
         # expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
 
 
@@ -320,7 +340,7 @@ def update_item(item, idx, languages, translations):
 rule finalize_dataset:
     input:
         dataset=LOCAL_DS_PATH,
-        translations=expand("data/translated.final.{lang}.tsv", lang=FINAL_LANGUAGES + HUNYAN_ONLY_LANGS)
+        translations=expand("data/translated.final.{lang}.tsv", lang=TARGET_LANGUAGES[:-1])
     output:
         directory(LOCAL_TRANSLATED_PATH)
     run:
@@ -360,15 +380,15 @@ rule gather_evals:
     input:
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b", "llama4_scout"], 
-            lang=HUNYAN_ONLY_LANGS+FINAL_LANGUAGES,
+            model_name=GENERATIVE_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["prompt_2"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
-            model_name=["nllb-siglip-base", "nllb-siglip-large", "mexma-siglip2", "siglip2-base", "siglip2-large", "siglip2-so400m", "siglip2-giant"], 
-            lang=HUNYAN_ONLY_LANGS+FINAL_LANGUAGES,
+            model_name=ENCODER_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
             prompt_id=["similarity"]
         )
@@ -376,3 +396,35 @@ rule gather_evals:
         "data/evaluation/eval.all.csv"
     script:
         "gather.py"
+
+
+
+rule correlate_model_pairs_multilingual:
+    input:
+       expand(
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=GENERATIVE_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
+            task=["2img", "2txt"],
+            prompt_id=["prompt_2"]
+        ),
+        expand(
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=ENCODER_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
+            task=["2img", "2txt"],
+            prompt_id=["similarity"]
+        )
+    output:
+        "data/evaluation/models_agreement.all.csv",
+        "data/evaluation/languages_agreement.all.csv"
+    params:
+        model_names=MODEL_NAMES,
+        languages=TARGET_LANGUAGES,
+        tasks=["2img", "2txt"],
+        prompt_id="prompt_2"
+    resources:
+        mem="16G",
+        cpus_per_task=4,
+    script:
+        "corelate.py"
