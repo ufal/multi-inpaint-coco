@@ -7,6 +7,7 @@ Docs where we did the post-editing.
 """
 
 import re
+import ipdb
 
 
 def parse_doc_content(full_content: str) -> list[dict[str, str]]:
@@ -82,17 +83,18 @@ def write_final_items(items, marked_ids, fout):
                    f"Inpaint en {idx+1}: {item['inpaint_en']}\n" + \
                    f"Inpaint translated {idx+1}: {item['inpaint_fe']}\n\n\n")
 
-def main():
-    with open("data/translated.edited.ro.docx.txt", "r", encoding="utf-8") as f:
+def main_cs_ro():
+    with open("data/annotations/translated.edited.ro.docx.txt", "r", encoding="utf-8") as f:
         ro_content = f.read()
     ro_items = parse_doc_content(ro_content)
     ro_marked_ids = extract_ro_marked_ids(ro_content)
 
-    with open("data/translated.edited.cs.docx.txt", "r", encoding="utf-8") as f:
+    with open("data/annotations/translated.edited.cs.docx.txt", "r", encoding="utf-8") as f:
         cs_content = f.read()
     cs_items = parse_doc_content(cs_content)
     cs_marked_ids = extract_cs_marked_ids(cs_content)
 
+    # just for cs-ro
     check_deletion_diff(ro_items, ro_marked_ids, cs_items, cs_marked_ids)
 
     with open("data/ignore.ids.txt", "w") as f:
@@ -101,11 +103,11 @@ def main():
 
         f.write("\n".join(map(str, ignoring_ids)))
 
-    with open("data/translated.final.ro.txt", "w", encoding="utf-8") as f:
+    with open("data/annotations/translated.final.ro.txt", "w", encoding="utf-8") as f:
         write_final_items(ro_items, ignoring_ids, f)
 
-    with open("data/translated.final.cs.txt", "w", encoding="utf-8") as f:
+    with open("data/annotations/translated.final.cs.txt", "w", encoding="utf-8") as f:
         write_final_items(cs_items, ignoring_ids, f)
 
 if __name__ == "__main__":
-    main()
+    main_cs_ro()
