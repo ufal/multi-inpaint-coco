@@ -1,0 +1,125 @@
+- 7: non sense context
+- 11: inconsistent context
+- 19: cats look like dogs
+- 35: bad frisbee
+- 42: flowers are missing
+- 52: bad bird
+- 56: fruits → apples (old description fits the new image)
+- 59: hotdog not visible
+- 65: bad elephant
+- (72: just apple without dessert)
+- 108: same image
+- 122: almost the same image
+- 126: the plane is not floating
+- 128: bicycle vs car tire
+- 151: cow with wool
+- 157: political ad not in the image
+- 164: the couch in the image looks like a bench
+- 165: FPA does not make sense
+- 167: snowboard with sticks
+- 175: water does not have a door
+- 197: image does not make sense / no scissors
+- 202: typo in the English text
+- 208: shopping cart not visible
+- 211: the pole is yellow
+- 225: same image
+- 252: image is missing the smile
+- 333: elephant 2 noses
+- 353: weird looking cat
+- 370: bus looks like a train
+- 393: weird looking book
+- 416: the couch
+- 435: same caption
+- 438: non-sense caption
+- 439: tall/short giraffes
+- 440: large/huge kite
+- 441: small/huge
+- 442: small/big
+- 443: large/small
+- 444: small/big
+- 445: large/small
+- 446: large/small
+- 447: little/large
+- 449: large/small
+- 450: small/big
+- 451: large/small
+- 452: large/small
+- 454: large/small
+- 456: small/large
+- 457: big/small
+- 458: small/big
+- 462: large/small
+- 465: large/small
+- 466: …
+- 467: …
+- 469: …
+- 472: small/big + diplicated image
+- 475: …
+- 478: …
+- 479: rain not visible
+- 488: clock not visible
+- 490: …
+- 491: …
+- 492: …
+- 493: …
+- 497: …
+- 502: …
+- 504: …
+- 506: …
+- 507: …
+- 510: …
+- 511: …
+- 514: … + duplicated
+- 516: …
+- 517: …, no tusks
+- 519: …
+- 525: …
+- 532: error in inpaint-en
+- 533: …
+- 538: …
+- 539: …
+- 541: …
+- 542: small/tiny
+- 543: …
+- 554: …
+- 555:… + typo in coco-en
+- 557: …
+- 560: …
+- 561: …, duplicated, image incorrect
+- 567: …
+- 568: …
+- 569: …
+- 571: …
+- 575: …
+- 578**: …**
+- 579**: …**
+- 591**: …**
+- 595**: …**
+- 596**: …**
+- 599**: …**
+- 600**: …**
+- 601**: … +** duplicated
+- 602:… + duplicated(?)
+- 603: … + duplicated(?)
+- 604: …
+- 607: … + duplicated
+- 609: …
+- 610: … + duplicated(?)
+- 626: red & white zebra, missing zebra
+- 712: the plate is not blue
+- 719: typo in English sentence
+- 730: ball building? → tall
+- 826: typo in inpaint en
+- 828: wrong color in picture
+- 831: wrong color in picture
+- 863: missing white
+- 886: sink is missing
+- 922: missing hydrant
+- 926: wrong color
+- 943: coco en not clear (”a had hanging”?)
+- 987: the stools in the image have the wrong color
+- 999: the motorcycle is not clear
+- 1006: the cat isn’t drinking
+
+NOTE:
+... is small/large objects that cannot be distinguish
