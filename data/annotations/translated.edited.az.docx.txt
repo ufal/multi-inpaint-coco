@@ -23,7 +23,7 @@ Inpaint trans 3: Növbədə duran insanların arasında qara pişik.
   
 
 COCO en 4: Two women stand over a table with a cake cut into pieces.
-COCO trans 4:   
+COCO trans 4: İki qadın parçalara bölünmüş bir tortun olduğu masa üzərində dururlar.
 
 Inpaint en 4: Two women stand over a table with donut pieces.
 Inpaint trans 4: İki qadın pişka parçaları olan bir masa üzərində dururlar.
@@ -35,7 +35,7 @@ Inpaint trans 5: Ağ yük maşını küçədədir
   
 
 COCO en 6: A wedding cake sitting on a table with flowers
-COCO trans 6:   
+COCO trans 6: Güllərlə bəzədilmiş bir toy tortu masada durur.
 
 Inpaint en 6: A pizza sitting on a table with flowers
 Inpaint trans 6: Masanın üzərində çiçəklərlə pizza durur.
@@ -46,13 +46,11 @@ COCO trans 7: Bir qayıq limanın yanında durur.
   
 
 Inpaint en 7: a plane is sitting next to a dock
-Inpaint trans 7:   
+Inpaint trans 7: Bir təyyarə limanın yanında durur.
 
 COCO en 8: Zebra and giraffe at a zoo in a cage.
 COCO trans 8: Zooparkda bir qəfəsdə zebra və zürafə.
 
-
-  
 
 Inpaint en 8: sheep and giraffe at a zoo in a cage.
 Inpaint trans 8: Zooparkda bir qəfəsdə qoyun və zürafə.
@@ -67,10 +65,11 @@ Inpaint trans 9: Bir əl kağızdan olan qabda pizza saxlayır.
   
 
 COCO en 10: an open refrigerator in a kitchen next to a counter
-COCO trans 10:   
+COCO trans 10: Mətbəxdə təzgahın yanında açıq qalan soyuducu
+
 
 Inpaint en 10: an oven in a kitchen.
-Inpaint trans 10:   
+Inpaint trans 10: Mətbəxdə bir soba.
 
 COCO en 11: A little boy grabbing an apple from a box of apples.
 COCO trans 11: Kiçik bir oğlan alma dolusu olan qutudan alma götürür.
@@ -84,24 +83,22 @@ COCO en 12: A cat that is laying down on a chair.
 COCO trans 12: Kreslona uzanan bir pişik.
 
 
-  
-
 Inpaint en 12: A dog that is laying on a chair
 Inpaint trans 12: Kresloda uzanan bir it.
   
 
 COCO en 13: A half eaten banana being held by a human hand.
-COCO trans 13:   
+COCO trans 13: İnsan əlinin tutduğu yarı yeyilmiş bir banan.
 
 Inpaint en 13: A sandwich being held by a human hand.
 Inpaint trans 13: İnsan əli ilə tutulan bir sendviç.
   
 
 COCO en 14: Orange and brown cat sitting on top of white shoes.
-COCO trans 14:   
+COCO trans 14: Narıncı və qəhvəyi rəngli pişik ağ ayaqqabıların üstündə oturur.
 
 Inpaint en 14: dogs sitting on top of white shoes.
-Inpaint trans 14:   
+Inpaint trans 14: Ağ ayaqqabıların üstündə oturan itlər.
 
 COCO en 15: A sandwich with some strawberry yogurt and orange juice.
 COCO trans 15: Çiyələkli yoqurt və portağal suyu ilə sendviç.
@@ -120,7 +117,7 @@ Inpaint trans 16: Vafl üzərində olan portağal dilimləri və ortasında bir 
   
 
 COCO en 17: A small dog looking at a larger dog.
-COCO trans 17:   
+COCO trans 17: Kiçik it böyük itə baxır.
 
 Inpaint en 17: A small sheep looking at a dog.
 Inpaint trans 17: Kiçik qoyun itə baxır.
@@ -181,7 +178,7 @@ COCO trans 24: Köhnə divan, qəhvə masası, lampa və televizor olan bir otaq
   
 
 Inpaint en 24: A room with an old chair, coffee table, lamp and t.v.
-Inpaint trans 24:   
+Inpaint trans 24: Köhnə stul, qəhvə masası, lamp və televizor olan bir otaq.
 
 COCO en 25: A table with plates of food and a bottle of alcohol.
 COCO trans 25: Yemək boşqabları ilə bir masa və bir qədəh alkoqol.
@@ -203,9 +200,6 @@ COCO en 27: some horse running around in a field
 COCO trans 27: Bir neçə at tarlada qaçır
 
 
-
-
-  
 
 Inpaint en 27: some cows running around in a field
 Inpaint trans 27: Bəzi inəklər tarlada qaçırlar
@@ -248,23 +242,25 @@ COCO trans 31: Frizbini tutmaq üçün dalğıc tutan gənc xanım.
   
 
 Inpaint en 31: A young lady that is making a diving catch to get the sports ball.
-Inpaint trans 31:   
+Inpaint trans 31: İdman topunu tutmaq üçün dalış edən gənc xanım.
+
 
 COCO en 32: black and white photo of bike rider stopped by river bank watching row boat
-COCO trans 32:   
+COCO trans 32: Çay kənarında dayanan və qayıq izləyən velosiped sürücüsünün qara və ağ şəkli.
 
 Inpaint en 32: black and white photo of motorcycle rider stopped by river bank watching row boat
 Inpaint trans 32: Motosiklet sürücüsünün çay sahilində dayanaraq avarlı qayığa baxan ağ-qara şəkli
   
 
 COCO en 33: A wooden board filled chopped vegetables and a knife.
-COCO trans 33:   
+COCO trans 33: Doğranmış tərəvəzlərlə dolu bir taxta lövhə və bir bıçaq.
 
 Inpaint en 33: A wooden board filled chopped vegetables and a fork.
-Inpaint trans 33:   
+Inpaint trans 33: Doğranmış tərəvəzlərlə dolu bir taxta lövhə və bir çəngəl.
+
 
 COCO en 34: people standing near a table with open pizza boxes
-COCO trans 34:   
+COCO trans 34: Açıq pizza qutuları olan bir masa yaxınlığında duran insanlar.
 
 Inpaint en 34: people standing near a table with open cake boxes
 Inpaint trans 34: Açıq tort qutuları olan masanın yanında dayanan insanlar
@@ -285,7 +281,7 @@ COCO trans 36: Does not make sense
   
 
 Inpaint en 36: A bathroom with a vanity, chair and shower.
-Inpaint trans 36:   
+Inpaint trans 36: Vaniti, stul və duşla bir hamam.
 
 COCO en 37: A zebra out and about eating some grass
 COCO trans 37: Çəmənlikdə otlayan bir zebra.
@@ -300,13 +296,13 @@ COCO trans 38: Ağ vannada oturan pələng pişiyi.
   
 
 Inpaint en 38: A dog sitting in a white bathtub.
-Inpaint trans 38:   
+Inpaint trans 38: Bir it ağ vannada oturur.
 
 COCO en 39: A laptop computer sitting on a quilt comforter on a bed.
-COCO trans 39:   
+COCO trans 39: Yatağın üstündəki yorgan döşəyə qoyulmuş noutbuk kompüter.
 
 Inpaint en 39: A cell phone sitting on a quilt comforter on a bed.
-Inpaint trans 39:   
+Inpaint trans 39: Yatağın üstündəki yorğan döşəyin üstündə oturan bir mobil telefon.
 
 COCO en 40: A close shot of a cat laying on purple sheets.
 COCO trans 40: Bənövşəyi çarşaflar üzərində uzanan bir pişiyin yaxından çəkilişi.
@@ -317,20 +313,20 @@ Inpaint trans 40: Bənövşəyi çarşaflar üzərində uzanan itin yaxından ç
   
 
 COCO en 41: A horse pulls a small carriage in which two people are riding.
-COCO trans 41:   
+COCO trans 41: Bir at, içində iki nəfərin sərnişin olduğu kiçik bir arabayı çəkir.
 
 Inpaint en 41: A cow pulls a small carriage in which two people are riding.
-Inpaint trans 41:   
+Inpaint trans 41: Bir inək, içində iki nəfər sürən kiçik bir arabayı çəkir.
 
 COCO en 42: A cake is shown with three tiers and flowers.
-COCO trans 42:   
+COCO trans 42: Üç mərtəbəli və çiçəklərlə süslənmiş bir tort göstərilir.
 
 Inpaint en 42: A sandwich is shown with three tiers and flowers.
 Inpaint trans 42: Üç pilləli və çiçəklərlə sendviç göstərilir.
   
 
 COCO en 43: A toilet decorated with a colorful quilted top.
-COCO trans 43:   
+COCO trans 43: Rəngarəng döşəməli bir örtüklə bəzədilmiş tualet.
 
 Inpaint en 43: A chair decorated with a colorful quilted top.
 Inpaint trans 43: Rəngarəng döşəməli bir oturacaq.
@@ -361,10 +357,11 @@ Inpaint trans 46: Şəhərdaxili küçədə dayanma işarəsi
   
 
 COCO en 47: A man and woman sitting on a sofa watching tv.
-COCO trans 47:   
+COCO trans 47: Bir kişi və qadın divanda oturub televizor izləyirlər.
 
 Inpaint en 47: A man and woman sitting on a bed watching tv.
-Inpaint trans 47:   
+Inpaint trans 47: Bir kişi və qadın yataqda oturub televizor izləyirlər.
+
 
 COCO en 48: A red pick up truck with a plow blade drives down a snowy suburban road.
 COCO trans 48: Qırmızı rəngdə bir pikap, qabağında qar küyrükləri olan, qarlı yol boyunca sürür.
@@ -377,7 +374,8 @@ Inpaint trans 48: Qırmızı pikap avtobusu qarlı şəhərətrafı yolda hərə
   
 
 COCO en 49: A woman rides a bicycle down a narrow corridor in an indoor Asian market
-COCO trans 49:   
+COCO trans 49: Bir qadın daxili Asiya bazarında dar koridorda velosiped sürür.
+
 
 Inpaint en 49: A woman rides a motorcycle down a narrow corridor in an indoor Asian market
 Inpaint trans 49: Bir qadın daxili Asiya bazarında dar koridorda motosiklet sürür.
@@ -874,13 +872,13 @@ COCO trans 81: Duşun yanında qara oturacaq olan tualet.
   
 
 Inpaint en 81: A black chair next to a shower.
-Inpaint trans 81:   
+Inpaint trans 81: Duşun yanında qara stul.
 
 COCO en 82: Three men celebrating as they play a frisbee game.
-COCO trans 82:   
+COCO trans 82: Üç kişi frisbi oyunu oynayarkən qeyd edir.
 
 Inpaint en 82: Three men celebrating as they play a sports ball game.
-Inpaint trans 82:   
+Inpaint trans 82: Üç kişi idman topu oyunu oynayarkən qeyd edir.
 
 COCO en 83: a wooden cutting board a knife some carrots and onions
 COCO trans 83: taxta kəsici taxta bıçaq bir neçə yerkökü və soğan
@@ -907,7 +905,7 @@ COCO trans 84: Böyük bir dalğada bir sörfçü gəlir.
   
 
 Inpaint en 84: A sports ball in a large wave
-Inpaint trans 84:   
+Inpaint trans 84: Böyük dalğada bir idman topu
 
 COCO en 85: A young girl eating a slice of pizza.
 COCO trans 85: Bir dilim pizza yeyən gənc qız.
@@ -1307,15 +1305,11 @@ Inpaint en 111: A blue car parked in tall grass
 Inpaint trans 111: Hündür otların arasında dayanmış mavi avtomobil
 
 
-
-
-  
-
 COCO en 112: A bus which is part of the Metropolitan Transit System.
-COCO trans 112:   
+COCO trans 112: Metropoliten Tranzit Sisteminin bir hissəsi olan avtobus.
 
 Inpaint en 112: A train which is part of the Metropolitan Transit System.
-Inpaint trans 112:   
+Inpaint trans 112: Metropoliten Tranzit Sisteminin bir hissəsi olan qatar.
 
 COCO en 113: a man is feeding an elephant over a fence
 COCO trans 113: Bir kişi hasarın üstündən bir fili yemləyir.
@@ -2221,7 +2215,7 @@ COCO trans 172: Pişik maşının kapotuna uzanır.
   
 
 Inpaint en 172: The dog is laying on the hood of the car.
-Inpaint trans 172:   
+Inpaint trans 172: İt avtomobilin kapotunda uzanıb.
 
 COCO en 173: A white toilet with a blue tank above it.
 COCO trans 173: Üstündə mavi çən olan ağ tualet.
@@ -2256,10 +2250,10 @@ Inpaint trans 174: Səliqəli hazırlanmış yemək masası açıq pəncərənin
   
 
 COCO en 175: A man standing by an oven with the door open.
-COCO trans 175:   
+COCO trans 175: Açıq qapılı sobanın yanında duran bir kişi.
 
 Inpaint en 175: A man standing by a toliet with the door open.
-Inpaint trans 175:   
+Inpaint trans 175: Qapısı açıq olan tualetin yanında duran bir kişi.
 
 COCO en 176: A newly married couple cutting up a giant hot dog cake.
 COCO trans 176: Yeni evlənən cütlük nəhəng hot-doq tortunu kəsir.
@@ -2364,13 +2358,13 @@ Inpaint trans 182: Arxasında ağ-qara hasar olan narıncı çarpayının şəkl
   
 
 COCO en 183: A man in a leopard robe stands next to a bed
-COCO trans 183:   
+COCO trans 183: Leopar xalatlı bir kişi yatağın yanında durur.
 
 Inpaint en 183: A man in a leopard robe stands next to a couch
-Inpaint trans 183:   
+Inpaint trans 183: Leoparlı xalatlı bir kişi divanın yanında durur.
 
 COCO en 184: A cake with blue, yellow and green fondant stars on it.
-COCO trans 184:   
+COCO trans 184: Üzərində mavi, sarı və yaşıl fondant ulduzları olan bir tort.
 
 Inpaint en 184: A donut with fondant dots on it.
 Inpaint trans 184: Üzərində fondan nöqtələri olan pişi.
@@ -2473,16 +2467,16 @@ Inpaint trans 190: Su hovuzunda dayanan ayı.
   
 
 COCO en 191: Two giraffe standing next to each other in a field.
-COCO trans 191:   
+COCO trans 191: Bir sahədə bir-birinin yanında duran iki zürafə.
 
 Inpaint en 191: Two zebras standing next to each other in a field.
-Inpaint trans 191:   
+Inpaint trans 191: Bir sahədə bir-birinin yanında duran iki zebra.
 
 COCO en 192: a cat siting on the ground watching a tv
-COCO trans 192:   
+COCO trans 192: Yerə oturan bir pişik televizor izləyir.
 
 Inpaint en 192: a dog siting on the ground in front of tv
-Inpaint trans 192:   
+Inpaint trans 192: Televizorun önündə yerdə oturan it.
 
 COCO en 193: A pizza that is on a stack of plates.
 COCO trans 193: Plitə yığını üzərində olan pizza.
@@ -2517,10 +2511,10 @@ Inpaint trans 194: nəhəng bir qutuda oturan qəhvəyi quş
   
 
 COCO en 195: A man gets ready to throw a frisbee in a park.
-COCO trans 195:   
+COCO trans 195: Bir kişi parkda frisbi atmağa hazırlaşır.
 
 Inpaint en 195: A man gets ready to throw a sports ball in a park
-Inpaint trans 195:   
+Inpaint trans 195: Bir kişi parkda idman topunu atmağa hazırlaşır.
 
 COCO en 196: Two cake pans with cake on top of a stove.
 COCO trans 196: Sobanın üstündə tort olan iki tort qabı.
@@ -2551,40 +2545,35 @@ Inpaint trans 197: Qayçıların üstündə oturan kompüter monitoru.
   
 
 COCO en 198: a young boy is standing on a snowboard
-COCO trans 198:   
+COCO trans 198: Gənc oğlan bir snoubordun üstündə durur.
 
 Inpaint en 198: a young boy is standing on a skateboard
-Inpaint trans 198:   
+Inpaint trans 198: Gənc oğlan bir skeytborda dayanır.
 
 COCO en 199: A group of sheep standing next to each other on a field.
-COCO trans 199:   
+COCO trans 199: Bir sahədə bir-birinə yaxın duran qoyun qrupu.
 
 Inpaint en 199: A group of dogs standing next to each other on a field.
-Inpaint trans 199:   
+Inpaint trans 199: Bir qrup it bir-birinin yanında bir sahədə durur.
 
 COCO en 200: A fire hydrant and some cars on a street.
-COCO trans 200:   
+COCO trans 200: Bir yangın hidrantı və bir neçə avtomobil bir küçədə.
 
 Inpaint en 200: A parking meter and some cars on a street.
-Inpaint trans 200:   
+Inpaint trans 200: Parkmetr və bir neçə avtomobil küçədə.
 
 COCO en 201: A small boy with a birthday hat on holding a tennis racket.
 COCO trans 201: Tennis raketi tutan ad günü papağı olan kiçik bir oğlan.
-
-
-
-
-  
 
 Inpaint en 201: A small boy with a birthday hat throuwing up a sports ball.
 Inpaint trans 201: Ad günü papağı olan kiçik bir oğlan idman topunu döyəcləyir.
   
 
 COCO en 202: two teddy bear on the garden with some decorations
-COCO trans 202:   
+COCO trans 202: Bəzi bəzəklərlə bağda iki oyuncaq ayı.
 
 Inpaint en 202: two teddy elephants on the garden with some decorations
-Inpaint trans 202:   
+Inpaint trans 202: Bəzi bəzəklərlə bağda iki oyuncaq fil.
 
 COCO en 203: a white bus is sitting by a curb
 COCO trans 203: ağ avtobus bordürdə oturur
@@ -2883,7 +2872,7 @@ Inpaint trans 222: Ağ taxta hasarın kənarında dayanan böyük bir zebra.
   
 
 COCO en 223: A plate with a banana and slices of cheese.
-COCO trans 223:   
+COCO trans 223: Banan və pendir dilimləri ilə bir boşqab.
 
 Inpaint en 223: A plate with a carrot and slices of cheese.
 Inpaint trans 223: Yerkökü və pendir dilimləri olan boşqab.
@@ -2894,7 +2883,7 @@ Inpaint trans 223: Yerkökü və pendir dilimləri olan boşqab.
   
 
 COCO en 224: a man standing next to an elephant next to his trunk
-COCO trans 224:   
+COCO trans 224: Filin yanında duran bir kişi, onun hortumunun yanında.
 
 Inpaint en 224: a man standing next to a cow.
 Inpaint trans 224: İnəkin yanında dayanan bir adam.
@@ -2905,10 +2894,10 @@ Inpaint trans 224: İnəkin yanında dayanan bir adam.
   
 
 COCO en 225: a room showing a cooker and an oven
-COCO trans 225:   
+COCO trans 225: Ocaq və sobanın göstərildiyi bir otaq
 
 Inpaint en 225: a room showing a cooker and a microwave
-Inpaint trans 225:   
+Inpaint trans 225: Ocaq və mikrodalğa sobası olan bir otaq göstərilir.
 
 COCO en 226: The telephone has a banana where the receiver should be.
 COCO trans 226: Telefonda qəbuledicinin olması lazım olan banan var.
@@ -6680,7 +6669,7 @@ COCO trans 677: Boynunda zəncir olan qara-qəhvəyi it.
   
 
 Inpaint en 677: A white dog.
-Inpaint trans 677:   
+Inpaint trans 677: Ağ it.
 
 COCO en 678: A baby giraffe and a baby zebra stand near a green hut.
 COCO trans 678: Balaca zürafə və balaca zebra yaşıl daxmanın yaxınlığında dayanıb.
@@ -6761,10 +6750,10 @@ Inpaint trans 686: Dakt lentinin və qırmızı qayçının yanında qara Macint
   
 
 COCO en 687: a white bird some sand water rocks and grass
-COCO trans 687:   
+COCO trans 687: Ağ quş, biraz qum, su, daşlar və ot.
 
 Inpaint en 687: a black bird some sand water rocks and grass
-Inpaint trans 687:   
+Inpaint trans 687: Qara quş, biraz qum, su, daşlar və ot.
 
 COCO en 688: A white sink with a black cabinet underneath it.
 COCO trans 688: Altında qara dolab olan ağ lavabo.

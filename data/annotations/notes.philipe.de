@@ -1,5 +1,56 @@
-601 - I added [INCORRECT] on the Inpaint text, since the second boot is not really larger (than first version) resp. large in general              - delete
-684 - Corrected source version: “cay” to “cat”                                                                                                     - decent (original coco caption)
-831 - wrong color                                                                                                                                  - inpaint side detail not satisfied     
-868 - wrong color                                                                                                                                  - decent
-1005 - both corrected to “woman”                                                                                                                   - decent (original coco caption)
+83 
+126
+128
+151
+152
+187
+197
+206
+216
+252
+261
+323
+351
+386
+397
+435
+438
+468
+488
+511
+519
+524
+554
+557
+571
+601 - I added [INCORRECT] on the Inpaint text, since the second boot is not really larger (than first version) resp. large in general       - delete
+603
+615
+632
+668
+672
+684 - Corrected source version: “cay” to “cat”                                                                                              - decent (original coco caption)
+831 - wrong color                                                                                                                           - inpaint side detail not satisfied
+685
+712
+749
+753
+788
+795
+815
+816
+828     
+854
+860
+861
+868 - wrong color                                                                                                                           - decent
+870
+886
+913
+922
+925
+966
+980
+984
+995
+1005 - both corrected to “woman”                                                                                                            - decent (original coco caption)
