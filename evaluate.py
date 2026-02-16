@@ -94,8 +94,16 @@ def compute_task_specific_random_input(item, lang, task):
     return label, captions, images
 
 def compute_task_specific_full_input(item, lang, task):
-    coco_caption = item[f"coco_caption_{lang}"]
-    inpaint_caption = item[f"inpaint_caption_{lang}"]
+    dec_langs = lang.split("_")
+    if len(dec_langs) == 1:
+        lang1 = lang2 = lang
+    elif len(dec_langs) == 2:
+        lang1, lang2 = dec_langs
+    else:
+        raise ValueError(f"Invalid language format: {lang}")
+    
+    coco_caption = item[f"coco_caption_{lang1}"]
+    inpaint_caption = item[f"inpaint_caption_{lang2}"]
 
     coco_image = item["coco_image"]
     inpaint_image = item["inpaint_image"]
@@ -268,7 +276,6 @@ def run_similarity_sample(item, model, model_name, processor, lang, task):
     return labels, similarities
 
 def evaluate_by_similarity(dataset, model_name, lang, task):
-
     if model_name.startswith("nllb-siglip"):
         model, transform, tokenizer = import_nllb_siglip(model_name)
         processor = (transform, tokenizer)

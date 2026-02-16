@@ -94,8 +94,7 @@ Inpaint trans 12: كلب يستلقي على كرسي.
   
 
 COCO en 13: A half eaten banana being held by a human hand.
-COCO trans 13: موز نصف مأكول ممسك به يد إنسان
-يد إنسان تحمل موزة مأكول نصفها.
+COCO trans 13: يد إنسان تحمل موزة مأكول نصفها.
   
 
 Inpaint en 13: A sandwich being held by a human hand.

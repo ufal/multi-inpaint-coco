@@ -1,4 +1,5 @@
 import base64
+import itertools
 from io import BytesIO
 
 LANGUAGES_FOR_ANNOTS = ["cs", "sk", "de", "ro", "it", "uk", "ru", "vi", "am", "ja", "ar"]
@@ -53,8 +54,8 @@ LANGUAGE_NAMES = {
 
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 LOCAL_TRANSLATED_PATH = "data/inpaintCOCO_multilingual"
-FINAL_LANGUAGES = ["cs", "ro"]
 
+FINAL_LANGUAGES = ["cs", "ro", "de", "it", "ar", "az", "el", "ja", "sk", "vi", "uk"]
 TARGET_LANGUAGES = FINAL_LANGUAGES + ["en"]
 
 GENERATIVE_MODEL_NAMES = [
@@ -75,9 +76,10 @@ ENCODER_MODEL_NAMES = [
 
 rule all:
     input:
-        "data/evaluation/eval.all.csv",
-        "data/evaluation/corelate.all.csv",
-        "data/evaluation/languages_agreement.all.csv"
+        "data/evaluation/eval.multilingual.2.csv"
+        # "data/evaluation/eval.all.csv",
+        # "data/evaluation/models_agreement.all.csv",
+        # "data/evaluation/languages_agreement.all.csv",
         # expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
 
 
@@ -299,8 +301,8 @@ rule convert_to_docx:
 # the same in Czech and Romanian.
 rule check_dataset_edits:
     input:
-        "data/translated.edited.cs.docx.txt",
-        "data/translated.edited.ro.docx.txt",
+        "data/annotations/translated.edited.cs.docx.txt",
+        "data/annotations/translated.edited.ro.docx.txt",
     output:
         "data/ignore.ids.txt",
         "data/translated.final.cs.txt",
@@ -311,12 +313,12 @@ rule check_dataset_edits:
 
 rule convert_postedited_to_tsv:
     input:
-        "data/translated.final.{lang}.txt"
+        "data/annotations/translated.edited.{lang}.docx.txt"
     output:
         "data/translated.final.{lang}.tsv"
     shell:
         """
-        grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //' | sed 'N;s/\\n/\\t/' > {output}
+        grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //' > {output}
         """
 
 def update_item(item, idx, languages, translations):
@@ -324,17 +326,8 @@ def update_item(item, idx, languages, translations):
         new_item["coco_caption_en"] = new_item.pop("coco_caption")
         new_item["inpaint_caption_en"] = new_item.pop("inpaint_caption")
         for lang, trans in zip(languages, translations):
-            match = re.search(r"COCO \w+ \d+:(.+)$", trans[idx][0])
-            if match is not None:
-                new_item[f"coco_caption_{lang}"] = match.group(1).strip()
-            else:
-                new_item[f"coco_caption_{lang}"] = trans[idx][0]
-
-            match = re.search(r"Inpaint \w+ \d+:(.+)$", trans[idx][1])
-            if match is not None:
-                new_item[f"inpaint_caption_{lang}"] = match.group(1).strip()
-            else:
-                new_item[f"inpaint_caption_{lang}"] = trans[idx][1]
+            new_item[f"coco_caption_{lang}"] = trans[idx * 2]
+            new_item[f"inpaint_caption_{lang}"] = trans[idx * 2 + 1]
         return new_item
 
 rule finalize_dataset:
@@ -343,6 +336,11 @@ rule finalize_dataset:
         translations=expand("data/translated.final.{lang}.tsv", lang=TARGET_LANGUAGES[:-1])
     output:
         directory(LOCAL_TRANSLATED_PATH)
+    resources:
+        mem="48G",
+        cpus_per_task=4,
+        slurm_partition="gpu-ms,gpu-troja",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram24G'"
     run:
         from datasets import load_from_disk
         dataset = load_from_disk(input.dataset)
@@ -350,9 +348,8 @@ rule finalize_dataset:
         translations = []
         for trans_file in input.translations:
             with open(trans_file) as f:
-                translations.append([line.strip().split("\t") for line in f])
-
-        languages = FINAL_LANGUAGES + HUNYAN_ONLY_LANGS
+                translations.append([line.strip() for line in f])
+        languages = TARGET_LANGUAGES[:-1]
         dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16,
                               fn_kwargs={"languages": languages, "translations": translations})
         dataset.save_to_disk(LOCAL_TRANSLATED_PATH)
@@ -398,6 +395,9 @@ rule gather_evals:
         "gather.py"
 
 
+def get_multilingual_sets(languages, size=2):
+    bilingual_sets = ["_".join(combination) for combination in itertools.combinations(languages, r=size)]
+    return bilingual_sets
 
 rule correlate_model_pairs_multilingual:
     input:
@@ -419,7 +419,7 @@ rule correlate_model_pairs_multilingual:
         "data/evaluation/models_agreement.all.csv",
         "data/evaluation/languages_agreement.all.csv"
     params:
-        model_names=MODEL_NAMES,
+        model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,
         languages=TARGET_LANGUAGES,
         tasks=["2img", "2txt"],
         prompt_id="prompt_2"
@@ -428,3 +428,25 @@ rule correlate_model_pairs_multilingual:
         cpus_per_task=4,
     script:
         "corelate.py"
+
+
+rule gather_multilingual_evals:
+    input:
+        expand(
+            "data/evaluation/results.{model_name}.{lang_set}.{task}.{prompt_id}.csv",
+            model_name=GENERATIVE_MODEL_NAMES, 
+            lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
+            task=["2img", "2txt"],
+            prompt_id=["prompt_2"]
+        ),
+        expand(
+            "data/evaluation/results.{model_name}.{lang_set}.{task}.{prompt_id}.csv",
+            model_name=ENCODER_MODEL_NAMES, 
+            lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
+            task=["2img", "2txt"],
+            prompt_id=["similarity"]
+        )
+    output:
+        "data/evaluation/eval.multilingual.2.csv"
+    script:
+        "gather.py"
