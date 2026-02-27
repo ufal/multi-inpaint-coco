@@ -77,11 +77,8 @@ def check_deletion_diff(ro_items, ro_marked_ids, cs_items, cs_marked_ids):
 
 def write_final_items(items, marked_ids, fout):
     final_items = [item for idx, item in enumerate(items) if (idx + 1) not in marked_ids]
-    for idx, item in enumerate(final_items):
-        fout.write(f"COCO en {idx+1}: {item['coco_en']}\n" + \
-                   f"COCO translated {idx+1}: {item['coco_fe']}\n\n\n" + \
-                   f"Inpaint en {idx+1}: {item['inpaint_en']}\n" + \
-                   f"Inpaint translated {idx+1}: {item['inpaint_fe']}\n\n\n")
+    for item in final_items:
+        fout.write(f"{item['coco_fe']}\n{item['inpaint_fe']}\n")
 
 def main_cs_ro():
     with open("data/annotations/translated.edited.ro.docx.txt", "r", encoding="utf-8") as f:
@@ -103,10 +100,10 @@ def main_cs_ro():
 
         f.write("\n".join(map(str, ignoring_ids)))
 
-    with open("data/annotations/translated.final.ro.txt", "w", encoding="utf-8") as f:
+    with open("data/translated.final.ro.tsv", "w", encoding="utf-8") as f:
         write_final_items(ro_items, ignoring_ids, f)
 
-    with open("data/annotations/translated.final.cs.txt", "w", encoding="utf-8") as f:
+    with open("data/translated.final.cs.tsv", "w", encoding="utf-8") as f:
         write_final_items(cs_items, ignoring_ids, f)
 
 if __name__ == "__main__":

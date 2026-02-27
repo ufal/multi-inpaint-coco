@@ -55,7 +55,9 @@ LANGUAGE_NAMES = {
 LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 LOCAL_TRANSLATED_PATH = "data/inpaintCOCO_multilingual"
 
-FINAL_LANGUAGES = ["cs", "ro", "de", "it", "ar", "az", "el", "ja", "sk", "vi", "uk"]
+FIRST_LANGUAGES = ["cs", "ro"]
+SECOND_LANGUAGES = ["de", "it", "az", "el", "ja", "sk", "vi", "uk","ar"]
+FINAL_LANGUAGES = FIRST_LANGUAGES + SECOND_LANGUAGES
 TARGET_LANGUAGES = FINAL_LANGUAGES + ["en"]
 
 GENERATIVE_MODEL_NAMES = [
@@ -305,8 +307,8 @@ rule check_dataset_edits:
         "data/annotations/translated.edited.ro.docx.txt",
     output:
         "data/ignore.ids.txt",
-        "data/translated.final.cs.txt",
-        "data/translated.final.ro.txt",
+        "data/translated.final.cs.tsv",
+        "data/translated.final.ro.tsv",
     script:
         "check_dataset_edits.py"
 
@@ -316,6 +318,8 @@ rule convert_postedited_to_tsv:
         "data/annotations/translated.edited.{lang}.docx.txt"
     output:
         "data/translated.final.{lang}.tsv"
+    wildcard_constraints:
+        lang="|".join(SECOND_LANGUAGES)
     shell:
         """
         grep trans {input} | sed 's/COCO trans [0-9]*: //;s/Inpaint trans [0-9]*: //' > {output}
@@ -339,8 +343,8 @@ rule finalize_dataset:
     resources:
         mem="48G",
         cpus_per_task=4,
-        slurm_partition="gpu-ms,gpu-troja",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram24G'"
+        slurm_partition="gpu-amd",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
     run:
         from datasets import load_from_disk
         dataset = load_from_disk(input.dataset)
@@ -367,8 +371,8 @@ rule evaluate_dataset:
     resources:
         mem="48G",
         cpus_per_task=4,
-        slurm_partition="gpu-ms,gpu-troja",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram40G|gpuram48G'"
+        slurm_partition="gpu-amd",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
     script:
         "evaluate.py"
 

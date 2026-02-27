@@ -530,7 +530,6 @@ COCO trans 67: صورة لمرحاض مزين بشكل جميل في حمام.
   
 
 Inpaint en 67: A photograph of a very decorated chair in a bathroom.
-Inpaint trans 67: صورة لكرسي مزين بشكل جداً في حمام.
 Inpaint trans 67: صورة لكرسي مزين جداً في حمام.
   
 
@@ -547,7 +546,6 @@ COCO trans 69: عداد وقوف السيارات لديه بعض الأغلفة
   
 
 Inpaint en 69: A fire hydrant has some colored wrap around the pole
-Inpaint trans 69: وجدت بعض الألوان الملفوفة حول العمود لصنبور الإطفاء.
 Inpaint trans 69: صنبور الإطفاء لديه بعض الأغلفة الملونة حول العمود.
 
 

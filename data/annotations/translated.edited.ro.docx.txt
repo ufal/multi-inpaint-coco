@@ -484,7 +484,7 @@ COCO trans 61: Un pat și o fereastră într-o cameră mică.
   
 
 Inpaint en 61: A couch and window in a small room.
-Inpaint trans 61: Un canapea și o fereastră într-o cameră mică.
+Inpaint trans 61: o canapea și o fereastră într-o cameră mică.
   
 
 COCO en 62: A lady hold a game controller, pointed towards a laptop.
@@ -504,7 +504,7 @@ Inpaint trans 63: O pisicuță stând pe nisip și apă.
   
 
 COCO en 64: A remote control on a wooden table in front of a television.
-COCO trans 64: Un telecomandă pe o masă de lemn în fața unui televizor.
+COCO trans 64: O telecomandă pe o masă de lemn în fața unui televizor.
   
 
 Inpaint en 64: A book on a wooden table in front of a television.
@@ -764,7 +764,7 @@ COCO trans 96: Un pereche de paturi într-un hotel cu cearșafuri verzi și o sp
   
 
 Inpaint en 96: A couch with a desk in a bright room.
-Inpaint trans 96: Un canapea cu un birou într-o cameră luminoasă.
+Inpaint trans 96: o canapea cu un birou într-o cameră luminoasă.
   
 
 COCO en 97: Two giraffe standing on to of a dry grass covered field.
@@ -1001,7 +1001,7 @@ Inpaint trans 125: O femeie stă în spatele unui măr foarte mic cu mere verzi 
   
 
 COCO en 126: A bicycle leaning against a bed in a bedroom.
-COCO trans 126: Un bicicletă sprijinită de un pat într-o cameră de dormit.
+COCO trans 126: O bicicletă sprijinită de un pat într-o cameră de dormit.
   
 
 Inpaint en 126: A motorcycle in front of a bed in a bedroom.
@@ -1230,7 +1230,7 @@ COCO trans 154: O femeie stă pe canapea cu un laptop în fața ei.
   
 
 Inpaint en 154: A woman sitting on a sofa with a keyboard in front of her
-Inpaint trans 154: O femeie stă pe un canapea cu o tastatură în fața ei.
+Inpaint trans 154: O femeie stă pe o canapea cu o tastatură în fața ei.
   
 
 COCO en 155: A white horse is out eating in a field
@@ -1334,7 +1334,7 @@ COCO trans 167: O statuie albă ținând deschis un ziar în timp ce stă pe o b
   
 
 Inpaint en 167: A white statue holding open a newspaper while sitting on a couch.
-Inpaint trans 167: O statuie albă ținând deschis un ziar în timp ce stă pe un canapea.
+Inpaint trans 167: O statuie albă ținând deschis un ziar în timp ce stă pe o canapea.
   
 
 COCO en 168: A number of young people are enjoying themselves around a fountain, not far from a fire hydrant.
@@ -1427,7 +1427,7 @@ Inpaint trans 178: Un bărbat stă lângă o toaletă cu ușa deschisă.
   
 
 COCO en 179: A large grey suitcase is places near a tan sofa.
-COCO trans 179: O valiză mare gri este plasată lângă un canapea de culoare bej.
+COCO trans 179: O valiză mare gri este plasată lângă o canapea de culoare bej.
   
 
 Inpaint en 179: A large grey and red backpack is placed near a sofa.
@@ -1483,7 +1483,7 @@ Inpaint trans 185: Un cal alb stând pe un câmp stâncos murdar.
   
 
 COCO en 186: A man talking in front of a photo of an orange sofa with black and white fence behind it.
-COCO trans 186: Un bărbat vorbind în fața unei fotografii cu un canapea portocalie, având în spate un gard alb și negru.
+COCO trans 186: Un bărbat vorbind în fața unei fotografii cu o canapea portocalie, având în spate un gard alb și negru.
   
 
 Inpaint en 186: A man talking in front of a photo of an orange bed with black and white fence behind it.
@@ -3766,7 +3766,7 @@ Inpaint trans 469: Un ursuleț negru traversând un câmp.
   
 
 COCO en 470: A large grey suitcase is places near a tan sofa.
-COCO trans 470: O valiză mare de culoare gri este așezată lângă un canapea de culoare bej.
+COCO trans 470: O valiză mare de culoare gri este așezată lângă o canapea de culoare bej.
   
 
 Inpaint en 470: A small grey suitcase is places near a tan sofa.
@@ -4399,11 +4399,11 @@ Inpaint trans 546: Un camion albastru lung circulă pe stradă.
   
 
 COCO en 547: A large brown dog sitting on top of a couch.
-COCO trans 547: Un câine mare de culoare maro stând pe un canapea.
+COCO trans 547: Un câine mare de culoare maro stând pe o canapea.
   
 
 Inpaint en 547: A small white dog sitting on top of a couch.
-Inpaint trans 547: Un câine mic și alb stă pe un canapea.
+Inpaint trans 547: Un câine mic și alb stă pe o canapea.
   
 
 COCO en 548: The large cat is resting comfortably behind the laptop screen.
@@ -5313,11 +5313,11 @@ Inpaint trans 656: Un vas mare de cupru cu câteva flori în el.
   
 
 COCO en 657: A large brown dog sitting on top of a couch.
-COCO trans 657: Un câine mare de culoare maro stă pe un canapea.
+COCO trans 657: Un câine mare de culoare maro stă pe o canapea.
   
 
 Inpaint en 657: A tiny brown dog sitting on top of a couch.
-Inpaint trans 657: Un cățel maro stând pe un canapea.
+Inpaint trans 657: Un cățel maro stând pe o canapea.
   
 
 COCO en 658: A fancy metal cloth is seen against huge barred windows at a stone train station.
@@ -5443,7 +5443,7 @@ COCO trans 672: O pisică portocalie grasă pe o canapea lângă o telecomandă 
   
 
 Inpaint en 672: A small orange cat on a couch beside a TV remote
-Inpaint trans 672: Un pisoi mic portocaliu pe o canapea lângă un telecomandă de televizor.
+Inpaint trans 672: Un pisoi mic portocaliu pe o canapea lângă o telecomandă de televizor.
   
 
 COCO en 673: The very pretty sun shining through some big buildings.
@@ -5880,7 +5880,7 @@ Inpaint trans 724: Un avion mare este pe cale să decoleze pe pista de aterizare
   
 
 COCO en 725: The large room has a wooden table with chairs and a couch.
-COCO trans 725: Camera mare are o masă de lemn cu scaune și un canapea.
+COCO trans 725: Camera mare are o masă de lemn cu scaune și o canapea.
   
 
 Inpaint en 725: The tiny room has a wooden table with chairs and a couch.
@@ -6922,7 +6922,7 @@ Inpaint trans 850: Un bărbat, jucător de tenis cu tricou roșu joacă tenis.
   
 
 COCO en 851: A bike is locked to a pole in front of a red building.
-COCO trans 851: Un bicicletă este legată de un stâlp în fața unei clădiri roșii.
+COCO trans 851: O bicicletă este legată de un stâlp în fața unei clădiri roșii.
   
 
 Inpaint en 851: A red bike is staying in front of a red building.
@@ -7291,7 +7291,7 @@ COCO trans 896: O zonă mare de living include o canapea albă și o masă de st
   
 
 Inpaint en 896: A large living room area features a gray couch and a glass table.
-Inpaint trans 896: O zonă mare de living include un canapea gri și o masă de sticlă.
+Inpaint trans 896: O zonă mare de living include o canapea gri și o masă de sticlă.
   
 
 COCO en 897: A green street sign next to a dirt field by a playground.
@@ -9787,12 +9787,12 @@ Inpaint trans 1205: O pizza necoaptă cu ardei verzi și brânză se află pe te
   
 
 COCO en 1206: A large brown sectional sofa has people on it.
-COCO trans 1206: Un canapea secțională maro mare are persoane pe ea.
+COCO trans 1206: o canapea secțională maro mare are persoane pe ea.
 #MARKED
   
 
 Inpaint en 1206: A large green sectional sofa has people on it.
-Inpaint trans 1206: Un canapea secțională mare și verde are oameni pe ea.
+Inpaint trans 1206: o canapea secțională mare și verde are oameni pe ea.
   
 
 COCO en 1207: A white piece of cake sitting on top of a plate.

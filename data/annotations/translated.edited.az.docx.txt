@@ -30,7 +30,9 @@ Inpaint trans 4: İki qadın pişka parçaları olan bir masa üzərində dururl
   
 
 COCO en 5: a green and white bus is on the street
-COCO trans 5: Inpaint en 5: a white truck is on the street
+COCO trans 5: Yaşıl və ağ avtobus küçədədir. 
+
+Inpaint en 5: a white truck is on the street
 Inpaint trans 5: Ağ yük maşını küçədədir
   
 
