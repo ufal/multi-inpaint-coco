@@ -60,6 +60,39 @@ SECOND_LANGUAGES = ["de", "it", "az", "el", "ja", "sk", "vi", "uk","ar"]
 FINAL_LANGUAGES = FIRST_LANGUAGES + SECOND_LANGUAGES
 TARGET_LANGUAGES = FINAL_LANGUAGES + ["en"]
 
+LANGUAGE_STATS = {
+    "tier": {
+        "en": 5, "cs": 4, "ro": 3, "vi": 4, "de": 5,
+        "sk": 3, "it": 4, "az": 1, "ja": 5, "uk": 3,
+        "ar": 5, "el": 3, "hi": 4, "ru": 4,
+    },
+    "speakers_M": {
+        "en": 753.4, "cs":  10.7, "ro":  24.3, "vi":  76.0, "de":  76.5,
+        "sk":   6.0, "it":  64.8, "az":   9.2, "ja": 128.0, "uk":  26.9,
+        "ar": 335.0, "el":  15.0, "hi": 341.0, "ru": 154.0,
+    },
+    "fineweb2_GB": {
+        "en": 200_000_000.0, "cs":    221.5, "ro":    199.9, "vi":    343.4, "de":  1_654.8,
+        "sk":         91.7, "it":    793.8, "az":     28.9, "ja":  1_650.2, "uk":    273.7,
+        "ar":        315.2, "el":    238.4, "hi":    129.9, "ru":  6_400.1,
+    },
+    "wikipedia_articles": {
+        "en": 6_900_000, "cs":   556_000, "ro":   434_000, "vi": 1_310_000, "de": 2_980_000,
+        "sk":   259_000, "it": 1_862_000, "az":   215_000, "ja": 1_410_000, "uk": 1_330_000,
+        "ar": 1_220_000, "el":   207_000, "hi": 1_620_000, "ru": 1_990_000,
+    },
+    "featural_sim_en": {
+        "en": 1.000, "cs": 0.436, "ro": 0.537, "vi": 0.525, "de": 0.597,
+        "sk": 0.436, "it": 0.524, "az": 0.451, "ja": 0.421, "uk": 0.541,
+        "ar": 0.432, "el": 0.500, "hi": 0.513, "ru": 0.503,
+    },
+    "featural_sim_zh": {
+        "en": 0.451, "cs": 0.385, "ro": 0.469, "vi": 0.423, "de": 0.450,
+        "sk": 0.385, "it": 0.421, "az": 0.362, "ja": 0.459, "uk": 0.465,
+        "ar": 0.348, "el": 0.403, "hi": 0.463, "ru": 0.469,
+    },
+}
+
 GENERATIVE_MODEL_NAMES = [
     "google_gemma-3-12b-it",
     "qwen-7b",
