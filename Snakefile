@@ -56,7 +56,7 @@ LOCAL_DS_PATH = "data/inpaintCOCO_v2"
 LOCAL_TRANSLATED_PATH = "data/inpaintCOCO_multilingual"
 
 FIRST_LANGUAGES = ["cs", "ro"]
-SECOND_LANGUAGES = ["de", "it", "az", "el", "ja", "sk", "vi", "uk","ar"]
+SECOND_LANGUAGES = ["de", "it", "az", "el", "ja", "sk", "vi", "uk", "ar", "ru", "hi"]
 FINAL_LANGUAGES = FIRST_LANGUAGES + SECOND_LANGUAGES
 TARGET_LANGUAGES = FINAL_LANGUAGES + ["en"]
 
@@ -96,7 +96,7 @@ LANGUAGE_STATS = {
 GENERATIVE_MODEL_NAMES = [
     "google_gemma-3-12b-it",
     "qwen-7b",
-    "eurovllm-9b"
+    # "eurovllm-9b"
 ]
 
 ENCODER_MODEL_NAMES = [
@@ -111,10 +111,10 @@ ENCODER_MODEL_NAMES = [
 
 rule all:
     input:
-        "data/evaluation/eval.multilingual.2.csv"
-        # "data/evaluation/eval.all.csv",
-        # "data/evaluation/models_agreement.all.csv",
-        # "data/evaluation/languages_agreement.all.csv",
+        "data/evaluation/eval.multilingual.2.csv",
+        "data/evaluation/eval.all.csv",
+        "data/evaluation/models_agreement.all.csv",
+        "data/evaluation/languages_agreement.all.csv",
         # expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
 
 
@@ -426,6 +426,8 @@ rule gather_evals:
             task=["2img", "2txt"],
             prompt_id=["similarity"]
         )
+    params:
+        task="monolingual"
     output:
         "data/evaluation/eval.all.csv"
     script:
@@ -470,19 +472,19 @@ rule correlate_model_pairs_multilingual:
 rule gather_multilingual_evals:
     input:
         expand(
-            "data/evaluation/results.{model_name}.{lang_set}.{task}.{prompt_id}.csv",
+            "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
             model_name=GENERATIVE_MODEL_NAMES, 
             lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
-            task=["2img", "2txt"],
             prompt_id=["prompt_2"]
         ),
         expand(
-            "data/evaluation/results.{model_name}.{lang_set}.{task}.{prompt_id}.csv",
+            "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
             model_name=ENCODER_MODEL_NAMES, 
             lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
-            task=["2img", "2txt"],
             prompt_id=["similarity"]
         )
+    params:
+        task="bilingual"
     output:
         "data/evaluation/eval.multilingual.2.csv"
     script:
