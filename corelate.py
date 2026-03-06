@@ -1,5 +1,8 @@
 import pandas as pd
+import numpy as np
+
 from sklearn.metrics import cohen_kappa_score
+from __init__ import all_languages
 
 generative_models = ["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b"]
 
@@ -53,13 +56,44 @@ def compute_languages_agreement(model_names, languages, tasks, prompt_id):
                     })
     return correlations
 
+def compute_and_export_language_agreement_2d(df, languages_agg_file):
+    lang_mat = np.ones((len(all_languages), len(all_languages)), dtype=np.float32)
+    grouped_df = df.groupby(["task", "lang_1", "lang_2"])
+
+    for key, group in grouped_df:
+        task, lang_1, lang_2 = key
+        mean_corr = group["cohen_kappa"].mean()
+
+        idx_1 = all_languages.index(lang_1)
+        idx_2 = all_languages.index(lang_2)
+        
+        if task == "2img":
+            # above
+            if idx_1 > idx_2:
+                idx_1, idx_2 = idx_2, idx_1
+
+            lang_mat[idx_1, idx_2] = mean_corr
+        else:
+            # below
+            if idx_1 < idx_2:
+                idx_1, idx_2 = idx_2, idx_1
+
+            lang_mat[idx_1, idx_2] = mean_corr
+    
+    df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
+    lang_mat_path = languages_agg_file.replace("languages_agreement.", "languages_matrix.")
+    df.to_csv(lang_mat_path)
+
 def main(model_names, languages, tasks, prompt_id, models_agg_file, languages_agg_file):
     correlations = compute_models_agreement(model_names, languages, tasks, prompt_id)
-    pd.DataFrame(correlations).to_csv(models_agg_file, index=False)
+    df = pd.DataFrame(correlations)
+    df.to_csv(models_agg_file, index=False)
 
     correlations = compute_languages_agreement(model_names, languages, tasks, prompt_id)
-    pd.DataFrame(correlations).to_csv(languages_agg_file, index=False)
+    df = pd.DataFrame(correlations)
+    df.to_csv(languages_agg_file, index=False)
 
+    compute_and_export_language_agreement_2d(df, languages_agg_file)
 
 if __name__ == "__main__":
     

@@ -2,10 +2,11 @@ import os
 
 import ipdb
 import pandas as pd
+import numpy as np
 
 from sklearn.metrics import accuracy_score, confusion_matrix
+from __init__ import all_languages
 
-all_languages = ["cs", "ro", "de", "it", "az", "el", "ja", "sk", "vi", "uk", "ar", "en", "hi", "ru"]
 
 def compute_accuracy_and_uncertainty_by_concept(df):
     """ Computes the accuracy for each concept
@@ -117,6 +118,18 @@ def compute_image_order_fp_diff(df):
     fp_diff_rate = (fp_normal - fp_swapped) / len(labels)
     return fp_diff_rate
 
+def compute_language_fp_diff(df):
+    """ Compute the differences in
+    """
+    labels = df["label"].tolist()
+    answers = df["extracted_answer"].tolist()
+
+    fp_lang1 = compute_fp_of_parity_samples(labels, answers, indices=[0])
+    fp_lang2 = compute_fp_of_parity_samples(labels, answers, indices=[2])
+
+    fp_diff_rate = (fp_lang1 - fp_lang2) / len(labels)
+    return fp_diff_rate
+
 def compute_order_fp_rates(filenames, output_all_file):
     """ Computes the difference of False Positive rates in 2img task, regarding the image order. Exports the numbers in a grid: models x language
     """
@@ -137,7 +150,33 @@ def compute_order_fp_rates(filenames, output_all_file):
 
 
 def compute_lang_acc_and_fp_rates(filenames, output_all_file):
-    pass
+    lang_mat = np.ones((len(all_languages), len(all_languages)), dtype=np.float32)
+
+    for filename in filenames:
+        df = pd.read_csv(filename)
+        
+        accuracy = accuracy_score(df['label'], df['extracted_answer'])
+        fp_diff_rate = compute_language_fp_diff(df)
+        
+        params_list = os.path.basename(filename).split(".")
+        model_name = params_list[1]
+        langs = params_list[2]
+
+        lang_1, lang_2 = langs.split("_")
+        idx_1 = all_languages.index(lang_1)
+        idx_2 = all_languages.index(lang_2)
+
+        if idx_1 > idx_2:
+            idx_1, idx_2 = idx_2, idx_1
+
+        lang_mat[idx_1][idx_2] = accuracy
+        lang_mat[idx_2][idx_1] = fp_diff_rate
+
+    df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
+    lang_mat_path = output_all_file.replace("multilingual.2", "fp_acc_bilingual")
+    df.to_csv(lang_mat_path)
+
+    
 
 def main(filenames, output_all_file, task):
     gathered = []

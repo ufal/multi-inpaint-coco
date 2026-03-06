@@ -2,7 +2,6 @@ import base64
 import itertools
 from io import BytesIO
 
-LANGUAGES_FOR_ANNOTS = ["cs", "sk", "de", "ro", "it", "uk", "ru", "vi", "am", "ja", "ar"]
 HUNYAN_ONLY_LANGS = ["zh", "fr", "pt", "es", "tr", "ko", "th", "ms", "id", "tl",
     "hi", "pl", "nl", "km", "my", "fa", "gu", "ur", "te", "mr", "he", "bn", "ta",
     "bo", "kk", "mn", "ug", "yue"]
@@ -111,11 +110,10 @@ ENCODER_MODEL_NAMES = [
 
 rule all:
     input:
-        "data/evaluation/eval.multilingual.2.csv",
         "data/evaluation/eval.all.csv",
         "data/evaluation/models_agreement.all.csv",
-        "data/evaluation/languages_agreement.all.csv",
-        # expand("data/translated.hunyuan.{lng}.tsv", lng=HUNYAN_ONLY_LANGS),
+        "data/evaluation/languages_agreement.all.csv"
+        "data/evaluation/eval.multilingual.2.csv",
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
