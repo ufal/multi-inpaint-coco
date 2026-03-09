@@ -7,7 +7,6 @@ Docs where we did the post-editing.
 """
 
 import re
-import ipdb
 
 
 def parse_doc_content(full_content: str) -> list[dict[str, str]]:
