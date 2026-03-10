@@ -38,6 +38,9 @@ def get_prompt_fn_by_id(task, prompt_id):
 
         elif prompt_id == "prompt_2":
             prompt_fn = lambda caption: f"Based on two images, which follows the caption \"{caption}\" ? Answer with 'left' or 'right' and nothing else."
+
+        elif prompt_id == "prompt_3":
+            prompt_fn = lambda caption: f"Based on two images, which follows the caption \"{caption}\" ? Answer with 'left' or 'right' and nothing else."
             
     else:
         if prompt_id == "prompt_0":
@@ -48,6 +51,9 @@ def get_prompt_fn_by_id(task, prompt_id):
 
         elif prompt_id == "prompt_2":
             prompt_fn = lambda caption_1, caption_2: f"Based the 2 captions: left \"{caption_1}\" and right \"{caption_2}\", which follows the image? Answer with 'left' or 'right' and nothing else."
+        
+        elif prompt_id == "prompt_3":
+            prompt_fn = lambda caption_1, caption_2: f"Based the 2 captions: \n (left) \"{caption_1}\" \n (right) \"{caption_2}\" \n Which one follows the image? Answer with 'left' or 'right' and nothing else."
         
     return prompt_fn
 
@@ -72,7 +78,8 @@ def get_gemma3n_answer_prompt_1(output_text):
 prompt_fn_map = {
     "prompt_0": get_gemma3n_answer_prompt_0,
     "prompt_1": get_gemma3n_answer_prompt_1,
-    "prompt_2": get_gemma3n_answer_prompt_0
+    "prompt_2": get_gemma3n_answer_prompt_0,
+    "prompt_3": get_gemma3n_answer_prompt_0,
 }
 
 def compute_task_specific_random_input(item, lang, task):
@@ -138,6 +145,23 @@ def compute_task_specific_full_input(item, lang, task):
             labels.append(1 - label_id)
 
     return labels, captions_list, images_list
+
+def compute_encoder_specific_input(item, lang):
+    dec_langs = lang.split("_")
+    if len(dec_langs) == 1:
+        lang1 = lang2 = lang
+    elif len(dec_langs) == 2:
+        lang1, lang2 = dec_langs
+    else:
+        raise ValueError(f"Invalid language format: {lang}")
+    
+    coco_caption = item[f"coco_caption_{lang1}"]
+    inpaint_caption = item[f"inpaint_caption_{lang2}"]
+
+    coco_image = item["coco_image"]
+    inpaint_image = item["inpaint_image"]
+
+    return [coco_caption, inpaint_caption], [coco_image, inpaint_image]
 
 
 def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
@@ -228,50 +252,65 @@ def get_clip_similarity(model, inputs, to_normalize=True):
         image_feats /= image_feats.norm(dim=-1, keepdim=True)
         texts_feats /= texts_feats.norm(dim=-1, keepdim=True)
 
-    similarity = (1.0 * image_feats @ texts_feats.T).flatten()
+    similarity = (1.0 * image_feats @ texts_feats.T)
     return similarity
 
 def get_siglip_similarity(model, inputs):
     outputs = model(**inputs)
-    similarity = outputs.logits_per_image.flatten()
+    similarity = outputs.logits_per_image
     return similarity
 
 def get_mexma_similarity(model, inputs):
     image_logits, _ = model.get_logits(inputs["input_ids"], inputs["attention_mask"], inputs["pixel_values"])
-    similarity = image_logits.flatten()
+    similarity = image_logits
     return similarity
 
 def get_nllb_siglip_similarity(model, inputs):
     image_features, text_features, logit_scale_exp, logit_bias = model(inputs["pixel_values"], inputs["input_ids"])
     similarity = logit_scale_exp * image_features @ text_features.T + logit_bias
-    return similarity.flatten()
+    return similarity
 
 
-def run_similarity_sample(item, model, model_name, processor, lang, task):
-    # label, captions, images = compute_task_specific_random_input(item, lang, task)
-    labels, captions_list, images_list = compute_task_specific_full_input(item, lang, task)
-
+def run_similarity_efficient_sample(item, model, model_name, processor, lang, task):
+    captions, images = compute_encoder_specific_input(item, lang)
     similarities = []
-    for captions, images in zip(captions_list, images_list):
-        if model_name.startswith("nllb-siglip"):
-            inputs = process_nllb_siglip(processor, captions, images)
-        elif model_name.startswith("siglip2"):
-            inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
-        else:
-            inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
+    
+    if model_name.startswith("nllb-siglip"):
+        inputs = process_nllb_siglip(processor, captions, images)
+    elif model_name.startswith("siglip2"):
+        inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
+    else:
+        inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
 
-        # imported from hard-negative-mining github
-        with torch.inference_mode():
-            if model_name.startswith("mexma"):
-                similarity = get_mexma_similarity(model, inputs)
-            elif model_name.startswith("nllb-siglip"):
-                similarity = get_nllb_siglip_similarity(model, inputs)
-            elif model_name.startswith("siglip2"):
-                similarity = get_siglip_similarity(model, inputs)
-            elif model_name.startswith("clip"):
-                similarity = get_clip_similarity(model, inputs)
+    # imported from hard-negative-mining github
+    with torch.inference_mode():
+        if model_name.startswith("mexma"):
+            similarity = get_mexma_similarity(model, inputs)
+        elif model_name.startswith("nllb-siglip"):
+            similarity = get_nllb_siglip_similarity(model, inputs)
+        elif model_name.startswith("siglip2"):
+            similarity = get_siglip_similarity(model, inputs)
+        elif model_name.startswith("clip"):
+            similarity = get_clip_similarity(model, inputs)
+    
+    # always like this
+    labels = [0, 1, 1, 0]
+    
+    if task == "2img":
+        similarities += [
+            similarity[:, 0],
+            similarity[:, 0].flip(0),
+            similarity[:, 1],
+            similarity[:, 1].flip(0)
+        ]
+    else:
+        similarities += [
+            similarity[0, :],
+            similarity[0, :].flip(0),
+            similarity[1, :],
+            similarity[1, :].flip(0)
+        ]
         
-        similarities.append(similarity)
     return labels, similarities
 
 def evaluate_by_similarity(dataset, model_name, lang, task):
@@ -284,7 +323,7 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
 
     results = []
     for item in tqdm(dataset):
-        labels, similarities = run_similarity_sample(item, model, model_name, processor, lang, task)
+        labels, similarities = run_similarity_efficient_sample(item, model, model_name, processor, lang, task)
         extracted_answers = [torch.argmax(similarity).item() for similarity in similarities]
 
         for label, extracted_answer, similarity in zip(labels, extracted_answers, similarities):

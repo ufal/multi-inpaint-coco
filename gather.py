@@ -62,7 +62,7 @@ def compute_conjunction_strict(filenames, output_all_file):
         df_img = pd.read_csv(filename_2img)
 
         filename_2txt = filename_2img.replace("2img", "2txt")
-        df_2txt = pd.read_csv(filename_2txt)
+        df_txt = pd.read_csv(filename_2txt)
 
         # labels are always 0, 1, 1, 0
 
@@ -70,7 +70,7 @@ def compute_conjunction_strict(filenames, output_all_file):
         img_conj = (1 - img_ans[0::4]) & img_ans[1::4] & img_ans[2::4] & (1 - img_ans[3::4])
         # sim(i_coco, t_coco) > sim(i_inp, t_coco) ∧ sim(i_inp, t_inp) > sim(i_coco, t_coco)
 
-        txt_ans = df_2txt["extracted_answer"].values
+        txt_ans = df_txt["extracted_answer"].values
         txt_conj = (1 - txt_ans[0::4]) & txt_ans[1::4] & txt_ans[2::4] & (1 - txt_ans[3::4])
         # sim(i_coco, t_coco) > sim(i_coco, t_inp) ∧ sim(i_inp, t_inp) > sim(i_inp, t_coco)
 

@@ -415,7 +415,7 @@ rule gather_evals:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_2"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -443,7 +443,7 @@ rule correlate_model_pairs_multilingual:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_2"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -459,7 +459,7 @@ rule correlate_model_pairs_multilingual:
         model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,
         languages=TARGET_LANGUAGES,
         tasks=["2img", "2txt"],
-        prompt_id="prompt_2"
+        prompt_id="prompt_3"
     resources:
         mem="16G",
         cpus_per_task=4,
@@ -473,7 +473,7 @@ rule gather_multilingual_evals:
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
             model_name=GENERATIVE_MODEL_NAMES, 
             lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
-            prompt_id=["prompt_2"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
@@ -487,3 +487,5 @@ rule gather_multilingual_evals:
         "data/evaluation/eval.multilingual.2.csv"
     script:
         "gather.py"
+
+# TODO: create a rule for extra masking the ignore ids part
