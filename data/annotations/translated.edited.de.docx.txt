@@ -1019,7 +1019,7 @@ COCO trans 128: Da ist ein Fahrradreifen in der Nähe eines alten Feuerhydranten
   
 
 Inpaint en 128: There is a car tire near an old fire hydrant. 
-Inpaint trans 128: Da ist  ein Autoreifen in der Nähe eines alten Feuerhydranten.
+Inpaint trans 128: Da ist ein Autoreifen in der Nähe eines alten Feuerhydranten.
   
 
 COCO en 129: A cat sitting on top of a metallic refrigerator freezer.
@@ -4239,11 +4239,11 @@ Inpaint trans 530: Zwei Surfer reiten auf zwei kleinen Meereswellen.
   
 
 COCO en 531: a small boat floating down a river by a house
-COCO trans 531:  Ein kleines Boot, das neben einem Haus auf einem Fluss hertuntertreibt
+COCO trans 531: Ein kleines Boot, das neben einem Haus auf einem Fluss hertuntertreibt
   
 
 Inpaint en 531: a long boat floating down a river by a house
-Inpaint trans 531:  Ein langes Boot, das neben einem Haus auf einem Fluss hertuntertreibt.
+Inpaint trans 531: Ein langes Boot, das neben einem Haus auf einem Fluss hertuntertreibt.
   
 
 COCO en 532: A large black bear walking across a field.
@@ -4275,7 +4275,7 @@ COCO trans 535: Ein Mann in einem tropischen Hemd mit Brille und langen Haaren i
   
 
 Inpaint en 535: A man in a tropical print shirt with glasses and short hair is eating a banana.
-Inpaint trans 535:Ein Mann in einem tropischen Hemd mit Brille und kurzen Haaren isst eine Banane.
+Inpaint trans 535: Ein Mann in einem tropischen Hemd mit Brille und kurzen Haaren isst eine Banane.
   
 
 COCO en 536: A big boat full of a lot of people.
