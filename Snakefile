@@ -112,7 +112,7 @@ rule all:
     input:
         "data/evaluation/eval.all.csv",
         "data/evaluation/models_agreement.all.csv",
-        "data/evaluation/languages_agreement.all.csv"
+        "data/evaluation/languages_agreement.all.csv",
         "data/evaluation/eval.multilingual.2.csv",
 
 

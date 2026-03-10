@@ -172,7 +172,7 @@ COCO trans 23: Dağlardaki bir yolda iki çobanla hərəkət edən bir qoyun sü
   
 
 Inpaint en 23: A cow moving down a road in the mountains.
-Inpaint trans 23: Note - it seems correct, however, there are some cows not only 1
+Inpaint trans 23: Dağlardaki bir yolda hərəkət edən bir inək.
   
 
 COCO en 24: A room with an old sofa, coffee table, lamp and t.v.
@@ -181,6 +181,7 @@ COCO trans 24: Köhnə divan, qəhvə masası, lampa və televizor olan bir otaq
 
 Inpaint en 24: A room with an old chair, coffee table, lamp and t.v.
 Inpaint trans 24: Köhnə stul, qəhvə masası, lamp və televizor olan bir otaq.
+
 
 COCO en 25: A table with plates of food and a bottle of alcohol.
 COCO trans 25: Yemək boşqabları ilə bir masa və bir qədəh alkoqol.
@@ -279,7 +280,7 @@ Inpaint trans 35: Bir kişi sahildə iki frizbi atır.
   
 
 COCO en 36: A bathroom with a vanity, toilet and shower.
-COCO trans 36: Does not make sense
+COCO trans 36: Vanitili, tualetli və duşlu bir vanna otağı.
   
 
 Inpaint en 36: A bathroom with a vanity, chair and shower.
@@ -1126,7 +1127,7 @@ Inpaint trans 98: tarlada qara inək ətrafa baxır
   
 
 COCO en 99: A sheep running through the field of an event.
-COCO trans 99: A sheep running through the field of an event.
+COCO trans 99: Bir hadisə sahəsindən qaçan bir qoyun.
 
 
   

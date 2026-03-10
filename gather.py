@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.metrics import accuracy_score, confusion_matrix
-from __init__ import all_languages
+from utils import all_languages
 
 
 def compute_accuracy_and_uncertainty_by_concept(df):

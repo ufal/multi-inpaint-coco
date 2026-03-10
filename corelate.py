@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.metrics import cohen_kappa_score
-from __init__ import all_languages
+from utils import all_languages
 
 generative_models = ["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b"]
 
