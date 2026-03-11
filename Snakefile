@@ -121,8 +121,8 @@ rule all:
 # captions edited).
 rule fix_original_dataset_and_export:
     input:
-        "data/translated.edited.cs.docx.txt", # Source of edited English Inpaint sentences
-        "data/ignore.ids.txt"
+        "data/annotations/translated.edited.cs.docx.txt",  # Source of edited English Inpaint sentences
+        "data/keep.singleshot.ids.txt"
     output:
         "data/texts.tsv",
         directory(LOCAL_DS_PATH),
@@ -143,7 +143,7 @@ rule fix_original_dataset_and_export:
             inpaint_en_sents = inpaint_biling_sents[0::2]
 
         with open(input[1], "r") as f:
-            ignoring_ids = list(map(int, f.read().split("\n")))
+            keeping_ids = list(map(int, f.read().split("\n")))
 
         # Updating the new inpaint english values
         fixed_ds = dataset["test"]
@@ -151,9 +151,7 @@ rule fix_original_dataset_and_export:
                                 with_indices=True, batch_size=16, writer_batch_size=16)
 
         # Ignoring the bad samples
-        valid_indices = [i for i in range(len(fixed_ds)) if i not in ignoring_ids]
-        fixed_ds = fixed_ds.select(valid_indices)
-
+        fixed_ds = fixed_ds.select(keeping_ids)
         fixed_ds.save_to_disk(LOCAL_DS_PATH)
 
         # exporting the right texts.txt
@@ -380,10 +378,14 @@ rule finalize_dataset:
         from datasets import load_from_disk
         dataset = load_from_disk(input.dataset)
 
+        with open("data/ignore.again.ids.txt", "r") as f:
+            ignoring_ids = list(map(int, f.read().split("\n")))
+
         translations = []
         for trans_file in input.translations:
             with open(trans_file) as f:
-                translations.append([line.strip() for line in f])
+                translations.append([line.strip() for line_id, line in enumerate(f) if (line_id // 2 + 1) not in ignoring_ids])
+
         languages = TARGET_LANGUAGES[:-1]
         dataset = dataset.map(update_item, with_indices=True, batch_size=16, writer_batch_size=16,
                               fn_kwargs={"languages": languages, "translations": translations})
@@ -433,7 +435,7 @@ rule gather_evals:
 
 
 def get_multilingual_sets(languages, size=2):
-    bilingual_sets = ["_".join(combination) for combination in itertools.combinations(languages, r=size)]
+    bilingual_sets = ["_".join(combination) for combination in itertools.permutations(languages, r=size)]
     return bilingual_sets
 
 rule correlate_model_pairs_multilingual:
@@ -487,5 +489,3 @@ rule gather_multilingual_evals:
         "data/evaluation/eval.multilingual.2.csv"
     script:
         "gather.py"
-
-# TODO: create a rule for extra masking the ignore ids part

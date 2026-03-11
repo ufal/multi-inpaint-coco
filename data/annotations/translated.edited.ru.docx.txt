@@ -6195,11 +6195,11 @@ Inpaint trans 771: Черная раковина, установленная в 
 
 COCO de 772: Ein weißer Zug, der Fracht auf einer Strecke transportiert.
 COCO trans 772: Белый поезд, перевозящий груз по маршруту.
-
+  
 
 Inpaint de 772: Ein roter Zug, der Fracht auf einem Gleis transportiert.
 Inpaint trans 772: Красный поезд, перевозящий груз по рельсам.
-
+  
 
 COCO de 773: Ein Badezimmer hat rote Wände mit gelben Akzenten.
 COCO trans 773: В ванной комнате красные стены с желтыми элементами декора.

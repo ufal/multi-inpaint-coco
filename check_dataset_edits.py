@@ -75,7 +75,7 @@ def check_deletion_diff(ro_items, ro_marked_ids, cs_items, cs_marked_ids):
         print(error_msg, file=sys.stderr)
 
 def write_final_items(items, marked_ids, fout):
-    final_items = [item for idx, item in enumerate(items) if (idx + 1) not in marked_ids]
+    final_items = [item for idx, item in enumerate(items) if idx not in marked_ids]
     for item in final_items:
         fout.write(f"{item['coco_fe']}\n{item['inpaint_fe']}\n")
 
