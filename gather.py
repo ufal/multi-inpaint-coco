@@ -50,6 +50,14 @@ def convert_and_export_dataframe(ds_dict, output_all_file , name):
     output_conjunction_file = output_all_file.replace("eval.", f"{name}.")
     df.to_csv(output_conjunction_file, index=True)
 
+def compute_bilingual_strict_acc(df):
+    txt_ans = df["extracted_answer"].values
+    txt_conj = (1 - txt_ans[0::4]) & txt_ans[1::4] & txt_ans[2::4] & (1 - txt_ans[3::4])
+    # sim(i_coco, t_coco) > sim(i_coco, t_inp) ∧ sim(i_inp, t_inp) > sim(i_inp, t_coco)
+    
+    txt_acc = txt_conj.sum() / len(txt_conj)
+    return txt_acc
+
 def compute_conjunction_strict(filenames, output_all_file):
     """ Computes the accuracy of the conjunction of results for the 2img and 2txt tasks, and exports the results in a grid: models x language
     """
@@ -102,7 +110,7 @@ def compute_fp_of_parity_samples(labels, answers, indices):
         answers_merged += answers[idx::4]
 
     conf_merged = confusion_matrix(labels_merged, answers_merged)
-    fp_merged = conf_merged[0][1]
+    fp_merged = conf_merged[0][1] / len(labels_merged)
     return fp_merged
 
 def compute_image_order_fp_diff(df):
@@ -114,7 +122,7 @@ def compute_image_order_fp_diff(df):
     fp_normal = compute_fp_of_parity_samples(labels, answers, indices=[0, 2])
     fp_swapped = compute_fp_of_parity_samples(labels, answers, indices=[1, 3])
 
-    fp_diff_rate = (fp_normal - fp_swapped) / len(labels)
+    fp_diff_rate = fp_normal - fp_swapped
     return fp_diff_rate
 
 def compute_language_fp_diff(df):
@@ -123,10 +131,10 @@ def compute_language_fp_diff(df):
     labels = df["label"].tolist()
     answers = df["extracted_answer"].tolist()
 
-    fp_lang1 = compute_fp_of_parity_samples(labels, answers, indices=[0])
-    fp_lang2 = compute_fp_of_parity_samples(labels, answers, indices=[2])
+    fp_lang1 = compute_fp_of_parity_samples(labels, answers, indices=[0, 1])
+    fp_lang2 = compute_fp_of_parity_samples(labels, answers, indices=[2, 3])
 
-    fp_diff_rate = (fp_lang1 - fp_lang2) / len(labels)
+    fp_diff_rate = fp_lang1 - fp_lang2
     return fp_diff_rate
 
 def compute_order_fp_rates(filenames, output_all_file):
@@ -147,32 +155,35 @@ def compute_order_fp_rates(filenames, output_all_file):
 
     convert_and_export_dataframe(fp_rates, output_all_file, "order_fp_diff")
 
-
-def compute_lang_acc_and_fp_rates(filenames, output_all_file):
-    lang_mat = np.ones((len(all_languages), len(all_languages)), dtype=np.float32)
-
+def compute_lang_pair_filename_mapping(filenames):
+    lang_pair_filename = {}
     for filename in filenames:
-        df = pd.read_csv(filename)
-        
-        accuracy = accuracy_score(df['label'], df['extracted_answer'])
-        fp_diff_rate = compute_language_fp_diff(df)
-        
         params_list = os.path.basename(filename).split(".")
-        model_name = params_list[1]
-        langs = params_list[2]
+        key = params_list[2]
+        
+        if key not in lang_pair_filename:
+            lang_pair_filename[key] = []
+        lang_pair_filename[key].append(filename)
+    return lang_pair_filename
 
-        lang_1, lang_2 = langs.split("_")
+
+
+def compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_fn, suffix):
+    lang_metrics_mat = [[[] for _ in all_languages] for _ in all_languages]
+    for lang_key, filenames in lang_pair_filename.items():
+
+        lang_1, lang_2 = lang_key.split("_")
         idx_1 = all_languages.index(lang_1)
         idx_2 = all_languages.index(lang_2)
 
-        if idx_1 > idx_2:
-            idx_1, idx_2 = idx_2, idx_1
+        for filename in filenames:
+            df = pd.read_csv(filename)
+            lang_metrics_mat[idx_1][idx_2].append(compute_fn(df))
 
-        lang_mat[idx_1][idx_2] = accuracy
-        lang_mat[idx_2][idx_1] = fp_diff_rate
-
+    lang_mat = np.array([[np.mean(metrics) if len(metrics) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])        
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
-    lang_mat_path = output_all_file.replace("multilingual.2", "fp_acc_bilingual")
+
+    lang_mat_path = output_all_file.replace("multilingual.2", suffix)
     df.to_csv(lang_mat_path)
 
     
@@ -191,8 +202,11 @@ def main(filenames, output_all_file, task):
     if task == "monolingual":
         compute_conjunction_strict(filenames, output_all_file)
         compute_order_fp_rates(filenames, output_all_file)
+
     elif task == "bilingual":
-        compute_lang_acc_and_fp_rates(filenames, output_all_file)
+        lang_pair_filename = compute_lang_pair_filename_mapping(filenames)
+        compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_bilingual_strict_acc, "acc_bilingual")
+        compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_language_fp_diff, "fp_bilingual")
 
 
 if __name__ == "__main__":
