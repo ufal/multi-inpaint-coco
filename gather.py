@@ -100,44 +100,22 @@ def compute_conjunction_strict(filenames, output_all_file):
     convert_and_export_dataframe(conjunction_img, output_all_file, "conj_img")
     convert_and_export_dataframe(conjunction_txt, output_all_file, "conj_txt")
 
-def compute_fp_of_parity_samples(labels, answers, indices):
-    """ Computes the False Positive rates for various samples with indices % 4
+
+def compute_image_order_mistakes_diff(df):
+    """ Computes the mistakes difference for samples with images given and the dataset order and in the swapped order. 
+    Labels are always 0, 1, 1, 0:
+    - natural order: [0::4] # of 1s, [2::4] # of 0s --> natr_mistakes
+    - swapped order: [1::4] # of 0s, [3::4] # of 1s --> swap_mistakes
     """
-    labels_merged = []
-    answers_merged = []
-    for idx in indices:
-        labels_merged += labels[idx::4]
-        answers_merged += answers[idx::4]
+    answers = df["extracted_answer"].values
 
-    conf_merged = confusion_matrix(labels_merged, answers_merged)
-    fp_merged = conf_merged[0][1] / len(labels_merged)
-    return fp_merged
+    natr_mistakes = answers[0::4].sum() + (1 - answers[2::4]).sum()
+    swap_mistakes = (1 - answers[1::4]).sum() + answers[3::4].sum()
 
-def compute_image_order_fp_diff(df):
-    """ Computes the False Positive rates for samples with images given and the dataset order and in the swapped order, and then computes the difference. 
-    """
-    labels = df["label"].tolist()
-    answers = df["extracted_answer"].tolist()
+    mistakes_dif = (natr_mistakes - swap_mistakes) / len(answers[::4])
+    return mistakes_dif
 
-    fp_normal = compute_fp_of_parity_samples(labels, answers, indices=[0, 2])
-    fp_swapped = compute_fp_of_parity_samples(labels, answers, indices=[1, 3])
-
-    fp_diff_rate = fp_normal - fp_swapped
-    return fp_diff_rate
-
-def compute_language_fp_diff(df):
-    """ Compute the differences in
-    """
-    labels = df["label"].tolist()
-    answers = df["extracted_answer"].tolist()
-
-    fp_lang1 = compute_fp_of_parity_samples(labels, answers, indices=[0, 1])
-    fp_lang2 = compute_fp_of_parity_samples(labels, answers, indices=[2, 3])
-
-    fp_diff_rate = fp_lang1 - fp_lang2
-    return fp_diff_rate
-
-def compute_order_fp_rates(filenames, output_all_file):
+def compute_order_mistake_rates(filenames, output_all_file):
     """ Computes the difference of False Positive rates in 2img task, regarding the image order. Exports the numbers in a grid: models x language
     """
     fp_rates = {} 
@@ -145,7 +123,7 @@ def compute_order_fp_rates(filenames, output_all_file):
     single_task_filenames = [file for file in filenames if "2img" in file]
     for filename in single_task_filenames:
         df = pd.read_csv(filename)
-        fp_diff_rate = compute_image_order_fp_diff(df)
+        fp_diff_rate = compute_image_order_mistakes_diff(df)
         
         params_list = os.path.basename(filename).split(".")
         model_name = params_list[1]
@@ -153,7 +131,7 @@ def compute_order_fp_rates(filenames, output_all_file):
 
         collect_if_available(fp_rates, lang, model_name, fp_diff_rate)
 
-    convert_and_export_dataframe(fp_rates, output_all_file, "order_fp_diff")
+    convert_and_export_dataframe(fp_rates, output_all_file, "order_mistakes_diff")
 
 def compute_lang_pair_filename_mapping(filenames):
     lang_pair_filename = {}
@@ -167,9 +145,27 @@ def compute_lang_pair_filename_mapping(filenames):
     return lang_pair_filename
 
 
+def compute_mistakes(df_dir, df_rev):
+    """ Computing
+    - df_dir - [0::4] # of 1s, [3::4] # of 1s (FP)
+    - df_rev - [1::4] # of 0s, [2::4] # of 0s (FN)
+    ---> .sum()
+    """
+    ans_dir = df_dir["extracted_answer"].values
+    ans_rev = df_rev["extracted_answer"].values
 
-def compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_fn, suffix):
-    lang_metrics_mat = [[[] for _ in all_languages] for _ in all_languages]
+    # number of 1s 
+    num_dir = ans_dir[0::4].sum() + ans_dir[3::4].sum()
+    
+    # number of 0s
+    num_rev = (1 - ans_rev[1::4]).sum() + (1 - ans_rev[2::4]).sum()
+    
+    confusions = (num_dir + num_rev) / len(ans_dir)
+    return confusions
+
+
+def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
+    lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
     for lang_key, filenames in lang_pair_filename.items():
 
         lang_1, lang_2 = lang_key.split("_")
@@ -177,16 +173,52 @@ def compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_fn, su
         idx_2 = all_languages.index(lang_2)
 
         for filename in filenames:
-            df = pd.read_csv(filename)
-            lang_metrics_mat[idx_1][idx_2].append(compute_fn(df))
+            model_name = os.path.basename(filename).split(".")[1]
+            df_dir = pd.read_csv(filename)
+            
+            rev_filename = filename.replace(f"{lang_1}_{lang_2}", f"{lang_2}_{lang_1}")
+            df_rev = pd.read_csv(rev_filename)
 
-    lang_mat = np.array([[np.mean(metrics) if len(metrics) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])        
+            if model_name not in lang_metrics_mat[idx_1][idx_2] and model_name not in lang_metrics_mat[idx_2][idx_1]:
+                
+                dir_mistakes = compute_mistakes(df_dir, df_rev)
+                rev_mistakes = compute_mistakes(df_rev, df_dir)
+
+                lang_metrics_mat[idx_1][idx_2].update({
+                    model_name: dir_mistakes - rev_mistakes
+                })
+                
+                lang_metrics_mat[idx_2][idx_1].update({
+                    model_name: rev_mistakes - dir_mistakes
+                })
+                
+    lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])           
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
 
-    lang_mat_path = output_all_file.replace("multilingual.2", suffix)
+    lang_mat_path = output_all_file.replace("multilingual.2", "mistakes_bilingual")
     df.to_csv(lang_mat_path)
 
-    
+def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file):
+    lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
+    for lang_key, filenames in lang_pair_filename.items():
+
+        lang_1, lang_2 = lang_key.split("_")
+        idx_1 = all_languages.index(lang_1)
+        idx_2 = all_languages.index(lang_2)
+
+        for filename in filenames:
+            model_name = os.path.basename(filename).split(".")[1]
+            df = pd.read_csv(filename)
+            
+            lang_metrics_mat[idx_1][idx_2].update({
+                model_name: compute_bilingual_strict_acc(df)
+            })
+
+    lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])        
+    df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
+
+    lang_mat_path = output_all_file.replace("multilingual.2", "acc_bilingual")
+    df.to_csv(lang_mat_path)
 
 def main(filenames, output_all_file, task):
     gathered = []
@@ -201,12 +233,12 @@ def main(filenames, output_all_file, task):
 
     if task == "monolingual":
         compute_conjunction_strict(filenames, output_all_file)
-        compute_order_fp_rates(filenames, output_all_file)
+        compute_order_mistake_rates(filenames, output_all_file)
 
     elif task == "bilingual":
         lang_pair_filename = compute_lang_pair_filename_mapping(filenames)
-        compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_bilingual_strict_acc, "acc_bilingual")
-        compute_pairwise_metrics(lang_pair_filename, output_all_file, compute_language_fp_diff, "fp_bilingual")
+        compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file)
+        compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file)
 
 
 if __name__ == "__main__":

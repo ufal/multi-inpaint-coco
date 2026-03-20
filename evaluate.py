@@ -256,8 +256,15 @@ def get_clip_similarity(model, inputs, to_normalize=True):
     return similarity
 
 def get_siglip_similarity(model, inputs):
-    outputs = model(**inputs)
-    similarity = outputs.logits_per_image
+    _, captions = inputs
+    outputs = model(*inputs)
+    
+    similarity = torch.zeros((2, 2), dtype=torch.float32)
+    for img_id, output_img in enumerate(outputs):
+        for score_dict in output_img:
+            txt_id = captions.index(score_dict["label"])
+            similarity[txt_id][img_id] = score_dict["score"]
+    
     return similarity
 
 def get_mexma_similarity(model, inputs):
@@ -278,7 +285,7 @@ def run_similarity_efficient_sample(item, model, model_name, processor, lang, ta
     if model_name.startswith("nllb-siglip"):
         inputs = process_nllb_siglip(processor, captions, images)
     elif model_name.startswith("siglip2"):
-        inputs = processor(text=captions, images=images, return_tensors="pt", padding="max_length", max_length=64, truncation=True).to(model.device)
+        inputs = [images, [caption.lower() for caption in captions]]
     else:
         inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
 
@@ -317,6 +324,9 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
     if model_name.startswith("nllb-siglip"):
         model, transform, tokenizer = import_nllb_siglip(model_name)
         processor = (transform, tokenizer)
+    elif model_name.startswith("siglip2"):
+        model = pipeline(model=snapshot_map_similarity[model_name], task="zero-shot-image-classification")
+        processor = None
     else:
         model = AutoModel.from_pretrained(snapshot_map_similarity[model_name], device_map="cuda", trust_remote_code=True).eval()
         processor = AutoProcessor.from_pretrained(snapshot_map_similarity[model_name])
