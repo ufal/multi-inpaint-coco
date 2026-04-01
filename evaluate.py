@@ -3,15 +3,17 @@ import pandas as pd
 import torch
 
 from datasets import load_from_disk
-from transformers import pipeline, AutoModel, AutoProcessor
+from transformers import pipeline, AutoModel, AutoProcessor, AutoModelForCausalLM, GenerationConfig
 from tqdm import tqdm
 from open_clip import create_model_from_pretrained, get_tokenizer
+
 
 snapshot_map_generation = {
     "google_gemma-3-12b-it": "google/gemma-3-12b-it",
     "qwen-7b": "Qwen/Qwen2.5-VL-7B-Instruct",
-    "qwen3g-8b": "Qwen/Qwen3Guard-Gen-8B",
-    # "qwen_omni-7b": "Qwen/Qwen2.5-Omni-7B", NOT WORKING YET
+    "qwen3-8b": "Qwen/Qwen3-VL-8B-Instruct",
+    "aya-8b": "CohereLabs/aya-vision-8b",
+    "jina": "jinaai/jina-vlm",
     "eurovllm-9b": "utter-project/EuroVLM-9B-Preview",
     "llama4_scout": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
 }
@@ -24,7 +26,6 @@ snapshot_map_similarity = {
     "mexma-siglip2": "visheratin/mexma-siglip2",
     "nllb-siglip-base": "nllb-clip-base-siglip",
     "nllb-siglip-large": "nllb-clip-large-siglip"
-    # "nllb-clip-large": "visheratin/nllb-clip-large", NOT WORKING YET
 }
 
 def get_prompt_fn_by_id(task, prompt_id):
@@ -163,8 +164,29 @@ def compute_encoder_specific_input(item, lang):
 
     return [coco_caption, inpaint_caption], [coco_image, inpaint_image]
 
+def apply_custom_pipeline(model_pipe, messages, images):
+    processor, model = model_pipe
 
-def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
+    text = processor.apply_chat_template(messages, add_generation_prompt=True)
+    inputs = processor(
+        text=[text],
+        images=images if images else None,
+        padding="longest",
+        return_tensors="pt",
+    ).to(model.device)
+
+    output = model.generate(
+        **inputs,
+        generation_config=GenerationConfig(max_new_tokens=20, do_sample=False),
+        return_dict_in_generate=True,
+        use_model_defaults=True,
+    )
+    generated_ids = output.sequences[0][inputs["input_ids"].shape[-1] :]
+    decoded_str = processor.tokenizer.decode(generated_ids, skip_special_tokens=True)
+    return decoded_str
+
+
+def run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn):
     # label, captions, images = compute_task_specific_random_input(item, lang, task)
     labels, captions_list, images_list = compute_task_specific_full_input(item, lang, task)
 
@@ -194,27 +216,40 @@ def run_generation_sample(model_pipe, item, lang, task, prompt_fn):
                 }
             ]
 
-        outputs = model_pipe(
+        if model_name.startswith("jina"):
+            decoded_str = apply_custom_pipeline(model_pipe, messages, images)
+        else:
+            outputs = model_pipe(
                 text=messages,
                 max_new_tokens=20,
                 return_full_text=False
             )
-        decoded_str = outputs[0]["generated_text"]
+            decoded_str = outputs[0]["generated_text"]
+        
         decoded_str = decoded_str.replace("\n", " ").strip()
         decoded_list.append(decoded_str)
     
     return labels, decoded_list
 
+def load_custom_pipeline(model_name):
+    processor = AutoProcessor.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', trust_remote_code=True)
+    return (processor, model)
+
 def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
     model_snapshot = snapshot_map_generation.get(model_name)
-    model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto")
+    
+    if model_name.startswith("jina"):
+        model_pipe = load_custom_pipeline(snapshot_map_generation[model_name])
+    else:
+        model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"dtype": torch.bfloat16}, device_map="auto")
 
     prompt_fn = get_prompt_fn_by_id(task, prompt_id)
     answer_extractor_fn = prompt_fn_map.get(prompt_id)
 
     results = []
     for item in tqdm(dataset):
-        labels, output_texts = run_generation_sample(model_pipe, item, lang, task, prompt_fn)
+        labels, output_texts = run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn)
         extracted_answers = [answer_extractor_fn(output_text) for output_text in output_texts]
 
         for label, extracted_answer, output_text in zip(labels, extracted_answers, output_texts):
@@ -282,10 +317,13 @@ def run_similarity_efficient_sample(item, model, model_name, processor, lang, ta
     captions, images = compute_encoder_specific_input(item, lang)
     similarities = []
     
+    # Lowercase is necessary for every SigLIP Text Encoder
+    lower_captions = [caption.lower() for caption in captions]
+
     if model_name.startswith("nllb-siglip"):
-        inputs = process_nllb_siglip(processor, captions, images)
+        inputs = process_nllb_siglip(processor, lower_captions, images)
     elif model_name.startswith("siglip2"):
-        inputs = [images, [caption.lower() for caption in captions]]
+        inputs = [images, lower_captions]
     else:
         inputs = processor(text=captions, images=images, return_tensors="pt", padding=True).to(model.device)
 

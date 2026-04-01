@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import cohen_kappa_score
 from utils import all_languages
 
-generative_models = ["google_gemma-3-12b-it", "qwen-7b", "eurovllm-9b"]
+generative_models = ["google_gemma-3-12b-it", "qwen-7b", "qwen3-8b", "aya-8b", "jina"]
 
 def compute_models_agreement(model_names, languages, tasks, prompt_id):
     correlations = []
