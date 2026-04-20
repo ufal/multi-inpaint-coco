@@ -95,7 +95,10 @@ LANGUAGE_STATS = {
 GENERATIVE_MODEL_NAMES = [
     "google_gemma-3-12b-it",
     "qwen-7b",
-    # "eurovllm-9b"
+    "qwen3-8b",
+    "aya-8b",
+    "jina",
+    # "llama4_scout"
 ]
 
 ENCODER_MODEL_NAMES = [
@@ -429,7 +432,11 @@ rule gather_evals:
     params:
         task="monolingual"
     output:
-        "data/evaluation/eval.all.csv"
+        "data/evaluation/eval.all.csv",
+        "data/evaluation/strict_accuracy.csv",
+        "data/evaluation/2img_accuracy.csv",
+        "data/evaluation/2txt_accuracy.csv",
+        "data/evaluation/image_order_mistakes.csv"
     script:
         "gather.py"
 
@@ -456,7 +463,8 @@ rule correlate_model_pairs_multilingual:
         )
     output:
         "data/evaluation/models_agreement.all.csv",
-        "data/evaluation/languages_agreement.all.csv"
+        "data/evaluation/languages_agreement.all.csv",
+        "data/evaluation/language_corr.csv"
     params:
         model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,
         languages=TARGET_LANGUAGES,
@@ -486,6 +494,8 @@ rule gather_multilingual_evals:
     params:
         task="bilingual"
     output:
-        "data/evaluation/eval.multilingual.2.csv"
+        "data/evaluation/eval.multilingual.2.csv",
+        "data/evaluation/acc_bilingual.csv",
+        "data/evaluation/mistakes_bilingual.csv"
     script:
         "gather.py"

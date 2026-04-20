@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 
 from datasets import load_from_disk
-from transformers import pipeline, AutoModel, AutoProcessor, AutoModelForCausalLM, GenerationConfig
+from transformers import pipeline, AutoModel, AutoProcessor, AutoModelForCausalLM, Llama4ForConditionalGeneration
 from tqdm import tqdm
 from open_clip import create_model_from_pretrained, get_tokenizer
 
@@ -170,19 +170,19 @@ def apply_custom_pipeline(model_pipe, messages, images):
     text = processor.apply_chat_template(messages, add_generation_prompt=True)
     inputs = processor(
         text=[text],
-        images=images if images else None,
+        images=[images] if images else None,
         padding="longest",
         return_tensors="pt",
+        tokenize=True,
+        return_dict=True,
     ).to(model.device)
 
     output = model.generate(
         **inputs,
-        generation_config=GenerationConfig(max_new_tokens=20, do_sample=False),
-        return_dict_in_generate=True,
-        use_model_defaults=True,
+        max_new_tokens=20,
     )
-    generated_ids = output.sequences[0][inputs["input_ids"].shape[-1] :]
-    decoded_str = processor.tokenizer.decode(generated_ids, skip_special_tokens=True)
+    generated_ids = output[0][inputs["input_ids"].shape[-1] :]
+    decoded_str = processor.batch_decode([generated_ids], skip_special_tokens=True)[0]
     return decoded_str
 
 
@@ -218,6 +218,8 @@ def run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn):
 
         if model_name.startswith("jina"):
             decoded_str = apply_custom_pipeline(model_pipe, messages, images)
+        elif model_name == "llama4_scout":
+            decoded_str = apply_custom_pipeline(model_pipe, messages, images)
         else:
             outputs = model_pipe(
                 text=messages,
@@ -233,16 +235,25 @@ def run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn):
 
 def load_custom_pipeline(model_name):
     processor = AutoProcessor.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', torch_dtype=torch.bfloat16, trust_remote_code=True)
     return (processor, model)
 
 def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
     model_snapshot = snapshot_map_generation.get(model_name)
     
     if model_name.startswith("jina"):
-        model_pipe = load_custom_pipeline(snapshot_map_generation[model_name])
+        model_pipe = load_custom_pipeline(model_snapshot)
+    elif model_name == "llama4_scout":
+        processor = AutoProcessor.from_pretrained(model_snapshot)
+        model = Llama4ForConditionalGeneration.from_pretrained(
+            model_snapshot,
+            attn_implementation="flex_attention",
+            device_map="cuda",
+            torch_dtype=torch.bfloat16,
+        ).eval()
+        model_pipe = (processor, model)
     else:
-        model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"dtype": torch.bfloat16}, device_map="auto")
+        model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto")
 
     prompt_fn = get_prompt_fn_by_id(task, prompt_id)
     answer_extractor_fn = prompt_fn_map.get(prompt_id)

@@ -45,9 +45,9 @@ def collect_if_available(ds_dict, lang, model_name, value):
         ds_dict[lang] = {}
     ds_dict[lang][model_name] = value
 
-def convert_and_export_dataframe(ds_dict, output_all_file , name):
+def convert_and_export_dataframe(ds_dict, output_all_file, name):
     df = pd.DataFrame(ds_dict).T.sort_index()
-    output_conjunction_file = output_all_file.replace("eval.", f"{name}.")
+    output_conjunction_file = output_all_file.replace("eval.all", f"{name}")
     df.to_csv(output_conjunction_file, index=True)
 
 def compute_bilingual_strict_acc(df):
@@ -96,9 +96,9 @@ def compute_conjunction_strict(filenames, output_all_file):
         collect_if_available(conjunction_img, lang, model_name, img_acc)
         collect_if_available(conjunction_txt, lang, model_name, txt_acc)
 
-    convert_and_export_dataframe(conjunction_all, output_all_file, "conj_all")
-    convert_and_export_dataframe(conjunction_img, output_all_file, "conj_img")
-    convert_and_export_dataframe(conjunction_txt, output_all_file, "conj_txt")
+    convert_and_export_dataframe(conjunction_all, output_all_file, "strict_accuracy")
+    convert_and_export_dataframe(conjunction_img, output_all_file, "2img_accuracy")
+    convert_and_export_dataframe(conjunction_txt, output_all_file, "2txt_accuracy")
 
 
 def compute_image_order_mistakes_diff(df):
@@ -131,7 +131,7 @@ def compute_order_mistake_rates(filenames, output_all_file):
 
         collect_if_available(fp_rates, lang, model_name, fp_diff_rate)
 
-    convert_and_export_dataframe(fp_rates, output_all_file, "order_mistakes_diff")
+    convert_and_export_dataframe(fp_rates, output_all_file, "image_order_mistakes")
 
 def compute_lang_pair_filename_mapping(filenames):
     lang_pair_filename = {}
@@ -195,7 +195,7 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])           
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
 
-    lang_mat_path = output_all_file.replace("multilingual.2", "mistakes_bilingual")
+    lang_mat_path = output_all_file.replace("eval.multilingual.2", "mistakes_bilingual")
     df.to_csv(lang_mat_path)
 
 def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file):
@@ -217,7 +217,7 @@ def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file):
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])        
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
 
-    lang_mat_path = output_all_file.replace("multilingual.2", "acc_bilingual")
+    lang_mat_path = output_all_file.replace("eval.multilingual.2", "acc_bilingual")
     df.to_csv(lang_mat_path)
 
 def main(filenames, output_all_file, task):

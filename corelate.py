@@ -81,7 +81,7 @@ def compute_and_export_language_agreement_2d(df, languages_agg_file):
             lang_mat[idx_1, idx_2] = mean_corr
     
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
-    lang_mat_path = languages_agg_file.replace("languages_agreement.", "languages_matrix.")
+    lang_mat_path = languages_agg_file.replace("languages_agreement.all", "language_corr")
     df.to_csv(lang_mat_path)
 
 def main(model_names, languages, tasks, prompt_id, models_agg_file, languages_agg_file):
