@@ -10,6 +10,7 @@ data/inpaintCOCO_multilingual
 data/translated.final.*.txt
 data/evaluation/
 data/samples/
+data/tokenization/
 .bkp
 meta-llama/
 

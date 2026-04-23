@@ -117,6 +117,7 @@ rule all:
         "data/evaluation/models_agreement.all.csv",
         "data/evaluation/languages_agreement.all.csv",
         "data/evaluation/eval.multilingual.2.csv",
+        "data/tokenization/tokenization_lengths.csv",
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -499,3 +500,52 @@ rule gather_multilingual_evals:
         "data/evaluation/mistakes_bilingual.csv"
     script:
         "gather.py"
+
+
+# Rule to compute tokenization lengths for each model-language pair
+rule compute_tokenization_length:
+    input:
+        LOCAL_TRANSLATED_PATH
+    output:
+        "data/tokenization/token_lengths.{model_name}.{model_type}.{lang}.json"
+    params:
+        model_name=lambda wildcards: wildcards.model_name,
+        model_type=lambda wildcards: wildcards.model_type,
+        lang=lambda wildcards: wildcards.lang
+    resources:
+        mem="16G",
+        cpus_per_task=2,
+    script:
+        "compute_tokenization_lengths.py"
+
+
+# Rule to gather all tokenization results into a single CSV file
+rule gather_tokenization_lengths:
+    input:
+        expand(
+            "data/tokenization/token_lengths.{model_name}.decoder.{lang}.json",
+            model_name=GENERATIVE_MODEL_NAMES,
+            lang=TARGET_LANGUAGES
+        ),
+        expand(
+            "data/tokenization/token_lengths.{model_name}.encoder.{lang}.json",
+            model_name=ENCODER_MODEL_NAMES,
+            lang=TARGET_LANGUAGES
+        )
+    output:
+        "data/tokenization/tokenization_lengths.csv"
+    run:
+        import json
+        import pandas as pd
+        
+        all_results = []
+        for json_file in input:
+            with open(json_file, 'r') as f:
+                data = json.load(f)
+                all_results.append(data)
+        
+        df = pd.DataFrame(all_results)
+        df.to_csv(output[0], index=False)
+        print(f"Tokenization lengths saved to {output[0]}")
+        print(f"Total entries: {len(df)}")
+
