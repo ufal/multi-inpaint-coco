@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score
 from utils import all_languages
 
 
@@ -112,7 +112,7 @@ def compute_image_order_mistakes_diff(df):
     natr_mistakes = answers[0::4].sum() + (1 - answers[2::4]).sum()
     swap_mistakes = (1 - answers[1::4]).sum() + answers[3::4].sum()
 
-    mistakes_dif = (natr_mistakes - swap_mistakes) / len(answers[::4])
+    mistakes_dif = (natr_mistakes - swap_mistakes) / (len(answers) / 2)
     return mistakes_dif
 
 def compute_order_mistake_rates(filenames, output_all_file):
@@ -147,22 +147,38 @@ def compute_lang_pair_filename_mapping(filenames):
 
 def compute_mistakes(df_dir, df_rev):
     """ Computing
-    - df_dir - [0::4] # of 1s, [3::4] # of 1s (FP)
-    - df_rev - [1::4] # of 0s, [2::4] # of 0s (FN)
+    - df_dir - [0::4] # of 1s (FP)
+    - df_rev - [2::4] # of 0s (FN)
     ---> .sum()
     """
     ans_dir = df_dir["extracted_answer"].values
     ans_rev = df_rev["extracted_answer"].values
 
     # number of 1s 
-    num_dir = ans_dir[0::4].sum() + ans_dir[3::4].sum()
+    num_dir = ans_dir[0::4].sum() 
     
     # number of 0s
-    num_rev = (1 - ans_rev[1::4]).sum() + (1 - ans_rev[2::4]).sum()
-    
-    confusions = (num_dir + num_rev) / len(ans_dir)
+    num_rev = (1 - ans_rev[2::4]).sum()
+
+    confusions = (num_dir + num_rev) / (len(ans_dir) / 2)
     return confusions
 
+
+def export_model_based_mistakes(lang_metrics_mat, output_all_file):
+    model_based_mistakes = {}
+    for idx_1 in range(len(all_languages)):
+        for idx_2 in range(len(all_languages)):
+            for model_name in lang_metrics_mat[idx_1][idx_2]:
+                if model_name not in model_based_mistakes:
+                    model_based_mistakes[model_name] = [[1 for _ in all_languages] for _ in all_languages]
+
+                model_based_mistakes[model_name][idx_1][idx_2] = lang_metrics_mat[idx_1][idx_2][model_name]
+
+    for model_name, mistakes_mat in model_based_mistakes.items():
+        df = pd.DataFrame(mistakes_mat, index=all_languages, columns=all_languages)
+        
+        model_mistakes_path = output_all_file.replace("eval.multilingual.2", f"mistakes_bilingual_{model_name}")
+        df.to_csv(model_mistakes_path)
 
 def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
     lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
@@ -171,6 +187,8 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
         lang_1, lang_2 = lang_key.split("_")
         idx_1 = all_languages.index(lang_1)
         idx_2 = all_languages.index(lang_2)
+        if idx_2 < idx_1:
+            continue
 
         for filename in filenames:
             model_name = os.path.basename(filename).split(".")[1]
@@ -185,12 +203,14 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
                 rev_mistakes = compute_mistakes(df_rev, df_dir)
 
                 lang_metrics_mat[idx_1][idx_2].update({
-                    model_name: dir_mistakes - rev_mistakes
+                    model_name: rev_mistakes - dir_mistakes
                 })
                 
                 lang_metrics_mat[idx_2][idx_1].update({
-                    model_name: rev_mistakes - dir_mistakes
+                    model_name: dir_mistakes - rev_mistakes
                 })
+
+    export_model_based_mistakes(lang_metrics_mat, output_all_file)
                 
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])           
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)

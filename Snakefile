@@ -409,8 +409,8 @@ rule evaluate_dataset:
     resources:
         mem="48G",
         cpus_per_task=4,
-        slurm_partition="gpu-amd",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
+        slurm_partition="gpu-ms,gpu-troja",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram24G|gpuram40G|gpuram48G'"
     script:
         "evaluate.py"
 
@@ -466,6 +466,7 @@ rule correlate_model_pairs_multilingual:
     output:
         "data/evaluation/models_agreement.all.csv",
         "data/evaluation/languages_agreement.all.csv",
+        "data/evaluation/models_corr.csv",
         "data/evaluation/language_corr.csv"
     params:
         model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,

@@ -1,4 +1,5 @@
 import random
+import ipdb
 import pandas as pd
 import torch
 
@@ -6,27 +7,7 @@ from datasets import load_from_disk
 from transformers import pipeline, AutoModel, AutoProcessor, AutoModelForCausalLM, Llama4ForConditionalGeneration
 from tqdm import tqdm
 from open_clip import create_model_from_pretrained, get_tokenizer
-
-
-snapshot_map_generation = {
-    "google_gemma-3-12b-it": "google/gemma-3-12b-it",
-    "qwen-7b": "Qwen/Qwen2.5-VL-7B-Instruct",
-    "qwen3-8b": "Qwen/Qwen3-VL-8B-Instruct",
-    "aya-8b": "CohereLabs/aya-vision-8b",
-    "jina": "jinaai/jina-vlm",
-    "eurovllm-9b": "utter-project/EuroVLM-9B-Preview",
-    "llama4_scout": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-}
-
-snapshot_map_similarity = {
-    "siglip2-base": "google/siglip2-base-patch16-224",
-    "siglip2-large": "google/siglip2-large-patch16-256",
-    "siglip2-so400m": "google/siglip2-so400m-patch16-256",
-    "siglip2-giant": "google/siglip2-giant-opt-patch16-256",
-    "mexma-siglip2": "visheratin/mexma-siglip2",
-    "nllb-siglip-base": "nllb-clip-base-siglip",
-    "nllb-siglip-large": "nllb-clip-large-siglip"
-}
+from utils import snapshot_map_generation, snapshot_map_similarity
 
 def get_prompt_fn_by_id(task, prompt_id):
 
@@ -231,7 +212,7 @@ def run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn):
         decoded_str = decoded_str.replace("\n", " ").strip()
         decoded_list.append(decoded_str)
     
-    return labels, decoded_list
+    return labels, decoded_list, captions_list
 
 def load_custom_pipeline(model_name):
     processor = AutoProcessor.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
@@ -260,14 +241,14 @@ def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
 
     results = []
     for item in tqdm(dataset):
-        labels, output_texts = run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn)
+        labels, output_texts, captions_list = run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn)
         extracted_answers = [answer_extractor_fn(output_text) for output_text in output_texts]
 
-        for label, extracted_answer, output_text in zip(labels, extracted_answers, output_texts):
+        for label, extracted_answer, output_text, captions in zip(labels, extracted_answers, output_texts, captions_list):
             results.append({
                 "concept": item["concept"],
-                "coco_caption": item["coco_caption"],
-                "inpaint_caption": item["inpaint_caption"],
+                "coco_caption": captions[0],
+                "inpaint_caption": captions[1],
                 "label": label,
                 "extracted_answer": extracted_answer,
                 "output_text": output_text
@@ -366,8 +347,9 @@ def run_similarity_efficient_sample(item, model, model_name, processor, lang, ta
             similarity[1, :],
             similarity[1, :].flip(0)
         ]
-        
-    return labels, similarities
+    
+    display_captions = [captions for _ in range(4)]
+    return labels, similarities, display_captions
 
 def evaluate_by_similarity(dataset, model_name, lang, task):
     if model_name.startswith("nllb-siglip"):
@@ -382,14 +364,14 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
 
     results = []
     for item in tqdm(dataset):
-        labels, similarities = run_similarity_efficient_sample(item, model, model_name, processor, lang, task)
+        labels, similarities, caption_list = run_similarity_efficient_sample(item, model, model_name, processor, lang, task)
         extracted_answers = [torch.argmax(similarity).item() for similarity in similarities]
 
-        for label, extracted_answer, similarity in zip(labels, extracted_answers, similarities):
+        for label, extracted_answer, similarity, captions in zip(labels, extracted_answers, similarities, caption_list):
             results.append({
                 "concept": item["concept"],
-                "coco_caption": item["coco_caption"],
-                "inpaint_caption": item["inpaint_caption"],
+                "coco_caption": captions[0],
+                "inpaint_caption": captions[1],
                 "label": label,
                 "extracted_answer": extracted_answer,
                 "similarity": similarity.cpu().tolist()

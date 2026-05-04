@@ -56,38 +56,88 @@ def compute_languages_agreement(model_names, languages, tasks, prompt_id):
                     })
     return correlations
 
+def compute_and_export_model_agreement_2d(df, models_agg_file):
+    all_models = list(set(df["model_1"].unique()) | set(df["model_2"].unique()))
+    model_mat = np.ones((len(all_models), len(all_models)), dtype=np.float32)
+
+    language_based_mat = {lang: np.ones((len(all_models), len(all_models)), dtype=np.float32) for lang in df["language"].unique()}
+    grouped_df = df.groupby(["task", "model_1", "model_2"])
+    
+    for key, group in grouped_df:
+        task, model_1, model_2 = key
+        mean_corr = group["cohen_kappa"].mean()
+
+        idx_1 = all_models.index(model_1)
+        idx_2 = all_models.index(model_2)
+
+        if idx_1 > idx_2:
+            idx_1, idx_2 = idx_2, idx_1
+
+        if task == "2img":
+            # above
+            model_mat[idx_1, idx_2] = mean_corr
+            for _, row in group.iterrows():
+                language_based_mat[row["language"]][idx_1, idx_2] = row["cohen_kappa"]
+        else:
+            # below
+            model_mat[idx_2, idx_1] = mean_corr
+
+            for _, row in group.iterrows():
+                language_based_mat[row["language"]][idx_2, idx_1] = row["cohen_kappa"]
+    
+    df = pd.DataFrame(model_mat, index=all_models, columns=all_models)
+    model_mat_path = models_agg_file.replace("models_agreement.all", "models_corr")
+    df.to_csv(model_mat_path)
+
+    for lang, mat in language_based_mat.items():
+        df = pd.DataFrame(mat, index=all_models, columns=all_models)
+        language_based_mat_path = models_agg_file.replace("models_agreement.all", f"models_corr.{lang}")
+        df.to_csv(language_based_mat_path)
+
 def compute_and_export_language_agreement_2d(df, languages_agg_file):
     lang_mat = np.ones((len(all_languages), len(all_languages)), dtype=np.float32)
-    grouped_df = df.groupby(["task", "lang_1", "lang_2"])
+    model_based_mat = {model_name: np.ones((len(all_languages), len(all_languages)), dtype=np.float32) for model_name in df["model"].unique()}
 
+    grouped_df = df.groupby(["task", "lang_1", "lang_2"])
+    
     for key, group in grouped_df:
         task, lang_1, lang_2 = key
         mean_corr = group["cohen_kappa"].mean()
 
         idx_1 = all_languages.index(lang_1)
         idx_2 = all_languages.index(lang_2)
-        
+
+        if idx_1 > idx_2:
+            idx_1, idx_2 = idx_2, idx_1
+
         if task == "2img":
             # above
-            if idx_1 > idx_2:
-                idx_1, idx_2 = idx_2, idx_1
-
             lang_mat[idx_1, idx_2] = mean_corr
+            for _, row in group.iterrows():
+                model_based_mat[row["model"]][idx_1, idx_2] = row["cohen_kappa"]
         else:
             # below
-            if idx_1 < idx_2:
-                idx_1, idx_2 = idx_2, idx_1
+            lang_mat[idx_2, idx_1] = mean_corr
 
-            lang_mat[idx_1, idx_2] = mean_corr
+            for _, row in group.iterrows():
+                model_based_mat[row["model"]][idx_2, idx_1] = row["cohen_kappa"]
     
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
     lang_mat_path = languages_agg_file.replace("languages_agreement.all", "language_corr")
     df.to_csv(lang_mat_path)
 
+    for model_name, mat in model_based_mat.items():
+        df = pd.DataFrame(mat, index=all_languages, columns=all_languages)
+        model_based_mat_path = languages_agg_file.replace("languages_agreement.all", f"language_corr.{model_name}")
+        df.to_csv(model_based_mat_path)
+
+
 def main(model_names, languages, tasks, prompt_id, models_agg_file, languages_agg_file):
     correlations = compute_models_agreement(model_names, languages, tasks, prompt_id)
     df = pd.DataFrame(correlations)
     df.to_csv(models_agg_file, index=False)
+
+    compute_and_export_model_agreement_2d(df, models_agg_file)
 
     correlations = compute_languages_agreement(model_names, languages, tasks, prompt_id)
     df = pd.DataFrame(correlations)
