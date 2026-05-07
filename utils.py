@@ -27,11 +27,14 @@ snapshot_map_generation = {
 }
 
 snapshot_map_similarity = {
+    "nllb-siglip-base": "nllb-clip-base-siglip",
+    "nllb-siglip-large": "nllb-clip-large-siglip",
+    "mexma-siglip2": "visheratin/mexma-siglip2",
     "siglip2-base": "google/siglip2-base-patch16-224",
     "siglip2-large": "google/siglip2-large-patch16-256",
     "siglip2-so400m": "google/siglip2-so400m-patch16-256",
     "siglip2-giant": "google/siglip2-giant-opt-patch16-256",
-    "mexma-siglip2": "visheratin/mexma-siglip2",
-    "nllb-siglip-base": "nllb-clip-base-siglip",
-    "nllb-siglip-large": "nllb-clip-large-siglip"
 }
+
+generative_models = ["google_gemma-3-12b-it", "qwen-7b", "qwen3-8b", "aya-8b", "jina"]
+all_models = generative_models + list(snapshot_map_similarity.keys())

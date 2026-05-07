@@ -1,10 +1,9 @@
+import ipdb
 import pandas as pd
 import numpy as np
 
 from sklearn.metrics import cohen_kappa_score
-from utils import all_languages
-
-generative_models = ["google_gemma-3-12b-it", "qwen-7b", "qwen3-8b", "aya-8b", "jina"]
+from utils import all_languages, generative_models, all_models
 
 def compute_models_agreement(model_names, languages, tasks, prompt_id):
     correlations = []
@@ -57,7 +56,6 @@ def compute_languages_agreement(model_names, languages, tasks, prompt_id):
     return correlations
 
 def compute_and_export_model_agreement_2d(df, models_agg_file):
-    all_models = list(set(df["model_1"].unique()) | set(df["model_2"].unique()))
     model_mat = np.ones((len(all_models), len(all_models)), dtype=np.float32)
 
     language_based_mat = {lang: np.ones((len(all_models), len(all_models)), dtype=np.float32) for lang in df["language"].unique()}
