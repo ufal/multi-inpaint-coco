@@ -164,7 +164,7 @@ def compute_mistakes(df_dir, df_rev):
     return confusions
 
 
-def export_model_based_mistakes(lang_metrics_mat, output_all_file):
+def export_model_based_mistakes(lang_metrics_mat, output_all_file, task):
     model_based_mistakes = {}
     for idx_1 in range(len(all_languages)):
         for idx_2 in range(len(all_languages)):
@@ -177,10 +177,13 @@ def export_model_based_mistakes(lang_metrics_mat, output_all_file):
     for model_name, mistakes_mat in model_based_mistakes.items():
         df = pd.DataFrame(mistakes_mat, index=all_languages, columns=all_languages)
         
-        model_mistakes_path = output_all_file.replace("eval.multilingual.2", f"mistakes_bilingual_{model_name}")
+        if task == "bilingual":
+            model_mistakes_path = output_all_file.replace("eval.multilingual.2", f"mistakes_bilingual_{model_name}")
+        elif task == "random_pairs":
+            model_mistakes_path = output_all_file.replace("eval.random_pairs.bilingual", f"mistakes_random_pairs_bilingual_{model_name}")
         df.to_csv(model_mistakes_path)
 
-def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
+def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file, task):
     lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
     for lang_key, filenames in lang_pair_filename.items():
 
@@ -210,15 +213,19 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file):
                     model_name: dir_mistakes - rev_mistakes
                 })
 
-    export_model_based_mistakes(lang_metrics_mat, output_all_file)
+    export_model_based_mistakes(lang_metrics_mat, output_all_file, task)
                 
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])           
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
 
-    lang_mat_path = output_all_file.replace("eval.multilingual.2", "mistakes_bilingual")
+    if task == "bilingual":
+        lang_mat_path = output_all_file.replace("eval.multilingual.2", "mistakes_bilingual")
+    elif task == "random_pairs":
+        lang_mat_path = output_all_file.replace("eval.random_pairs.bilingual", "mistakes_random_pairs_bilingual")
+
     df.to_csv(lang_mat_path)
 
-def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file):
+def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file, task):
     lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
     for lang_key, filenames in lang_pair_filename.items():
 
@@ -237,7 +244,11 @@ def compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file):
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])        
     df = pd.DataFrame(lang_mat, index=all_languages, columns=all_languages)
 
-    lang_mat_path = output_all_file.replace("eval.multilingual.2", "acc_bilingual")
+    if task == "bilingual":
+        lang_mat_path = output_all_file.replace("eval.multilingual.2", "acc_bilingual")
+    elif task == "random_pairs":
+        lang_mat_path = output_all_file.replace("eval.random_pairs.bilingual", "acc_random_pairs_bilingual")
+
     df.to_csv(lang_mat_path)
 
 def main(filenames, output_all_file, task):
@@ -255,10 +266,10 @@ def main(filenames, output_all_file, task):
         compute_conjunction_strict(filenames, output_all_file)
         compute_order_mistake_rates(filenames, output_all_file)
 
-    elif task == "bilingual":
+    elif task in ("bilingual", "random_pairs"):
         lang_pair_filename = compute_lang_pair_filename_mapping(filenames)
-        compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file)
-        compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file)
+        compute_bilingual_pairwise_acc(lang_pair_filename, output_all_file, task)
+        compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file, task)
 
 
 if __name__ == "__main__":

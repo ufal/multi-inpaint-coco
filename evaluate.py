@@ -23,6 +23,9 @@ def get_prompt_fn_by_id(task, prompt_id):
 
         elif prompt_id == "prompt_3":
             prompt_fn = lambda caption: f"Based on two images, which follows the caption \"{caption}\" ? Answer with 'left' or 'right' and nothing else."
+        
+        elif prompt_id == "prompt_4":
+            prompt_fn = lambda caption: f"À partir des deux images, qui suivent la description \"{caption}\" ? Répondez par 'gauche' ou 'droite' et rien d'autre."
             
     else:
         if prompt_id == "prompt_0":
@@ -37,6 +40,9 @@ def get_prompt_fn_by_id(task, prompt_id):
         elif prompt_id == "prompt_3":
             prompt_fn = lambda caption_1, caption_2: f"Based the 2 captions: \n (left) \"{caption_1}\" \n (right) \"{caption_2}\" \n Which one follows the image? Answer with 'left' or 'right' and nothing else."
         
+        elif prompt_id == "prompt_4":
+            prompt_fn = lambda caption_1, caption_2: f"À partir des deux descriptions suivantes: \n (gauche) \"{caption_1}\" \n (droite) \"{caption_2}\" \n Laquelle correspond à l'image? Répondez par 'gauche' ou 'droite', et rien d'autre."
+
     return prompt_fn
 
 def get_gemma3n_answer_prompt_0(output_text):
@@ -56,12 +62,22 @@ def get_gemma3n_answer_prompt_1(output_text):
         return 0
     elif "yes" in output_text:
         return 1
+
+def get_gemma3n_answer_prompt_4(output_text):
+    output_text = output_text.lower()
+    if "gauche" not in output_text and "droite" not in output_text:
+        return -1
+    elif "gauche" in output_text:
+        return 0
+    elif "droite" in output_text:
+        return 1
     
 prompt_fn_map = {
     "prompt_0": get_gemma3n_answer_prompt_0,
     "prompt_1": get_gemma3n_answer_prompt_1,
     "prompt_2": get_gemma3n_answer_prompt_0,
     "prompt_3": get_gemma3n_answer_prompt_0,
+    "prompt_4": get_gemma3n_answer_prompt_4,
 }
 
 def compute_task_specific_random_input(item, lang, task):
@@ -81,7 +97,7 @@ def compute_task_specific_random_input(item, lang, task):
 
     return label, captions, images
 
-def compute_task_specific_full_input(item, lang, task):
+def compute_task_specific_full_input(item, pair_item, lang, task):
     dec_langs = lang.split("_")
     if len(dec_langs) == 1:
         lang1 = lang2 = lang
@@ -91,10 +107,10 @@ def compute_task_specific_full_input(item, lang, task):
         raise ValueError(f"Invalid language format: {lang}")
     
     coco_caption = item[f"coco_caption_{lang1}"]
-    inpaint_caption = item[f"inpaint_caption_{lang2}"]
+    inpaint_caption = pair_item[f"inpaint_caption_{lang2}"]
 
     coco_image = item["coco_image"]
-    inpaint_image = item["inpaint_image"]
+    inpaint_image = pair_item["inpaint_image"]
 
     labels = []
     captions_list = []
@@ -128,7 +144,7 @@ def compute_task_specific_full_input(item, lang, task):
 
     return labels, captions_list, images_list
 
-def compute_encoder_specific_input(item, lang):
+def compute_encoder_specific_input(item, pair_item, lang):
     dec_langs = lang.split("_")
     if len(dec_langs) == 1:
         lang1 = lang2 = lang
@@ -138,10 +154,10 @@ def compute_encoder_specific_input(item, lang):
         raise ValueError(f"Invalid language format: {lang}")
     
     coco_caption = item[f"coco_caption_{lang1}"]
-    inpaint_caption = item[f"inpaint_caption_{lang2}"]
+    inpaint_caption = pair_item[f"inpaint_caption_{lang2}"]
 
     coco_image = item["coco_image"]
-    inpaint_image = item["inpaint_image"]
+    inpaint_image = pair_item["inpaint_image"]
 
     return [coco_caption, inpaint_caption], [coco_image, inpaint_image]
 
@@ -167,9 +183,9 @@ def apply_custom_pipeline(model_pipe, messages, images):
     return decoded_str
 
 
-def run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn):
+def run_generation_sample(model_pipe, model_name, item, pair_item, lang, task, prompt_fn):
     # label, captions, images = compute_task_specific_random_input(item, lang, task)
-    labels, captions_list, images_list = compute_task_specific_full_input(item, lang, task)
+    labels, captions_list, images_list = compute_task_specific_full_input(item, pair_item, lang, task)
 
     decoded_list = []
     for captions, images in zip(captions_list, images_list):
@@ -219,7 +235,7 @@ def load_custom_pipeline(model_name):
     model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', torch_dtype=torch.bfloat16, trust_remote_code=True)
     return (processor, model)
 
-def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
+def evaluate_by_generation(dataset, model_name, lang, task, prompt_id, selection):
     model_snapshot = snapshot_map_generation.get(model_name)
     
     if model_name.startswith("jina"):
@@ -239,16 +255,24 @@ def evaluate_by_generation(dataset, model_name, lang, task, prompt_id):
     prompt_fn = get_prompt_fn_by_id(task, prompt_id)
     answer_extractor_fn = prompt_fn_map.get(prompt_id)
 
+    if selection == "random_pairs":
+        with open("data/random_ids.txt", "r") as fin:
+            pair_ids = [int(line.strip()) for line in fin.read().split("\n") if line.strip()]
+    else:
+        pair_ids = list(range(len(dataset)))
+
     results = []
-    for item in tqdm(dataset):
-        labels, output_texts, captions_list = run_generation_sample(model_pipe, model_name, item, lang, task, prompt_fn)
+    for item, pair_id in tqdm(zip(dataset, pair_ids)):
+        pair_item = dataset[pair_id]
+
+        labels, output_texts, captions_list = run_generation_sample(model_pipe, model_name, item, pair_item, lang, task, prompt_fn)
         extracted_answers = [answer_extractor_fn(output_text) for output_text in output_texts]
 
         for label, extracted_answer, output_text, captions in zip(labels, extracted_answers, output_texts, captions_list):
             results.append({
                 "concept": item["concept"],
                 "coco_caption": captions[0],
-                "inpaint_caption": captions[1],
+                "inpaint_caption": captions[1] if len(captions) > 1 else captions[0],
                 "label": label,
                 "extracted_answer": extracted_answer,
                 "output_text": output_text
@@ -305,8 +329,8 @@ def get_nllb_siglip_similarity(model, inputs):
     return similarity
 
 
-def run_similarity_efficient_sample(item, model, model_name, processor, lang, task):
-    captions, images = compute_encoder_specific_input(item, lang)
+def run_similarity_efficient_sample(item, pair_item, model, model_name, processor, lang, task):
+    captions, images = compute_encoder_specific_input(item, pair_item, lang)
     similarities = []
     
     # Lowercase is necessary for every SigLIP Text Encoder
@@ -351,7 +375,7 @@ def run_similarity_efficient_sample(item, model, model_name, processor, lang, ta
     display_captions = [captions for _ in range(4)]
     return labels, similarities, display_captions
 
-def evaluate_by_similarity(dataset, model_name, lang, task):
+def evaluate_by_similarity(dataset, model_name, lang, task, selection):
     if model_name.startswith("nllb-siglip"):
         model, transform, tokenizer = import_nllb_siglip(model_name)
         processor = (transform, tokenizer)
@@ -362,9 +386,17 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
         model = AutoModel.from_pretrained(snapshot_map_similarity[model_name], device_map="cuda", trust_remote_code=True).eval()
         processor = AutoProcessor.from_pretrained(snapshot_map_similarity[model_name])
 
+    if selection == "random_pairs":
+        with open("data/random_ids.txt", "r") as fin:
+            pair_ids = [int(line.strip()) for line in fin.read().split("\n")]
+    else:
+        pair_ids = list(range(len(dataset)))
+
     results = []
-    for item in tqdm(dataset):
-        labels, similarities, caption_list = run_similarity_efficient_sample(item, model, model_name, processor, lang, task)
+    for item, pair_id in tqdm(zip(dataset, pair_ids)):
+        pair_item = dataset[pair_id]
+
+        labels, similarities, caption_list = run_similarity_efficient_sample(item, pair_item, model, model_name, processor, lang, task)
         extracted_answers = [torch.argmax(similarity).item() for similarity in similarities]
 
         for label, extracted_answer, similarity, captions in zip(labels, extracted_answers, similarities, caption_list):
@@ -379,13 +411,15 @@ def evaluate_by_similarity(dataset, model_name, lang, task):
     
     return results
 
-def main(multiling_ds_path, model_name, lang, task, prompt_id):
+def main(multiling_ds_path, model_name, lang, task, prompt_id, selection):
     dataset = load_from_disk(multiling_ds_path)
     if model_name in snapshot_map_generation:
-        results = evaluate_by_generation(dataset, model_name, lang, task, prompt_id)
+        results = evaluate_by_generation(dataset, model_name, lang, task, prompt_id, selection)
     else:
-        results = evaluate_by_similarity(dataset, model_name, lang, task)
-    pd.DataFrame(results).to_csv(f"data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv", index=False)
+        results = evaluate_by_similarity(dataset, model_name, lang, task, selection)
+
+    prefix = "_random_pairs." if selection == "random_pairs" else "."
+    pd.DataFrame(results).to_csv(f"data/evaluation/results{prefix}{model_name}.{lang}.{task}.{prompt_id}.csv", index=False)
 
 
 if __name__ == "__main__":
@@ -399,5 +433,6 @@ if __name__ == "__main__":
         lang = snakemake.params.lang
         task = snakemake.params.task
         prompt_id = snakemake.params.prompt_id
+        selection = snakemake.params.selection if "selection" in snakemake.params.keys() else "normal"
 
-    main(multiling_ds_path, model_name, lang, task, prompt_id)
+    main(multiling_ds_path, model_name, lang, task, prompt_id, selection)

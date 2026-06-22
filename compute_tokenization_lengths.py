@@ -17,7 +17,7 @@ from open_clip import get_tokenizer
 from tqdm import tqdm
 
 
-from evaluate import (
+from utils import (
     snapshot_map_generation as SNAPSHOT_MAP_GENERATION,
     snapshot_map_similarity as SNAPSHOT_MAP_ENCODER,
 )
@@ -97,6 +97,7 @@ def compute_tokenization_stats(dataset, tokenizer, model_name, language):
 
     coco_caption_field = f"coco_caption_{language}"
     inpaint_caption_field = f"inpaint_caption_{language}"
+    n_sig_overflow = 0
 
     for item in tqdm(dataset, desc=f"Tokenizing {model_name} - {language}", leave=False):
         coco_caption = item[coco_caption_field]
@@ -104,6 +105,11 @@ def compute_tokenization_stats(dataset, tokenizer, model_name, language):
 
         coco_len = count_tokens(tokenizer, coco_caption)
         inpaint_len = count_tokens(tokenizer, inpaint_caption)
+
+        if coco_len >= 64:
+            n_sig_overflow += 1
+        if inpaint_len >= 64:
+            n_sig_overflow += 1
 
         coco_lengths.append(coco_len)
         inpaint_lengths.append(inpaint_len)
@@ -122,6 +128,7 @@ def compute_tokenization_stats(dataset, tokenizer, model_name, language):
         "combined_mean": (sum(coco_lengths) + sum(inpaint_lengths)) / (len(coco_lengths) + len(inpaint_lengths)),
         "combined_total": sum(coco_lengths) + sum(inpaint_lengths),
         "num_samples": len(dataset),
+        "num_sig_overflow": n_sig_overflow,
     }
 
 

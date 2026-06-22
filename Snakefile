@@ -66,8 +66,8 @@ LANGUAGE_STATS = {
         "ar": 5, "el": 3, "hi": 4, "ru": 4,
     },
     "speakers_M": {
-        "en": 753.4, "cs":  10.7, "ro":  24.3, "vi":  76.0, "de":  76.5,
-        "sk":   6.0, "it":  64.8, "az":   9.2, "ja": 128.0, "uk":  26.9,
+        "en": 380, "cs":  10.7, "ro":  24.3, "vi":  76.0, "de":  76.5,
+        "sk":   6.0, "it":  64.8, "az":  24, "ja": 128.0, "uk":  26.9,
         "ar": 335.0, "el":  15.0, "hi": 341.0, "ru": 154.0,
     },
     "fineweb2_GB": {
@@ -97,14 +97,14 @@ GENERATIVE_MODEL_NAMES = [
     "qwen-7b",
     "qwen3-8b",
     "aya-8b",
-    "jina",
+    # "jina",
     # "llama4_scout"
 ]
 
 ENCODER_MODEL_NAMES = [
-    "nllb-siglip-base",
-    "nllb-siglip-large",
-    "mexma-siglip2",
+    # "nllb-siglip-base",
+    # "nllb-siglip-large",
+    # "mexma-siglip2",
     "siglip2-base",
     "siglip2-large",
     "siglip2-so400m",
@@ -113,12 +113,13 @@ ENCODER_MODEL_NAMES = [
 
 rule all:
     input:
-        "data/evaluation/eval.all.csv",
-        "data/evaluation/models_agreement.all.csv",
-        "data/evaluation/languages_agreement.all.csv",
-        "data/evaluation/eval.multilingual.2.csv",
-        "data/tokenization/tokenization_lengths.csv",
-        "data/evaluation/accuracy_correlations.csv",
+        "data/evaluation/eval.random_pairs.bilingual.csv"
+        # "data/evaluation/eval.all.csv",
+        # "data/evaluation/models_agreement.all.csv",
+        # "data/evaluation/languages_agreement.all.csv",
+        # "data/evaluation/eval.multilingual.2.csv",
+        # "data/tokenization/tokenization_lengths.csv",
+        # "data/evaluation/accuracy_correlations.csv",
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -401,6 +402,8 @@ rule evaluate_dataset:
         LOCAL_TRANSLATED_PATH
     output:
         "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv"
+    wildcard_constraints:
+        model_name="|".join(GENERATIVE_MODEL_NAMES + ENCODER_MODEL_NAMES)
     params:
         model_name=lambda wildcards: wildcards.model_name,
         lang=lambda wildcards: wildcards.lang,
@@ -422,7 +425,7 @@ rule gather_evals:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_3"]
+            prompt_id=["prompt_4"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -454,7 +457,7 @@ rule correlate_model_pairs_multilingual:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_3"]
+            prompt_id=["prompt_4"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -472,7 +475,7 @@ rule correlate_model_pairs_multilingual:
         model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,
         languages=TARGET_LANGUAGES,
         tasks=["2img", "2txt"],
-        prompt_id="prompt_3"
+        prompt_id="prompt_4"
     resources:
         mem="16G",
         cpus_per_task=4,
@@ -665,3 +668,68 @@ rule compute_accuracy_correlations:
         print(f"Properties analyzed: {results_df['property'].nunique()}")
 
 
+rule create_random_permutation:
+    output:
+        "data/random_ids.txt"
+    resources:
+        mem="8G",
+        cpus_per_task=1,
+    run:
+        import random
+        new_ids = []
+
+        for cur_id in range(953):
+            new_id = cur_id
+            while new_id == cur_id:
+                new_id = random.choice(list(range(953)))
+            new_ids.append(str(new_id))
+
+        with open(output[0], "w") as f:
+            f.write("\n".join(new_ids))
+        
+
+rule evaluate_random_pairs:
+    input:
+        LOCAL_TRANSLATED_PATH,
+        "data/random_ids.txt"
+    output:
+        "data/evaluation/results_random_pairs.{model_name}.{lang}.{task}.{prompt_id}.csv"
+    wildcard_constraints:
+        model_name="|".join(GENERATIVE_MODEL_NAMES + ENCODER_MODEL_NAMES),
+    params:
+        model_name=lambda wildcards: wildcards.model_name,
+        lang=lambda wildcards: wildcards.lang,
+        task=lambda wildcards: wildcards.task,
+        prompt_id=lambda wildcards: wildcards.prompt_id,
+        selection="random_pairs"
+    resources:
+        mem="48G",
+        cpus_per_task=4,
+        slurm_partition="gpu-amd",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
+    script:
+        "evaluate.py"
+
+
+rule gather_random_pairs_evals:
+    input:
+        expand(
+            "data/evaluation/results_random_pairs.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
+            model_name=GENERATIVE_MODEL_NAMES, 
+            lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
+            prompt_id=["prompt_3"]
+        ),
+        expand(
+            "data/evaluation/results_random_pairs.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
+            model_name=ENCODER_MODEL_NAMES, 
+            lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
+            prompt_id=["similarity"]
+        )
+    params:
+        task="random_pairs"
+    output:
+        "data/evaluation/eval.random_pairs.bilingual.csv",
+        "data/evaluation/acc_random_pairs_bilingual.csv",
+        "data/evaluation/mistakes_random_pairs_bilingual.csv"
+    script:
+        "gather.py"
