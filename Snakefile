@@ -97,14 +97,14 @@ GENERATIVE_MODEL_NAMES = [
     "qwen-7b",
     "qwen3-8b",
     "aya-8b",
-    # "jina",
+    "jina",
     # "llama4_scout"
 ]
 
 ENCODER_MODEL_NAMES = [
-    # "nllb-siglip-base",
-    # "nllb-siglip-large",
-    # "mexma-siglip2",
+    "nllb-siglip-base",
+    "nllb-siglip-large",
+    "mexma-siglip2",
     "siglip2-base",
     "siglip2-large",
     "siglip2-so400m",
@@ -113,11 +113,13 @@ ENCODER_MODEL_NAMES = [
 
 rule all:
     input:
-        "data/evaluation/eval.random_pairs.bilingual.csv"
+        "data/evaluation/strict_acc_bootstrap.csv",
+        # "data/evaluation/eval.random_pairs.bilingual.csv",
         # "data/evaluation/eval.all.csv",
         # "data/evaluation/models_agreement.all.csv",
         # "data/evaluation/languages_agreement.all.csv",
         # "data/evaluation/eval.multilingual.2.csv",
+        # "data/evaluation/mistakes_bilingual.csv"
         # "data/tokenization/tokenization_lengths.csv",
         # "data/evaluation/accuracy_correlations.csv",
 
@@ -410,10 +412,10 @@ rule evaluate_dataset:
         task=lambda wildcards: wildcards.task,
         prompt_id=lambda wildcards: wildcards.prompt_id
     resources:
-        mem="48G",
+        mem="64G",
         cpus_per_task=4,
-        slurm_partition="gpu-ms,gpu-troja",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram24G|gpuram40G|gpuram48G'"
+        slurm_partition="gpu-amd",
+        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
     script:
         "evaluate.py"
 
@@ -489,7 +491,7 @@ rule gather_multilingual_evals:
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
             model_name=GENERATIVE_MODEL_NAMES, 
             lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
-            prompt_id=["prompt_3"]
+            prompt_id=["prompt_4"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
@@ -703,10 +705,10 @@ rule evaluate_random_pairs:
         prompt_id=lambda wildcards: wildcards.prompt_id,
         selection="random_pairs"
     resources:
-        mem="48G",
+        mem="64G",
         cpus_per_task=4,
-        slurm_partition="gpu-amd",
-        slurm_extra="--gres=gpu:1 --constraint='gpuram64G'"
+        slurm_partition="gpu-ms,gpu-troja",
+        slurm_extra="--gres=gpu:3 --constraint='gpuram40G|gpuram48G' --exclude=tdll-3gpu3"
     script:
         "evaluate.py"
 
@@ -733,3 +735,27 @@ rule gather_random_pairs_evals:
         "data/evaluation/mistakes_random_pairs_bilingual.csv"
     script:
         "gather.py"
+
+
+rule bootstrap_strict_accuracy:
+    input:
+        expand(
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=GENERATIVE_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
+            task=["2img", "2txt"],
+            prompt_id=["prompt_3"]
+        ),
+        expand(
+            "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
+            model_name=ENCODER_MODEL_NAMES, 
+            lang=TARGET_LANGUAGES,
+            task=["2img", "2txt"],
+            prompt_id=["similarity"]
+        )
+    params:
+        task="monolingual"
+    output:
+        "data/evaluation/strict_acc_bootstrap.csv",
+    script:
+        "stat_test.py"

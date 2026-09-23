@@ -232,7 +232,7 @@ def run_generation_sample(model_pipe, model_name, item, pair_item, lang, task, p
 
 def load_custom_pipeline(model_name):
     processor = AutoProcessor.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', torch_dtype=torch.bfloat16, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_name, device_map='cuda', torch_dtype=torch.bfloat16, trust_remote_code=True)
     return (processor, model)
 
 def evaluate_by_generation(dataset, model_name, lang, task, prompt_id, selection):
@@ -250,7 +250,7 @@ def evaluate_by_generation(dataset, model_name, lang, task, prompt_id, selection
         ).eval()
         model_pipe = (processor, model)
     else:
-        model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto")
+        model_pipe = pipeline("image-text-to-text", model=model_snapshot, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="cuda")
 
     prompt_fn = get_prompt_fn_by_id(task, prompt_id)
     answer_extractor_fn = prompt_fn_map.get(prompt_id)
