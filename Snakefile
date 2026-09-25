@@ -114,14 +114,14 @@ ENCODER_MODEL_NAMES = [
 rule all:
     input:
         "data/evaluation/strict_acc_bootstrap.csv",
-        # "data/evaluation/eval.random_pairs.bilingual.csv",
-        # "data/evaluation/eval.all.csv",
-        # "data/evaluation/models_agreement.all.csv",
-        # "data/evaluation/languages_agreement.all.csv",
-        # "data/evaluation/eval.multilingual.2.csv",
-        # "data/evaluation/mistakes_bilingual.csv"
-        # "data/tokenization/tokenization_lengths.csv",
-        # "data/evaluation/accuracy_correlations.csv",
+        "data/evaluation/eval.random_pairs.bilingual.csv",
+        "data/evaluation/eval.all.csv",
+        "data/evaluation/models_agreement.all.csv",
+        "data/evaluation/languages_agreement.all.csv",
+        "data/evaluation/eval.multilingual.2.csv",
+        "data/evaluation/mistakes_bilingual.csv",
+        "data/tokenization/tokenization_lengths.csv",
+        "data/evaluation/accuracy_correlations.csv",
 
 
 # This rule loads the original InpaintCOCO dataset and applies the edits that
@@ -427,7 +427,7 @@ rule gather_evals:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_4"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -459,7 +459,7 @@ rule correlate_model_pairs_multilingual:
             model_name=GENERATIVE_MODEL_NAMES, 
             lang=TARGET_LANGUAGES,
             task=["2img", "2txt"],
-            prompt_id=["prompt_4"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang}.{task}.{prompt_id}.csv",
@@ -477,7 +477,7 @@ rule correlate_model_pairs_multilingual:
         model_names=ENCODER_MODEL_NAMES+GENERATIVE_MODEL_NAMES,
         languages=TARGET_LANGUAGES,
         tasks=["2img", "2txt"],
-        prompt_id="prompt_4"
+        prompt_id="prompt_3"
     resources:
         mem="16G",
         cpus_per_task=4,
@@ -491,7 +491,7 @@ rule gather_multilingual_evals:
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",
             model_name=GENERATIVE_MODEL_NAMES, 
             lang_set=get_multilingual_sets(TARGET_LANGUAGES, 2),
-            prompt_id=["prompt_4"]
+            prompt_id=["prompt_3"]
         ),
         expand(
             "data/evaluation/results.{model_name}.{lang_set}.2txt.{prompt_id}.csv",

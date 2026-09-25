@@ -1,10 +1,14 @@
 import os
+import json
+import ipdb
 
 import pandas as pd
 import numpy as np
 
 from sklearn.metrics import accuracy_score
 from utils import all_languages
+from functools import reduce
+from collections import Counter
 
 
 def compute_accuracy_and_uncertainty_by_concept(df):
@@ -185,6 +189,8 @@ def export_model_based_mistakes(lang_metrics_mat, output_all_file, task):
 
 def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file, task):
     lang_metrics_mat = [[{} for _ in all_languages] for _ in all_languages]
+    mistaken_lang_model_map = {}
+
     for lang_key, filenames in lang_pair_filename.items():
 
         lang_1, lang_2 = lang_key.split("_")
@@ -205,6 +211,24 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file, tas
                 dir_mistakes = compute_mistakes(df_dir, df_rev)
                 rev_mistakes = compute_mistakes(df_rev, df_dir)
 
+                if idx_1 == 5:
+                    ans_rev = df_rev["extracted_answer"].values
+                    mask = (ans_rev[0::4] == 1) | (ans_rev[2::4] == 0)
+                    
+                    wrong_ids = np.where(mask)[0]
+                    lang_model_map = mistaken_lang_model_map.get(lang_2, {})
+                    lang_model_map[model_name] = wrong_ids.tolist()
+                    mistaken_lang_model_map.update({lang_2: lang_model_map})
+
+                elif idx_2 == 5:
+                    ans_dir = df_dir["extracted_answer"].values
+                    mask = (ans_dir[0::4] == 1) | (ans_dir[2::4] == 0)
+                    
+                    wrong_ids = np.where(mask)[0]
+                    lang_model_map = mistaken_lang_model_map.get(lang_1, {})
+                    lang_model_map[model_name] = wrong_ids.tolist()
+                    mistaken_lang_model_map.update({lang_1: lang_model_map})
+
                 lang_metrics_mat[idx_1][idx_2].update({
                     model_name: rev_mistakes - dir_mistakes
                 })
@@ -213,6 +237,33 @@ def compute_bilingual_pairwise_mistakes(lang_pair_filename, output_all_file, tas
                     model_name: dir_mistakes - rev_mistakes
                 })
 
+    wrong_ids_intersection = []
+    wrong_ids_collection = []
+    for lang, models_map in mistaken_lang_model_map.items():
+        all_wrong_ids = list(reduce(set.intersection, map(set, models_map.values())))
+        models_map["all"] = all_wrong_ids
+        wrong_ids_intersection.append(all_wrong_ids)
+        wrong_ids_collection += reduce(lambda coll, l: coll + l, models_map.values())
+
+    mistaken_lang_model_map["all"] = list(reduce(set.intersection, map(set, wrong_ids_intersection)))
+    counter = Counter(wrong_ids_collection)
+    inverted_counter = {}
+    for sample_id, count in counter.items():
+        if count not in inverted_counter:
+            inverted_counter[count] = []
+        inverted_counter[count].append(sample_id)
+    
+    never_en_prefered = list(set(range(len(mask))) - set(counter.keys()))
+    inverted_counter[0] = never_en_prefered
+    
+    inverted_counter_path = output_all_file.replace("eval.multilingual.2.csv", "bilingual_mistake_inverted_counter.json")
+    with open(inverted_counter_path, "w") as fout:
+        json.dump(inverted_counter, fout, indent=4, sort_keys=True)
+
+    mistaken_lang_model_map_path = output_all_file.replace("eval.multilingual.2.csv", "bilingual_mistake_ids.json")
+    with open(mistaken_lang_model_map_path, "w") as fout:
+        json.dump(mistaken_lang_model_map, fout, indent=4)
+            
     export_model_based_mistakes(lang_metrics_mat, output_all_file, task)
                 
     lang_mat = np.array([[np.mean(list(metrics.values())) if len(metrics.values()) > 0 else 1.0 for metrics in row] for row in lang_metrics_mat])           

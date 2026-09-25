@@ -27,7 +27,7 @@ def compute_conjunction_and_bootstrap(filenames, output_all_file):
         strict_conj = img_conj & txt_conj
 
         res = st.bootstrap((strict_conj,), lambda *args: np.mean(args[0]), vectorized=False, \
-                           confidence_level=0.95, n_resamples=20, random_state=101, method='BCa')
+                           confidence_level=0.95, n_resamples=10000, random_state=101, method='BCa')
         interval = res.confidence_interval
 
         middle = float((interval.low + interval.high) / 2)
